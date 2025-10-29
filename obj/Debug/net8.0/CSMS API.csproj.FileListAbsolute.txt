@@ -1,0 +1,35 @@
+C:\Users\jatabilog\source\repos\CSMS API\CSMS API\bin\Debug\net8.0\appsettings.Development.json
+C:\Users\jatabilog\source\repos\CSMS API\CSMS API\bin\Debug\net8.0\appsettings.json
+C:\Users\jatabilog\source\repos\CSMS API\CSMS API\bin\Debug\net8.0\CSMS API.staticwebassets.endpoints.json
+C:\Users\jatabilog\source\repos\CSMS API\CSMS API\bin\Debug\net8.0\CSMS API.exe
+C:\Users\jatabilog\source\repos\CSMS API\CSMS API\bin\Debug\net8.0\CSMS API.deps.json
+C:\Users\jatabilog\source\repos\CSMS API\CSMS API\bin\Debug\net8.0\CSMS API.runtimeconfig.json
+C:\Users\jatabilog\source\repos\CSMS API\CSMS API\bin\Debug\net8.0\CSMS API.dll
+C:\Users\jatabilog\source\repos\CSMS API\CSMS API\bin\Debug\net8.0\CSMS API.pdb
+C:\Users\jatabilog\source\repos\CSMS API\CSMS API\bin\Debug\net8.0\Microsoft.OpenApi.dll
+C:\Users\jatabilog\source\repos\CSMS API\CSMS API\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\jatabilog\source\repos\CSMS API\CSMS API\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\jatabilog\source\repos\CSMS API\CSMS API\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\jatabilog\source\repos\CSMS API\CSMS API\obj\Debug\net8.0\CSMS API.csproj.AssemblyReference.cache
+C:\Users\jatabilog\source\repos\CSMS API\CSMS API\obj\Debug\net8.0\rpswa.dswa.cache.json
+C:\Users\jatabilog\source\repos\CSMS API\CSMS API\obj\Debug\net8.0\CSMS API.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\jatabilog\source\repos\CSMS API\CSMS API\obj\Debug\net8.0\CSMS API.AssemblyInfoInputs.cache
+C:\Users\jatabilog\source\repos\CSMS API\CSMS API\obj\Debug\net8.0\CSMS API.AssemblyInfo.cs
+C:\Users\jatabilog\source\repos\CSMS API\CSMS API\obj\Debug\net8.0\CSMS API.csproj.CoreCompileInputs.cache
+C:\Users\jatabilog\source\repos\CSMS API\CSMS API\obj\Debug\net8.0\CSMS API.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\jatabilog\source\repos\CSMS API\CSMS API\obj\Debug\net8.0\CSMS API.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\jatabilog\source\repos\CSMS API\CSMS API\obj\Debug\net8.0\rjimswa.dswa.cache.json
+C:\Users\jatabilog\source\repos\CSMS API\CSMS API\obj\Debug\net8.0\rjsmrazor.dswa.cache.json
+C:\Users\jatabilog\source\repos\CSMS API\CSMS API\obj\Debug\net8.0\rjsmcshtml.dswa.cache.json
+C:\Users\jatabilog\source\repos\CSMS API\CSMS API\obj\Debug\net8.0\scopedcss\bundle\CSMS API.styles.css
+C:\Users\jatabilog\source\repos\CSMS API\CSMS API\obj\Debug\net8.0\staticwebassets.build.json
+C:\Users\jatabilog\source\repos\CSMS API\CSMS API\obj\Debug\net8.0\staticwebassets.build.json.cache
+C:\Users\jatabilog\source\repos\CSMS API\CSMS API\obj\Debug\net8.0\staticwebassets.development.json
+C:\Users\jatabilog\source\repos\CSMS API\CSMS API\obj\Debug\net8.0\staticwebassets.build.endpoints.json
+C:\Users\jatabilog\source\repos\CSMS API\CSMS API\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
+C:\Users\jatabilog\source\repos\CSMS API\CSMS API\obj\Debug\net8.0\CSMS API.csproj.Up2Date
+C:\Users\jatabilog\source\repos\CSMS API\CSMS API\obj\Debug\net8.0\CSMS API.dll
+C:\Users\jatabilog\source\repos\CSMS API\CSMS API\obj\Debug\net8.0\refint\CSMS API.dll
+C:\Users\jatabilog\source\repos\CSMS API\CSMS API\obj\Debug\net8.0\CSMS API.pdb
+C:\Users\jatabilog\source\repos\CSMS API\CSMS API\obj\Debug\net8.0\CSMS API.genruntimeconfig.cache
+C:\Users\jatabilog\source\repos\CSMS API\CSMS API\obj\Debug\net8.0\ref\CSMS API.dll
