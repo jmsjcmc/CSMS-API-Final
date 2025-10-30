@@ -1,0 +1,154 @@
+﻿using CSMS_API.Controllers;
+using CSMS_API.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System.Text;
+
+namespace CSMS_API.Utils
+{
+    public static class ServiceExtensionCollection
+    {
+        public static IServiceCollection AddServices(this IServiceCollection service)
+        {
+            service.AddScoped<UserService>();
+            return service;
+        }
+        public static IServiceCollection AddQueries(this IServiceCollection service)
+        {
+            service.AddScoped<UserQuery>();
+            return service;
+        }
+        public static IServiceCollection AddHelpers(this IServiceCollection service)
+        {
+            service.AddScoped<AuthenticationHelper>();
+            return service;
+        }
+        //public static IServiceCollection AddSwaggerDocumentation(this IServiceCollection service)
+        //{
+        //    service.AddSwaggerGen(swagger =>
+        //    {
+        //        swagger.SwaggerDoc("V1", new()
+        //        {
+        //            Title = "CSMS API",
+        //            Version = "V1"
+        //        });
+        //        swagger.AddSecurityDefinition(
+        //            "Bearer",
+        //            new OpenApiSecurityScheme
+        //            {
+        //                In = ParameterLocation.Header,
+        //                Description = "Bearer (token)",
+        //                Name = "Authorization",
+        //                Type = SecuritySchemeType.ApiKey,
+        //                Scheme = "Bearer"
+        //            });
+        //        swagger.AddSecurityRequirement(
+        //            new OpenApiSecurityRequirement
+        //            {
+        //                {
+        //                    new OpenApiSecurityScheme
+        //                    {
+        //                        Reference = new OpenApiReference
+        //                        {
+        //                            Type = ReferenceType.SecurityScheme,
+        //                            Id = "Bearer"
+        //                        },
+        //                    },
+        //                    new string[] {}
+        //                }
+        //            });
+        //    });
+        //    return service;
+        //}
+        public static IServiceCollection AddSwaggerDocumentation(this IServiceCollection services)
+        {
+            services.AddSwaggerGen(swagger =>
+            {
+                swagger.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "CSMS API",
+                    Version = "v1"
+                });
+
+                swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Enter 'Bearer' [space] and then your valid token.",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+
+                swagger.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        },
+                        Scheme = "oauth2",
+                        Name = "Bearer",
+                        In = ParameterLocation.Header
+                    },
+                    new string[] {}
+                }
+            });
+            });
+
+            return services;
+        }
+        public static IServiceCollection AddJwtAuthentication(this IServiceCollection service, IConfiguration config)
+        {
+            var jwtSetting = ValidatedJwtSetting(config);
+            service.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(jwt =>
+                {
+                    jwt.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = config["Jwt:Issuer"],
+                        ValidAudience = config["Jwt:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(
+                            Encoding.UTF8.GetBytes(jwtSetting.Key)),
+                        ClockSkew = TimeSpan.Zero
+                    };
+                    jwt.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            var accessToken = context.Request.Headers["Authorization"].ToString();
+                            if (!string.IsNullOrEmpty(accessToken) &&
+                            !accessToken.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+                            {
+                                context.Token = accessToken;
+                            }
+                            return Task.CompletedTask;
+                        }
+                    };
+                });
+            return service;
+        }
+        private static JwtSetting ValidatedJwtSetting(IConfiguration config)
+        {
+            var key = config["Jwt:Key"]
+                ?? throw new InvalidOperationException("JWT key is not configured");
+            var issuer = config["Jwt:Issuer"]
+                ?? throw new InvalidOperationException("JWT issuer not configured");
+            var audience = config["Jwt:Audience"]
+                ?? throw new InvalidOperationException("JWT audience not configured");
+
+            return new JwtSetting
+            {
+                Key = key,
+                Issuer = issuer,
+                Audience = audience
+            };
+        }
+    }
+}

@@ -8,6 +8,8 @@ namespace CSMS_API.Models
         {
             CreateMap<CreateUserRequest, User>()
                 .ForMember(d => d.Password, o => o.Ignore());
+            CreateMap<UpdateUserRequest, User>()
+                .ForMember(d => d.Password, o => o.Ignore());
             CreateMap<User, UserWithBusinessUnitAndPositonResponse>()
                 .ForMember(d => d.BusinessUnitID, o => o.MapFrom(s => s.BusinessUnit.ID))
                 .ForMember(d => d.BusinessUnitName, o => o.MapFrom(s => s.BusinessUnit.Name))

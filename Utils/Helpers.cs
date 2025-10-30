@@ -2,7 +2,10 @@
 using AutoMapper.QueryableExtensions;
 using CSMS_API.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Text;
 
 namespace CSMS_API.Utils
 {
@@ -63,6 +66,11 @@ namespace CSMS_API.Utils
     }
     public class AuthenticationHelper
     {
+        private readonly IConfiguration _config;
+        public AuthenticationHelper(IConfiguration config)
+        {
+            _config = config;
+        }
         public static int GetUserIDAsync(ClaimsPrincipal user)
         {
             if (user == null)
@@ -73,6 +81,29 @@ namespace CSMS_API.Utils
                 return userID;
             }
             return 0;
+        }
+        public string GenerateAccessToken(User user)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.UTF8.GetBytes(_config["Jwt:Key"]!);
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.ID.ToString()),
+                new Claim(ClaimTypes.Name, user.Username),
+                //new Claim(ClaimTypes.Role, user.UserRole.)
+            };
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.UtcNow.AddHours(8),
+                Issuer = _config["Jwt:Issuer"],
+                Audience = _config["Jwt:Audience"],
+                SigningCredentials = new SigningCredentials(
+                    new SymmetricSecurityKey(key),
+                    SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
         }
     }
 }

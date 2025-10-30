@@ -13,14 +13,20 @@ namespace CSMS_API.Controllers
         {
             _userService = userService;
         }
+        [HttpPost("user/login")]
+        public async Task<ActionResult<object>> UserLoginAsync(UserLoginRequest request)
+        {
+            var response = await _userService.UserLoginAsync(request);
+            return response;
+        }
         [HttpPost("user/create")]
         public async Task<ActionResult<UserWithBusinessUnitAndPositonResponse>> CreateUserAsync(CreateUserRequest request)
         {
             var response = await _userService.CreateUserAsync(request, User);
             return response;
         }
-        [HttpPatch("user/update/{id}")]
-        public async Task<ActionResult<UserWithBusinessUnitAndPositonResponse>> UpdateUserByIDAsync(int ID, CreateUserRequest request)
+        [HttpPatch("user/update/{ID}")]
+        public async Task<ActionResult<UserWithBusinessUnitAndPositonResponse>> UpdateUserByIDAsync(int ID, UpdateUserRequest request)
         {
             var response = await _userService.UpdateUserByIDAsync(ID, request, User);
             return response;

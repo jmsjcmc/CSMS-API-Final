@@ -20,7 +20,7 @@ namespace CSMS_API.Controllers
             {
                 return await _context.User
                     .AsNoTracking()
-                    .FirstOrDefaultAsync(u => u.ID == ID);
+                    .SingleOrDefaultAsync(u => u.ID == ID);
             }
         }
         public async Task<User?> PatchUserByIDAsync(int ID)
@@ -32,7 +32,7 @@ namespace CSMS_API.Controllers
             else
             {
                 return await _context.User
-                    .FirstOrDefaultAsync(u => u.ID == ID);
+                    .SingleOrDefaultAsync(u => u.ID == ID);
             }
         }
     }

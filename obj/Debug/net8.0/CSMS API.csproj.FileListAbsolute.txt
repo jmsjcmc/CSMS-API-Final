@@ -204,10 +204,11 @@ C:\Users\jatabilog\source\repos\CSMS-API-Final\obj\Debug\net8.0\staticwebassets.
 C:\Users\jatabilog\source\repos\CSMS-API-Final\obj\Debug\net8.0\staticwebassets.build.json.cache
 C:\Users\jatabilog\source\repos\CSMS-API-Final\obj\Debug\net8.0\staticwebassets.development.json
 C:\Users\jatabilog\source\repos\CSMS-API-Final\obj\Debug\net8.0\staticwebassets.build.endpoints.json
-C:\Users\jatabilog\source\repos\CSMS-API-Final\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 C:\Users\jatabilog\source\repos\CSMS-API-Final\obj\Debug\net8.0\CSMS API.csproj.Up2Date
 C:\Users\jatabilog\source\repos\CSMS-API-Final\obj\Debug\net8.0\CSMS API.dll
 C:\Users\jatabilog\source\repos\CSMS-API-Final\obj\Debug\net8.0\refint\CSMS API.dll
 C:\Users\jatabilog\source\repos\CSMS-API-Final\obj\Debug\net8.0\CSMS API.pdb
 C:\Users\jatabilog\source\repos\CSMS-API-Final\obj\Debug\net8.0\CSMS API.genruntimeconfig.cache
 C:\Users\jatabilog\source\repos\CSMS-API-Final\obj\Debug\net8.0\ref\CSMS API.dll
+C:\Users\jatabilog\source\repos\CSMS-API-Final\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\jatabilog\source\repos\CSMS-API-Final\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
