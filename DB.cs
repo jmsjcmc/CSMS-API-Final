@@ -13,5 +13,9 @@ namespace CSMS_API
         public DbSet<UserRole> UserRole { get; set; }
         public DbSet<BusinessUnit> BusinessUnit { get; set; }   
         public DbSet<BusinessUnitLog> BusinessUnitLog { get; set; }
+        public DbSet<Department> Department { get; set; }
+        public DbSet<DepartmentLog> DepartmentLog { get; set; } 
+        public DbSet<Position> Position { get; set; }
+        public DbSet<PositionLog> PositionLog { get; set; }
     }
 }

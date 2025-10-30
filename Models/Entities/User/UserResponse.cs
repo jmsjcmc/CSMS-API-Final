@@ -12,7 +12,18 @@
     }
     public class UserWithBusinessUnitAndPositonResponse
     {
-
+        public int ID { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public string? Username { get; set; }
+        public string? Password { get; set; }
+        public int? BusinessUnitID { get; set; } // BUSINESS UNIT
+        public string? BusinessUnitName { get; set; } // BUSINESS UNIT
+        public string? BusinessUnitLocation { get; set; } // BUSINESS UNIT
+        public int? PositionID { get; set; } // POSITION
+        public string? PositionName { get; set; } // POSITION
+        public int DepartmentID { get; set; } // POSITION -> DEPARTMENT
+        public string? DepartmentName { get; set; } // POSITION -> DEPARTMENT
     }
     public class UserWithBusinessUnitAndPositionObjectResponse
     {

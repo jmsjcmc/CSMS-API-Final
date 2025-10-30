@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using CSMS_API.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace CSMS_API.Utils
 {
@@ -58,6 +59,20 @@ namespace CSMS_API.Utils
                 PageNumber = pageNumber,
                 PageSize = pageSize
             };
+        }
+    }
+    public class AuthenticationHelper
+    {
+        public static int GetUserIDAsync(ClaimsPrincipal user)
+        {
+            if (user == null)
+                return 0;
+            var value = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (int.TryParse(value, out int userID))
+            {
+                return userID;
+            }
+            return 0;
         }
     }
 }
