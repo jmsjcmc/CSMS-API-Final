@@ -55,6 +55,7 @@
         public int? RoleID { get; set; }
         public Role? Role { get; set; }
         public DateTime? AssignedOn { get; set; }
+        public RecordStatus? RecordStatus { get; set; }
     }
     public class BusinessUnit
     {
@@ -64,6 +65,7 @@
         public int? CreatorID { get; set; }
         public User? Creator { get; set; }
         public DateTime? CreatedOn { get; set; }
+        public RecordStatus? RecordStatus { get; set; }
         public ICollection<User>? User { get; set; }
         public ICollection<BusinessUnitLog>? BusinessUnitLog { get; set; }
     }
@@ -83,6 +85,7 @@
         public int? CreatorID { get; set; }
         public User? Creator { get; set; }
         public DateTime? CreatedOn { get; set; }
+        public RecordStatus? RecordStatus { get; set; }
         public ICollection<Position>? Position { get; set; }
         public ICollection<DepartmentLog>? DepartmentLog { get; set; }
     }
@@ -104,6 +107,7 @@
         public int? CreatorID { get; set; }
         public User? Creator { get; set; }
         public DateTime? CreatedOn { get; set; }
+        public RecordStatus? RecordStatus { get; set; }
         public ICollection<PositionLog>? PositionLog { get; set; }
         public ICollection<User>? User { get; set; }
     }

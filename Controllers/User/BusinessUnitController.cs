@@ -1,32 +1,40 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+using CSMS_API.Models.Entities;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace CSMS_API.Controllers
 {
-    [Route("[controller]")]
-    public class BusinessUnitController : Controller
+    [Route("")]
+    [ApiController]
+    public class BusinessUnitController : ControllerBase
     {
-        private readonly ILogger<BusinessUnitController> _logger;
-
-        public BusinessUnitController(ILogger<BusinessUnitController> logger)
+        private readonly BusinessUnitService _businessUnitService;
+        public BusinessUnitController(BusinessUnitService businessUnitService)
         {
-            _logger = logger;
+            _businessUnitService = businessUnitService;
         }
-
-        public IActionResult Index()
+        [HttpPost("busines-unit/create")]
+        public async Task<ActionResult<BusinessUnitResponse>> CreateBusinessUnitAsync(CreateBusinessUnitRequest request)
         {
-            return View();
+            var response = await _businessUnitService.CreateBusinessUnitAsync(request, User);
+            return response;
         }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [HttpPatch("business-unit/update/{ID}")]
+        public async Task<ActionResult<BusinessUnitResponse>> UpdateBusinessUnitByIDAsync(int ID, UpdateBusinessUnitRequest request)
         {
-            return View("Error!");
+            var response = await _businessUnitService.UpdateBusinessUnitByIDAsync(ID, request, User);
+            return response;
+        }
+        [HttpDelete("business-unit/delete/{ID}")]
+        public async Task<ActionResult<BusinessUnitResponse>> DeleteBusinessUnitByIDAsync(int ID)
+        {
+            var response = await _businessUnitService.DeleteBusinessUnitByIDAsync(ID);
+            return response;
+        }
+        [HttpGet("business-unit/{ID}")]
+        public async Task<ActionResult<BusinessUnitResponse>> GetBusinessUnitByIDAsync(int ID)
+        {
+            var response = await _businessUnitService.GetBusinessUnitByIDAsync(ID);
+            return response;
         }
     }
 }

@@ -12,11 +12,13 @@ namespace CSMS_API.Utils
         public static IServiceCollection AddServices(this IServiceCollection service)
         {
             service.AddScoped<UserService>();
+            service.AddScoped<BusinessUnitService>();
             return service;
         }
         public static IServiceCollection AddQueries(this IServiceCollection service)
         {
             service.AddScoped<UserQuery>();
+            service.AddScoped<BusinessUnitQuery>();
             return service;
         }
         public static IServiceCollection AddHelpers(this IServiceCollection service)
@@ -24,43 +26,6 @@ namespace CSMS_API.Utils
             service.AddScoped<AuthenticationHelper>();
             return service;
         }
-        //public static IServiceCollection AddSwaggerDocumentation(this IServiceCollection service)
-        //{
-        //    service.AddSwaggerGen(swagger =>
-        //    {
-        //        swagger.SwaggerDoc("V1", new()
-        //        {
-        //            Title = "CSMS API",
-        //            Version = "V1"
-        //        });
-        //        swagger.AddSecurityDefinition(
-        //            "Bearer",
-        //            new OpenApiSecurityScheme
-        //            {
-        //                In = ParameterLocation.Header,
-        //                Description = "Bearer (token)",
-        //                Name = "Authorization",
-        //                Type = SecuritySchemeType.ApiKey,
-        //                Scheme = "Bearer"
-        //            });
-        //        swagger.AddSecurityRequirement(
-        //            new OpenApiSecurityRequirement
-        //            {
-        //                {
-        //                    new OpenApiSecurityScheme
-        //                    {
-        //                        Reference = new OpenApiReference
-        //                        {
-        //                            Type = ReferenceType.SecurityScheme,
-        //                            Id = "Bearer"
-        //                        },
-        //                    },
-        //                    new string[] {}
-        //                }
-        //            });
-        //    });
-        //    return service;
-        //}
         public static IServiceCollection AddSwaggerDocumentation(this IServiceCollection services)
         {
             services.AddSwaggerGen(swagger =>

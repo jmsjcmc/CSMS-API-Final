@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CSMS API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d6be82e9199967ff17f193e08e60245a4f7ec1f1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2d1a27650b36c5d6140e38aae5f90f78adaf9830")]
 [assembly: System.Reflection.AssemblyProductAttribute("CSMS API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CSMS API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
