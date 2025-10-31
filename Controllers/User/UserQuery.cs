@@ -20,6 +20,8 @@ namespace CSMS_API.Controllers
             {
                 return await _context.User
                     .AsNoTracking()
+                    .Include(u => u.BusinessUnit)
+                    .Include(u => u.Position)
                     .SingleOrDefaultAsync(u => u.ID == ID);
             }
         }

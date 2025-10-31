@@ -16,7 +16,6 @@
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? Username { get; set; }
-        public string? Password { get; set; }
         public int? BusinessUnitID { get; set; } // BUSINESS UNIT
         public string? BusinessUnitName { get; set; } // BUSINESS UNIT
         public string? BusinessUnitLocation { get; set; } // BUSINESS UNIT
@@ -31,7 +30,6 @@
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? Username { get; set; }
-        public string? Password { get; set; }
         public DateTime? CreatedOn { get; set; }
         public RecordStatus? RecordStatus { get; set; }
     }

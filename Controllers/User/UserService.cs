@@ -11,6 +11,8 @@ namespace CSMS_API.Controllers
         Task<object> UserLoginAsync(UserLoginRequest request);
         Task<UserWithBusinessUnitAndPositonResponse> CreateUserAsync(CreateUserRequest request, ClaimsPrincipal authUser);
         Task<UserWithBusinessUnitAndPositonResponse> UpdateUserByIDAsync(int ID, UpdateUserRequest request, ClaimsPrincipal authUser);
+        Task<UserWithBusinessUnitAndPositonResponse> DeleteUserByIDAsync(int ID);
+        Task<UserWithBusinessUnitAndPositonResponse> GetUserByIDAsync(int ID);
     }
     public class UserService : UserInterface
     {
@@ -56,7 +58,7 @@ namespace CSMS_API.Controllers
         {
             var user = await _userQuery.PatchUserByIDAsync(ID);
 
-            _mapper.Map(user, request);
+            _mapper.Map(request, user);
 
             await _context.SaveChangesAsync();
 
@@ -70,6 +72,20 @@ namespace CSMS_API.Controllers
             await _context.UserLog.AddAsync(userLog);
             await _context.SaveChangesAsync();
 
+            return _mapper.Map<UserWithBusinessUnitAndPositonResponse>(user);
+        }
+        public async Task<UserWithBusinessUnitAndPositonResponse> DeleteUserByIDAsync(int ID)
+        {
+            var user = await _userQuery.PatchUserByIDAsync(ID);
+
+            _context.User.Remove(user);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<UserWithBusinessUnitAndPositonResponse>(user);
+        }
+        public async Task<UserWithBusinessUnitAndPositonResponse> GetUserByIDAsync(int ID)
+        {
+            var user = await _userQuery.GetUserByIDAsync(ID);
             return _mapper.Map<UserWithBusinessUnitAndPositonResponse>(user);
         }
     }

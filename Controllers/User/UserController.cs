@@ -31,5 +31,17 @@ namespace CSMS_API.Controllers
             var response = await _userService.UpdateUserByIDAsync(ID, request, User);
             return response;
         }
+        [HttpDelete("user/delete/{ID}")]
+        public async Task<ActionResult<UserWithBusinessUnitAndPositonResponse>> DeleteUserByIDAsync(int ID)
+        {
+            var response = await _userService.DeleteUserByIDAsync(ID);
+            return response;
+        }
+        [HttpGet("user/{ID}")]
+        public async Task<ActionResult<UserWithBusinessUnitAndPositonResponse>> GetUserByIDAsync(int ID)
+        {
+            var response = await _userService.GetUserByIDAsync(ID);
+            return response;
+        }
     }
 }
