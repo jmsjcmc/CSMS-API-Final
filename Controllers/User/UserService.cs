@@ -42,17 +42,24 @@ namespace CSMS_API.Controllers
         }
         public async Task<UserWithBusinessUnitAndPositonResponse> CreateUserAsync(CreateUserRequest request, ClaimsPrincipal authUser)
         {
-            var user = _mapper.Map<User>(request);
+            if (await _context.User.AnyAsync(u => u.Username == request.Username))
+            {
+                throw new Exception($"Username {request.Username} already exist");
+            }
+            else
+            {
+                var user = _mapper.Map<User>(request);
 
-            user.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
-            user.CreatorID = AuthenticationHelper.GetUserIDAsync(authUser);
-            user.CreatedOn = PresentDateTimeFetcher.FetchPresentDateTime();
-            user.RecordStatus = RecordStatus.Active;
+                user.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
+                user.CreatorID = AuthenticationHelper.GetUserIDAsync(authUser);
+                user.CreatedOn = PresentDateTimeFetcher.FetchPresentDateTime();
+                user.RecordStatus = RecordStatus.Active;
 
-            await _context.User.AddAsync(user);
-            await _context.SaveChangesAsync();
+                await _context.User.AddAsync(user);
+                await _context.SaveChangesAsync();
 
-            return _mapper.Map<UserWithBusinessUnitAndPositonResponse>(user);
+                return _mapper.Map<UserWithBusinessUnitAndPositonResponse>(user);
+            }
         }
         public async Task<UserWithBusinessUnitAndPositonResponse> UpdateUserByIDAsync(int ID, UpdateUserRequest request, ClaimsPrincipal authUser)
         {
