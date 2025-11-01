@@ -31,6 +31,12 @@ namespace CSMS_API.Controllers
             var response = await _userService.UpdateUserByIDAsync(ID, request, User);
             return response;
         }
+        [HttpPatch("user/add-position/{userID}")]
+        public async Task<ActionResult<UserWithBusinessUnitAndPositonResponse>> AddPositionToUserByIDAsync(int userID, int positionID)
+        {
+            var response = await _userService.AddPositionToUserByIDAsync(userID, positionID, User);
+            return response;
+        }
         [HttpDelete("user/delete/{ID}")]
         public async Task<ActionResult<UserWithBusinessUnitAndPositonResponse>> DeleteUserByIDAsync(int ID)
         {

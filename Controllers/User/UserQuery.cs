@@ -22,6 +22,7 @@ namespace CSMS_API.Controllers
                     .AsNoTracking()
                     .Include(u => u.BusinessUnit)
                     .Include(u => u.Position)
+                    .ThenInclude(p => p.Department)
                     .SingleOrDefaultAsync(u => u.ID == ID);
             }
         }
