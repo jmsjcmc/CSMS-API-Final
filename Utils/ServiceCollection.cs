@@ -13,12 +13,16 @@ namespace CSMS_API.Utils
         {
             service.AddScoped<UserService>();
             service.AddScoped<BusinessUnitService>();
+            service.AddScoped<DepartmentService>();
+            service.AddScoped<PositionService>();
             return service;
         }
         public static IServiceCollection AddQueries(this IServiceCollection service)
         {
             service.AddScoped<UserQuery>();
             service.AddScoped<BusinessUnitQuery>();
+            service.AddScoped<DepartmentQuery>();
+            service.AddScoped<PositionQuery>();
             return service;
         }
         public static IServiceCollection AddHelpers(this IServiceCollection service)

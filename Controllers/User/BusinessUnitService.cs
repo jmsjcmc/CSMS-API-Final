@@ -3,6 +3,7 @@ using AutoMapper;
 using CSMS_API.Models;
 using CSMS_API.Models.Entities;
 using CSMS_API.Utils;
+using Microsoft.EntityFrameworkCore;
 
 namespace CSMS_API.Controllers
 {
@@ -26,15 +27,22 @@ namespace CSMS_API.Controllers
         }
         public async Task<BusinessUnitResponse> CreateBusinessUnitAsync(CreateBusinessUnitRequest request, ClaimsPrincipal user)
         {
-            var businessUnit = _mapper.Map<BusinessUnit>(request);
+            if (await _context.BusinessUnit.AnyAsync(bu => bu.Name == request.Name))
+            {
+                throw new Exception($"Business Unit {request.Name} already exist");
+            }
+            else
+            {
+                var businessUnit = _mapper.Map<BusinessUnit>(request);
 
-            businessUnit.CreatorID = AuthenticationHelper.GetUserIDAsync(user);
-            businessUnit.CreatedOn = PresentDateTimeFetcher.FetchPresentDateTime();
-            businessUnit.RecordStatus = RecordStatus.Active;
+                businessUnit.CreatorID = AuthenticationHelper.GetUserIDAsync(user);
+                businessUnit.CreatedOn = PresentDateTimeFetcher.FetchPresentDateTime();
+                businessUnit.RecordStatus = RecordStatus.Active;
 
-            await _context.BusinessUnit.AddAsync(businessUnit);
-            await _context.SaveChangesAsync();
-            return _mapper.Map<BusinessUnitResponse>(businessUnit);
+                await _context.BusinessUnit.AddAsync(businessUnit);
+                await _context.SaveChangesAsync();
+                return _mapper.Map<BusinessUnitResponse>(businessUnit);
+            }
         }
         public async Task<BusinessUnitResponse> UpdateBusinessUnitByIDAsync(int ID, UpdateBusinessUnitRequest request, ClaimsPrincipal user)
         {
@@ -54,7 +62,7 @@ namespace CSMS_API.Controllers
             await _context.BusinessUnitLog.AddAsync(businessUnitLog);
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<BusinessUnitResponse>(businessUnit); 
+            return _mapper.Map<BusinessUnitResponse>(businessUnit);
         }
         public async Task<BusinessUnitResponse> DeleteBusinessUnitByIDAsync(int ID)
         {
