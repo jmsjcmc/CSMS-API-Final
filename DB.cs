@@ -18,6 +18,8 @@ namespace CSMS_API
         public DbSet<DepartmentLog> DepartmentLog { get; set; }
         public DbSet<Position> Position { get; set; }
         public DbSet<PositionLog> PositionLog { get; set; }
+        public DbSet<Company> Company { get; set; }
+        public DbSet<Representative> Representative { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
