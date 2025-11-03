@@ -19,6 +19,7 @@ namespace CSMS_API.Utils
             service.AddScoped<ProductService>();
             service.AddScoped<CategoryService>();
             service.AddScoped<ReceivingService>();
+            service.AddScoped<ReceivingDetailService>();
             return service;
         }
         public static IServiceCollection AddQueries(this IServiceCollection service)
@@ -31,6 +32,7 @@ namespace CSMS_API.Utils
             service.AddScoped<ProductQuery>();
             service.AddScoped<CategoryQuery>();
             service.AddScoped<ReceivingQuery>();
+            service.AddScoped<ReceivingDetailQuery>();
             return service;
         }
         public static IServiceCollection AddHelpers(this IServiceCollection service)
