@@ -24,7 +24,7 @@ namespace CSMS_API.Controllers
             var response = await _representativeService.UpdateRepresentativeByIDAsync(ID, request, User);
             return response;
         }
-        [HttpPatch("representative/add-company/{ID}")]
+        [HttpPatch("representative/add-company/{representativeID}")]
         public async Task<ActionResult<RepresentativeWithCompanyResponse>> AddCompanyToRepresentativeByIDAsync(int representativeID, int companyID)
         {
             var response = await _representativeService.AddCompanyToRepresentativeByIDAsync(representativeID, companyID, User);

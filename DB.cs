@@ -30,6 +30,12 @@ namespace CSMS_API
         public DbSet<ReceivingLog> ReceivingLog { get; set; }
         public DbSet<ReceivingDetail> ReceivingDetail { get; set; }
         public DbSet<ReceivingDetailLog> ReceivingDetailLog { get; set; }
+        public DbSet<Pallet> Pallet { get; set; }
+        public DbSet<PalletLog> PalletLog { get; set; }
+        public DbSet<PalletPosition> PalletPosition { get; set; }
+        public DbSet<PalletPositionLog> PalletPositionLog { get; set; }
+        public DbSet<ColdStorage> ColdStorage { get; set; }
+        public DbSet<ColdStorageLog> ColdStorageLog { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -66,6 +72,15 @@ namespace CSMS_API
 
             modelBuilder.Entity<ReceivingDetail>().Ignore(rd => rd.Creator);
             modelBuilder.Entity<ReceivingDetailLog>().Ignore(rdl => rdl.Updater);
+
+            modelBuilder.Entity<Pallet>().Ignore(p => p.Creator);
+            modelBuilder.Entity<PalletLog>().Ignore(pl => pl.Updater);
+
+            modelBuilder.Entity<PalletPosition>().Ignore(pp => pp.Creator);
+            modelBuilder.Entity<PalletPositionLog>().Ignore(pl => pl.Updater);
+
+            modelBuilder.Entity<ColdStorage>().Ignore(cs => cs.Creator);
+            modelBuilder.Entity<ColdStorageLog>().Ignore(cs => cs.Updater);
             modelBuilder.Seed();
         }
     }

@@ -20,9 +20,9 @@ namespace CSMS_API.Controllers
             {
                 return await _context.Receiving
                     .AsNoTracking()
-                    .Include(r => r.ReceivingDetail)
                     .Include(r => r.Creator)
                     .Include(r => r.Approver)
+                    .Include(r => r.ReceivingDetail)
                     .SingleOrDefaultAsync(r => r.ID == ID);
             }
         }

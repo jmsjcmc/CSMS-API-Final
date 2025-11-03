@@ -49,5 +49,11 @@ namespace CSMS_API.Controllers
             var response = await _userService.GetUserByIDAsync(ID);
             return response;
         }
+        [HttpGet("user/authenticated-details")]
+        public async Task<ActionResult<UserWithBusinessUnitAndPositonResponse>> AuthenticatedUserDetailsAsync()
+        {
+            var response = await _userService.AuthenticatedUserDetailsAsync(User);
+            return response;
+        }
     }
 }

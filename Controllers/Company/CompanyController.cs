@@ -36,5 +36,11 @@ namespace CSMS_API.Controllers
             var response = await _companyService.GetCompanyByIDAsync(ID);
             return response;
         }
+        [HttpGet("company/with-representative/{ID}")]
+        public async Task<ActionResult<CompanyWithRepresentativeResponse>> GetCompanyWithRepresentativeByIDAsync(int ID)
+        {
+            var response = await _companyService.GetCompanyWithRepresentativeByIDAsync(ID);
+            return response;
+        }
     }
 }

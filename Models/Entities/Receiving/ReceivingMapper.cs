@@ -13,7 +13,9 @@ namespace CSMS_API.Models
                 .ForMember(d => d.Creator, o => o.MapFrom(s => s.Creator))
                 .ForMember(d => d.Approver, o => o.MapFrom(s => s.Approver));
             CreateMap<Receiving, ReceivingWithReceivingDetailResponse>()
-                .ForMember(d => d.ReceivingDetail, o => o.MapFrom(s => s.ReceivingDetail));
+                .ForMember(d => d.ReceivingDetail, o => o.MapFrom(s => s.ReceivingDetail))
+                .ForMember(d => d.Creator, o => o.MapFrom(s => s.Creator))
+                .ForMember(d => d.Approver, o => o.MapFrom(s => s.Approver));
         }
     }
     public class ReceivingDetailMapper : Profile

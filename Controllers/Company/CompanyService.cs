@@ -11,6 +11,7 @@ namespace CSMS_API.Controllers
         Task<CompanyOnlyResponse> UpdateCompanyByIDAsync(int ID, CreateCompanyRequest request, ClaimsPrincipal user);
         Task<CompanyOnlyResponse> DeleteCompanyByIDAsync(int ID);
         Task<CompanyOnlyResponse> GetCompanyByIDAsync(int ID);
+        Task<CompanyWithRepresentativeResponse> GetCompanyWithRepresentativeByIDAsync(int ID);
     }
     public class CompanyService : CompanyInterface
     {
@@ -66,5 +67,10 @@ namespace CSMS_API.Controllers
             var company = await _companyQuery.GetCompanyByIDAsync(ID);
             return _mapper.Map<CompanyOnlyResponse>(company);
         }   
+        public async Task<CompanyWithRepresentativeResponse> GetCompanyWithRepresentativeByIDAsync(int ID)
+        {
+            var company = await _companyQuery.GetCompanyByIDAsync(ID);
+            return _mapper.Map<CompanyWithRepresentativeResponse>(company);
+        }
     }
 }

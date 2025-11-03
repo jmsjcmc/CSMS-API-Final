@@ -14,6 +14,7 @@ namespace CSMS_API.Controllers
         Task<UserWithBusinessUnitAndPositonResponse> AddPositionToUserByIDAsync(int userID, int positionID, ClaimsPrincipal authUser);
         Task<UserWithBusinessUnitAndPositonResponse> DeleteUserByIDAsync(int ID);
         Task<UserWithBusinessUnitAndPositonResponse> GetUserByIDAsync(int ID);
+        Task<UserWithBusinessUnitAndPositonResponse> AuthenticatedUserDetailsAsync(ClaimsPrincipal userDetail);
     }
     public class UserService : UserInterface
     {
@@ -111,6 +112,17 @@ namespace CSMS_API.Controllers
         public async Task<UserWithBusinessUnitAndPositonResponse> GetUserByIDAsync(int ID)
         {
             var user = await _userQuery.GetUserByIDAsync(ID);
+            return _mapper.Map<UserWithBusinessUnitAndPositonResponse>(user);
+        }
+        public async Task<UserWithBusinessUnitAndPositonResponse> AuthenticatedUserDetailsAsync(ClaimsPrincipal userDetail)
+        {
+            var userIDClaim = userDetail.FindFirst(ClaimTypes.NameIdentifier)
+                ?? throw new UnauthorizedAccessException("User ID claim not found");
+
+            if (!int.TryParse(userIDClaim.Value, out var userID))
+                throw new UnauthorizedAccessException("Invalid user ID claim");
+
+            var user = await _userQuery.GetUserByIDAsync(userID);
             return _mapper.Map<UserWithBusinessUnitAndPositonResponse>(user);
         }
     }

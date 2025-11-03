@@ -2,6 +2,7 @@ using AutoMapper;
 using CSMS_API.Models;
 using CSMS_API.Utils;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace CSMS_API.Controllers
@@ -28,22 +29,32 @@ namespace CSMS_API.Controllers
         }
         public async Task<ReceivingOnlyResponse> CreateReceivingAsync(CreateReceivingRequest request, ClaimsPrincipal user)
         {
-            var receiving = _mapper.Map<Receiving>(request);
+            if (await _context.Receiving.AnyAsync(r => r.DocumentNo == request.DocumentNo))
+            {
+                throw new Exception($"Document No {request.DocumentNo} already exist");
+            } else
+            {
+                var receiving = _mapper.Map<Receiving>(request);
+                receiving.CreatorID = AuthenticationHelper.GetUserIDAsync(user);
+                receiving.CreatedOn = PresentDateTimeFetcher.FetchPresentDateTime();
+                receiving.RecordStatus = RecordStatus.Active;
 
-            receiving.CreatorID = AuthenticationHelper.GetUserIDAsync(user);
-            receiving.CreatedOn = PresentDateTimeFetcher.FetchPresentDateTime();
-            receiving.RecordStatus = RecordStatus.Active;
+                await _context.Receiving.AddAsync(receiving);
+                await _context.SaveChangesAsync();
 
-            await _context.Receiving.AddAsync(receiving);
-            await _context.SaveChangesAsync();
-
-            return _mapper.Map<ReceivingOnlyResponse>(receiving);
+                return _mapper.Map<ReceivingOnlyResponse>(receiving);
+            }
         }
         public async Task<ReceivingWithReceivingDetailResponse> AddReceivingDetailToReceivingByIDAsync(int ID, UpdateReceivingRequest request, ClaimsPrincipal user)
         {
             var receiving = await _receivingQuery.PatchReceivingByIDAsync(ID);
             _mapper.Map(request, receiving);
 
+            foreach (var receivingDetail in receiving.ReceivingDetail)
+            {
+                receivingDetail.CreatorID = AuthenticationHelper.GetUserIDAsync(user);
+                receivingDetail.CreatedOn = PresentDateTimeFetcher.FetchPresentDateTime();
+            }
             await _context.SaveChangesAsync();
 
             var receivingLog = new ReceivingLog

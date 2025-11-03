@@ -28,6 +28,7 @@ namespace CSMS_API.Controllers
         {
             var representative = _mapper.Map<Representative>(request);
             representative.CreatorID = AuthenticationHelper.GetUserIDAsync(user);
+            representative.CreatedOn = PresentDateTimeFetcher.FetchPresentDateTime();
             representative.RecordStatus = RecordStatus.Active;
 
             await _context.Representative.AddAsync(representative);

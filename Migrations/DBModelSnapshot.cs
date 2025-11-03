@@ -381,6 +381,149 @@ namespace CSMS_API.Migrations
                     b.ToTable("ProductLog");
                 });
 
+            modelBuilder.Entity("CSMS_API.Models.Receiving", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<int?>("ApproverID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ArrivalDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CVNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("CreatorID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DateReceived")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DocumentNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PlateNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("RecordStatus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UnloadingEnd")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UnloadingStart")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ApproverID");
+
+                    b.ToTable("Receiving");
+                });
+
+            modelBuilder.Entity("CSMS_API.Models.ReceivingDetail", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<DateTime?>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("CreatorID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DUQuantity")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ExpirationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("ProductID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ProductionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("QuantityInPallet")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ReceivingID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Remark")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("TotalWeight")
+                        .HasColumnType("float");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ProductID");
+
+                    b.HasIndex("ReceivingID");
+
+                    b.ToTable("ReceivingDetail");
+                });
+
+            modelBuilder.Entity("CSMS_API.Models.ReceivingDetailLog", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<int?>("ReceivingDetailID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("UpdaterID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ReceivingDetailID");
+
+                    b.ToTable("ReceivingDetailLog");
+                });
+
+            modelBuilder.Entity("CSMS_API.Models.ReceivingLog", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<int?>("ReceivingID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("UpdaterID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ReceivingID");
+
+                    b.ToTable("ReceivingLog");
+                });
+
             modelBuilder.Entity("CSMS_API.Models.Representative", b =>
                 {
                     b.Property<int>("ID")
@@ -686,6 +829,48 @@ namespace CSMS_API.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("CSMS_API.Models.Receiving", b =>
+                {
+                    b.HasOne("CSMS_API.Models.User", "Approver")
+                        .WithMany()
+                        .HasForeignKey("ApproverID");
+
+                    b.Navigation("Approver");
+                });
+
+            modelBuilder.Entity("CSMS_API.Models.ReceivingDetail", b =>
+                {
+                    b.HasOne("CSMS_API.Models.Product", "Product")
+                        .WithMany("ReceivingDetail")
+                        .HasForeignKey("ProductID");
+
+                    b.HasOne("CSMS_API.Models.Receiving", "Receiving")
+                        .WithMany("ReceivingDetail")
+                        .HasForeignKey("ReceivingID");
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Receiving");
+                });
+
+            modelBuilder.Entity("CSMS_API.Models.ReceivingDetailLog", b =>
+                {
+                    b.HasOne("CSMS_API.Models.ReceivingDetail", "ReceivingDetail")
+                        .WithMany("ReceivingDetailLog")
+                        .HasForeignKey("ReceivingDetailID");
+
+                    b.Navigation("ReceivingDetail");
+                });
+
+            modelBuilder.Entity("CSMS_API.Models.ReceivingLog", b =>
+                {
+                    b.HasOne("CSMS_API.Models.Receiving", "Receiving")
+                        .WithMany("ReceivingLog")
+                        .HasForeignKey("ReceivingID");
+
+                    b.Navigation("Receiving");
+                });
+
             modelBuilder.Entity("CSMS_API.Models.Representative", b =>
                 {
                     b.HasOne("CSMS_API.Models.Company", "Company")
@@ -792,6 +977,20 @@ namespace CSMS_API.Migrations
             modelBuilder.Entity("CSMS_API.Models.Product", b =>
                 {
                     b.Navigation("ProductLog");
+
+                    b.Navigation("ReceivingDetail");
+                });
+
+            modelBuilder.Entity("CSMS_API.Models.Receiving", b =>
+                {
+                    b.Navigation("ReceivingDetail");
+
+                    b.Navigation("ReceivingLog");
+                });
+
+            modelBuilder.Entity("CSMS_API.Models.ReceivingDetail", b =>
+                {
+                    b.Navigation("ReceivingDetailLog");
                 });
 
             modelBuilder.Entity("CSMS_API.Models.Representative", b =>
