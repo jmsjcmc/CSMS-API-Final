@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CSMS API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c8f82557d1712ee9b00c829a10eb4ab2ac64a0dc")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1d35ce85dae1ce92311eeacd7ecd3d2e828a5fdd")]
 [assembly: System.Reflection.AssemblyProductAttribute("CSMS API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CSMS API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
