@@ -18,6 +18,9 @@ namespace CSMS_API.Models
                 .ForMember(d => d.PositionName, o => o.MapFrom(s => s.Position.Name))
                 .ForMember(d => d.DepartmentID, o => o.MapFrom(s => s.Position.Department.ID))
                 .ForMember(d => d.DepartmentName, o => o.MapFrom(s => s.Position.Department.Name));
+            CreateMap<User, UserWithBusinessUnitAndPositionObjectResponse>()
+                .ForMember(d => d.BusinessUnit, o => o.MapFrom(s => s.BusinessUnit))
+                .ForMember(d => d.Position, o => o.MapFrom(s => s.Position));
         }
     }
 }

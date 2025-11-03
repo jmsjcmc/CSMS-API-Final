@@ -1,4 +1,6 @@
-﻿namespace CSMS_API.Models
+﻿using CSMS_API.Models.Entities;
+
+namespace CSMS_API.Models
 {
     public class UserOnlyResponse
     {
@@ -32,6 +34,8 @@
         public string? Username { get; set; }
         public DateTime? CreatedOn { get; set; }
         public RecordStatus? RecordStatus { get; set; }
+        public BusinessUnitResponse? BusinessUnit { get; set; } // BUSINESS UNIT
+        public PositionOnlyResponse? Position { get; set; } // POSITION
     }
     public class RoleOnlyResponse
     {

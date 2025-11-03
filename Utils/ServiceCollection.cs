@@ -16,6 +16,8 @@ namespace CSMS_API.Utils
             service.AddScoped<DepartmentService>();
             service.AddScoped<PositionService>();
             service.AddScoped<CompanyService>();
+            service.AddScoped<ProductService>();
+            service.AddScoped<CategoryService>();
             return service;
         }
         public static IServiceCollection AddQueries(this IServiceCollection service)
@@ -25,6 +27,8 @@ namespace CSMS_API.Utils
             service.AddScoped<DepartmentQuery>();
             service.AddScoped<PositionQuery>();
             service.AddScoped<CompanyQuery>();
+            service.AddScoped<ProductQuery>();
+            service.AddScoped<CategoryQuery>();
             return service;
         }
         public static IServiceCollection AddHelpers(this IServiceCollection service)

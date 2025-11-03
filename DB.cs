@@ -26,6 +26,10 @@ namespace CSMS_API
         public DbSet<ProductLog> ProductLog { get; set; }
         public DbSet<Category> Category { get; set; }
         public DbSet<CategoryLog> CategoryLog { get; set; }
+        public DbSet<Receiving> Receiving { get; set; }
+        public DbSet<ReceivingLog> ReceivingLog { get; set; }
+        public DbSet<ReceivingDetail> ReceivingDetail { get; set; }
+        public DbSet<ReceivingDetailLog> ReceivingDetailLog { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -40,25 +44,28 @@ namespace CSMS_API
             modelBuilder.Entity<BusinessUnitLog>().Ignore(bul => bul.Updater);
 
             modelBuilder.Entity<Department>().Ignore(d => d.Creator);
+            modelBuilder.Entity<DepartmentLog>().Ignore(dl => dl.Updater);
 
             modelBuilder.Entity<Position>().Ignore(p => p.Creator);
+            modelBuilder.Entity<PositionLog>().Ignore(pl => pl.Updater);
 
             modelBuilder.Entity<Company>().Ignore(c => c.Creator);
+            modelBuilder.Entity<CompanyLog>().Ignore(cl => cl.Updater);
 
             modelBuilder.Entity<Representative>().Ignore(r => r.Creator);
+            modelBuilder.Entity<RepresentativeLog>().Ignore(rl => rl.Updater);
 
             modelBuilder.Entity<Product>().Ignore(p => p.Creator);
+            modelBuilder.Entity<ProductLog>().Ignore(pl => pl.Updater);
 
             modelBuilder.Entity<Category>().Ignore(c => c.Creator);
-
-
-
-            modelBuilder.Entity<DepartmentLog>().Ignore(dl => dl.Updater);
-            modelBuilder.Entity<PositionLog>().Ignore(pl => pl.Updater);
-            modelBuilder.Entity<CompanyLog>().Ignore(cl => cl.Updater);
-            modelBuilder.Entity<RepresentativeLog>().Ignore(rl => rl.Updater);
-            modelBuilder.Entity<ProductLog>().Ignore(pl => pl.Updater);
             modelBuilder.Entity<CategoryLog>().Ignore(cl => cl.Updater);
+
+            modelBuilder.Entity<Receiving>().Ignore(r => r.Creator);
+            modelBuilder.Entity<ReceivingLog>().Ignore(rl => rl.Updater);
+
+            modelBuilder.Entity<ReceivingDetail>().Ignore(rd => rd.Creator);
+            modelBuilder.Entity<ReceivingDetailLog>().Ignore(rdl => rdl.Updater);
             modelBuilder.Seed();
         }
     }

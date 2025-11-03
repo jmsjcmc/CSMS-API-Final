@@ -22,6 +22,7 @@ namespace CSMS_API.Models
         public DateTime? CreatedOn { get; set; }
         public RecordStatus? RecordStatus { get; set; }
         public ICollection<ProductLog>? ProductLog { get; set; }
+        public ICollection<ReceivingDetail>? ReceivingDetail { get; set; }
     }
     public class ProductLog
     {

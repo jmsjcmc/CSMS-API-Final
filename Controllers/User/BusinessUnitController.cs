@@ -12,7 +12,7 @@ namespace CSMS_API.Controllers
         {
             _businessUnitService = businessUnitService;
         }
-        [HttpPost("busines-unit/create")]
+        [HttpPost("business-unit/create")]
         public async Task<ActionResult<BusinessUnitResponse>> CreateBusinessUnitAsync(CreateBusinessUnitRequest request)
         {
             var response = await _businessUnitService.CreateBusinessUnitAsync(request, User);
