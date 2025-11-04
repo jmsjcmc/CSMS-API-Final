@@ -50,5 +50,36 @@ namespace CSMS_API.Utils
             var file = await _excelExporter.ExportAsByteArray(companies);
             return file;
         }
+        public async Task ImportRepresentativesAsync(IFormFile file, ClaimsPrincipal user)
+        {
+            var result = await _excelImporter.Import<RepresentativeImportRequest>(file.OpenReadStream());
+            var response = result.Data;
+            var companies = await _context.Company.ToListAsync();
+            var representatives = new List<Representative>();
+            foreach (var row in response)
+            {
+                var company = companies.SingleOrDefault(c => c.Name == row.CompanyName);
+                if (company == null)
+                {
+                    throw new Exception($"Company {row.CompanyName} mot found");
+                }
+                var representative = new Representative
+                {
+                    FirstName = row.FirstName,
+                    LastName = row.LastName,
+                    Position = row.Position,
+                    Email = row.Email,
+                    PhoneNumber = row.PhoneNumber,
+                    TelephoneNumber = row.TelephoneNumber,
+                    CompanyID = company.ID,
+                    CreatorID = AuthenticationHelper.GetUserIDAsync(user),
+                    CreatedOn = PresentDateTimeFetcher.FetchPresentDateTime(),
+                    RecordStatus = RecordStatus.Active
+                };
+                representatives.Add(representative);
+            }
+            _context.Representative.AddRange(representatives);
+            await _context.SaveChangesAsync();
+        }
     }
 }

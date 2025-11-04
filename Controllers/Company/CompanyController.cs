@@ -96,5 +96,6 @@ namespace CSMS_API.Controllers
             var file = await _companyExcelService.ExportCompaniesAsync();
             return File(file, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Companies.xlsx");
         }
+
     }
 }

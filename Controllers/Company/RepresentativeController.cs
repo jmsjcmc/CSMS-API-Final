@@ -1,4 +1,6 @@
 using CSMS_API.Models;
+using CSMS_API.Utils;
+using Magicodes.ExporterAndImporter.Excel;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CSMS_API.Controllers
@@ -8,15 +10,23 @@ namespace CSMS_API.Controllers
     public class RepresentativeController : ControllerBase
     {
         private readonly RepresentativeService _representativeService;
-        public RepresentativeController(RepresentativeService representativeService)
+        private readonly CompanyExcelService _companyExcelService;
+        public RepresentativeController(RepresentativeService representativeService, CompanyExcelService companyExcelService)
         {
             _representativeService = representativeService;
+            _companyExcelService = companyExcelService;
         }
         [HttpPost("representative/create")]
         public async Task<ActionResult<RepresentativeOnlyResponse>> CreateRepresentativeAsync(CreateRepresentativeRequest request)
         {
             var response = await _representativeService.CreateRepresentativeAsync(request, User);
             return response;
+        }
+        [HttpPost("representative/excel-import")]
+        public async Task<ActionResult> ImportRepresentativeAsync(IFormFile file)
+        {
+            await _companyExcelService.ImportRepresentativesAsync(file, User);
+            return Ok("Success");
         }
         [HttpPatch("representative/update/{ID}")]
         public async Task<ActionResult<RepresentativeOnlyResponse>> UpdateRepresentativeByIDAsync(int ID, UpdateRepresentativeRequest request)
@@ -41,6 +51,13 @@ namespace CSMS_API.Controllers
         {
             var response = await _representativeService.GetRepresentativeByIDAsync(ID);
             return response;
+        }
+        [HttpGet("representative/excel-template")]
+        public async Task<ActionResult> GetTemplateAsync()
+        {
+            var importer = new ExcelImporter();
+            var file = await importer.GenerateTemplateBytes<RepresentativeImportRequest>();
+            return File(file, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "RepresentativeTemplate.xlsx");
         }
     }
 }
