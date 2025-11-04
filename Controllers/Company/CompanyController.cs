@@ -1,4 +1,6 @@
 using CSMS_API.Models;
+using CSMS_API.Utils;
+using Magicodes.ExporterAndImporter.Excel;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CSMS_API.Controllers
@@ -8,15 +10,24 @@ namespace CSMS_API.Controllers
     public class CompanyController : ControllerBase
     {
         private readonly CompanyService _companyService;
-        public CompanyController(CompanyService companyService)
+        private readonly CompanyExcelService _companyExcelService;
+        public CompanyController(CompanyService companyService, CompanyExcelService companyExcelService)
         {
             _companyService = companyService;
+            _companyExcelService = companyExcelService;
         }
         [HttpPost("company/create")]
         public async Task<ActionResult<CompanyOnlyResponse>> CreateCompanyAsync(CreateCompanyRequest request)
         {
             var response = await _companyService.CreateCompanyAsync(request, User);
             return response;
+        }
+        [HttpPost("companies/excel-import")]
+        public async Task<ActionResult> ImportCompaniesAsync(IFormFile file)
+        {
+            using var stream = file.OpenReadStream();
+            await _companyExcelService.ImportCompaniesAsync(stream, User);
+            return Ok("Success");
         }
         [HttpPatch("company/update/{ID}")]
         public async Task<ActionResult<CompanyOnlyResponse>> UpdateCompanyByIDAsync(int ID, CreateCompanyRequest request)
@@ -41,6 +52,19 @@ namespace CSMS_API.Controllers
         {
             var response = await _companyService.GetCompanyWithRepresentativeByIDAsync(ID);
             return response;
+        }
+        [HttpGet("company/excel-template")]
+        public async Task<ActionResult> GetTemplateAsync()
+        {
+            var importer = new ExcelImporter();
+            var file = await importer.GenerateTemplateBytes<CompanyImportRequest>();
+            return File(file, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "CompanyTemplate.xlsx");
+        }
+        [HttpGet("companies/excel-export")]
+        public async Task<ActionResult> ExportCompaniesAsync()
+        {
+            var file = await _companyExcelService.ExportCompaniesAsync();
+            return File(file, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Companies.xlsx");
         }
     }
 }

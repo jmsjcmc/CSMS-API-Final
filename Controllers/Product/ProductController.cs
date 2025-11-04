@@ -1,4 +1,6 @@
 using CSMS_API.Models;
+using CSMS_API.Utils;
+using Magicodes.ExporterAndImporter.Excel;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CSMS_API.Controllers
@@ -35,6 +37,13 @@ namespace CSMS_API.Controllers
         {
             var response = await _productService.GetProductByIDAsync(ID);
             return response;
+        }
+        [HttpGet("product/excel-template")]
+        public async Task<ActionResult> GetTemplateAsync()
+        {
+            var importer = new ExcelImporter();
+            var file = await importer.GenerateTemplateBytes<ProductImportRequest>();
+            return File(file, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "ProductTemplate.xlsx");
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using CSMS_API.Controllers;
 using CSMS_API.Models;
+using Magicodes.ExporterAndImporter.Excel;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -16,12 +17,21 @@ namespace CSMS_API.Utils
             service.AddScoped<DepartmentService>();
             service.AddScoped<PositionService>();
             service.AddScoped<CompanyService>();
+            service.AddScoped<CompanyExcelService>();
             service.AddScoped<ProductService>();
             service.AddScoped<CategoryService>();
             service.AddScoped<ReceivingService>();
             service.AddScoped<ReceivingDetailService>();
             service.AddScoped<RepresentativeService>();
             service.AddScoped<ColdStorageService>();
+
+            return service;
+        }
+        public static IServiceCollection AddMagicCodesServices(this IServiceCollection service)
+        {
+            service.AddScoped<IExcelExporter, ExcelExporter>();
+            service.AddScoped<IExcelImporter, ExcelImporter>();
+
             return service;
         }
         public static IServiceCollection AddQueries(this IServiceCollection service)

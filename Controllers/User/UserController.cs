@@ -55,5 +55,35 @@ namespace CSMS_API.Controllers
             var response = await _userService.AuthenticatedUserDetailsAsync(User);
             return response;
         }
+        [HttpGet("users/paginated")]
+        public async Task<ActionResult<Paginate<UserOnlyResponse>>> PaginatedUsers(
+            int pageNumber = 1,
+            int pageSize = 10,
+            string searchTerm = null)
+        {
+            var response = await _userService.PaginatedUsers(pageNumber, pageSize, searchTerm);
+            return response;
+        }
+        [HttpGet("users/paginated/business-unit-and-position")]
+        public async Task<ActionResult<Paginate<UserWithBusinessUnitAndPositonResponse>>> PaginatedUsersWithBusinessUnitAndPosition(
+            int pageNumber = 1,
+            int pageSize = 10,
+            string searchTerm = null)
+        {
+            var response = await _userService.PaginatedUsersWithBusinessUnitAndPosition(pageNumber, pageSize, searchTerm);
+            return response;
+        }
+        [HttpGet("users/list")]
+        public async Task<ActionResult<List<UserOnlyResponse>>> ListedUsers(string? searchTerm)
+        {
+            var response = await _userService.ListedUsers(searchTerm);
+            return response;
+        }
+        [HttpGet("users/list/business-unit-and-position")]
+        public async Task<ActionResult<List<UserWithBusinessUnitAndPositonResponse>>> ListedUsersWithBusinessUnitAndPosition(string? searchTerm)
+        {
+            var response = await _userService.ListedUsersWithBusinessUnitAndPosition(searchTerm);
+            return response;
+        }
     }
 }

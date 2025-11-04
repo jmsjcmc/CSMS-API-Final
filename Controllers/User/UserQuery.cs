@@ -38,5 +38,100 @@ namespace CSMS_API.Controllers
                     .SingleOrDefaultAsync(u => u.ID == ID);
             }
         }
+        public IQueryable<User?> PaginatedUsers(string searchTerm)
+        {
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                var query = _context.User
+                    .AsNoTracking()
+                    .Where(u => u.FirstName.Contains(searchTerm) ||
+                    u.LastName.Contains(searchTerm) ||
+                    u.Username.Contains(searchTerm))
+                    .OrderByDescending(u => u.ID)
+                    .AsQueryable();
+
+                return query;
+            } else
+            {
+                var query = _context.User
+                    .AsNoTracking()
+                    .OrderByDescending(u => u.ID)
+                    .AsQueryable();
+
+                return query;
+            }
+        }
+        public IQueryable<User> PaginatedUsersWithBusinessUnitAndPosition(string searchTerm)
+        {
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                var query = _context.User
+                    .AsNoTracking()
+                    .Where(u => u.FirstName.Contains(searchTerm) ||
+                    u.LastName.Contains(searchTerm) ||
+                    u.Username.Contains(searchTerm))
+                    .Include(u => u.BusinessUnit)
+                    .Include(u => u.Position)
+                    .OrderByDescending(u => u.ID)
+                    .AsQueryable();
+
+                return query;
+            }
+            else
+            {
+                var query = _context.User
+                    .AsNoTracking()
+                    .Include(u => u.BusinessUnit)
+                    .Include(u => u.Position)
+                    .OrderByDescending(u => u.ID)
+                    .AsQueryable();
+
+                return query;
+            }
+        }
+        public async Task<List<User>> ListedUsers(string? searchTerm)
+        {
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                return await _context.User
+                    .AsNoTracking()
+                    .Where(u => u.FirstName.Contains(searchTerm) ||
+                    u.LastName.Contains(searchTerm) ||
+                    u.Username.Contains(searchTerm))
+                    .OrderByDescending(u => u.ID)
+                    .ToListAsync();
+            }
+            else
+            {
+                return await _context.User
+                    .AsNoTracking()
+                    .OrderByDescending(u => u.ID)
+                    .ToListAsync();
+            }
+        }
+        public async Task<List<User>> ListedUsersWithBusinessUnitAndPosition(string? searchTerm)
+        {
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                return await _context.User
+                    .AsNoTracking()
+                    .Where(u => u.FirstName.Contains(searchTerm) ||
+                    u.LastName.Contains(searchTerm) ||
+                    u.Username.Contains(searchTerm))
+                    .Include(u => u.BusinessUnit)
+                    .Include(u => u.Position)
+                    .OrderByDescending(u => u.ID)
+                    .ToListAsync();
+            }
+            else
+            {
+                return await _context.User
+                    .AsNoTracking()
+                    .Include(u => u.BusinessUnit)
+                    .Include(u => u.Position)
+                    .OrderByDescending(u => u.ID)
+                    .ToListAsync();
+            }
+        }
     }
 }

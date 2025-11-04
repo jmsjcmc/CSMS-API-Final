@@ -15,6 +15,16 @@ namespace CSMS_API.Controllers
         Task<UserWithBusinessUnitAndPositonResponse> DeleteUserByIDAsync(int ID);
         Task<UserWithBusinessUnitAndPositonResponse> GetUserByIDAsync(int ID);
         Task<UserWithBusinessUnitAndPositonResponse> AuthenticatedUserDetailsAsync(ClaimsPrincipal userDetail);
+        Task<Paginate<UserOnlyResponse>> PaginatedUsers(
+            int pageNumber,
+            int pageSize,
+            string searchTerm);
+        Task<Paginate<UserWithBusinessUnitAndPositonResponse>> PaginatedUsersWithBusinessUnitAndPosition(
+            int pageNumber,
+            int pageSize,
+            string searchTerm);
+        Task<List<UserOnlyResponse>> ListedUsers(string? searchTerm);
+        Task<List<UserWithBusinessUnitAndPositonResponse>> ListedUsersWithBusinessUnitAndPosition(string? searchTerm);
     }
     public class UserService : UserInterface
     {
@@ -124,6 +134,32 @@ namespace CSMS_API.Controllers
 
             var user = await _userQuery.GetUserByIDAsync(userID);
             return _mapper.Map<UserWithBusinessUnitAndPositonResponse>(user);
+        }
+        public async Task<Paginate<UserOnlyResponse>> PaginatedUsers(
+            int pageNumber,
+            int pageSize,
+            string searchTerm)
+        {
+            var query = _userQuery.PaginatedUsers(searchTerm);
+            return await PaginationHelper.PaginateAndMapAsync<User, UserOnlyResponse>(query, pageNumber, pageSize, _mapper);
+        }
+        public async Task<Paginate<UserWithBusinessUnitAndPositonResponse>> PaginatedUsersWithBusinessUnitAndPosition(
+            int pageNumber,
+            int pageSize,
+            string searchTerm)
+        {
+            var query = _userQuery.PaginatedUsersWithBusinessUnitAndPosition(searchTerm);
+            return await PaginationHelper.PaginateAndMapAsync<User, UserWithBusinessUnitAndPositonResponse>(query, pageNumber, pageSize, _mapper);
+        }
+        public async Task<List<UserOnlyResponse>> ListedUsers(string? searchTerm)
+        {
+            var users = await _userQuery.ListedUsers(searchTerm);
+            return _mapper.Map<List<UserOnlyResponse>>(users);
+        }
+        public async Task<List<UserWithBusinessUnitAndPositonResponse>> ListedUsersWithBusinessUnitAndPosition(string? searchTerm)
+        {
+            var users = await _userQuery.ListedUsersWithBusinessUnitAndPosition(searchTerm);
+            return _mapper.Map<List<UserWithBusinessUnitAndPositonResponse>>(users);
         }
     }
 }

@@ -12,6 +12,7 @@ builder.Services.AddDbContext<DB>(db =>
 });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddMagicCodesServices();
 builder.Services.AddServices();
 builder.Services.AddQueries();
 builder.Services.AddHelpers();
