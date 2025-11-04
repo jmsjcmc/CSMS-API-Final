@@ -21,6 +21,7 @@ namespace CSMS_API.Utils
             service.AddScoped<ReceivingService>();
             service.AddScoped<ReceivingDetailService>();
             service.AddScoped<RepresentativeService>();
+            service.AddScoped<ColdStorageService>();
             return service;
         }
         public static IServiceCollection AddQueries(this IServiceCollection service)
@@ -35,6 +36,7 @@ namespace CSMS_API.Utils
             service.AddScoped<ReceivingQuery>();
             service.AddScoped<ReceivingDetailQuery>();
             service.AddScoped<RepresentativeQuery>();
+            service.AddScoped<ColdStorageQuery>();
             return service;
         }
         public static IServiceCollection AddHelpers(this IServiceCollection service)

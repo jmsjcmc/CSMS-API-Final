@@ -9,6 +9,7 @@
         public User? Creator { get; set; }
         public DateTime? CreatedOn { get; set; }
         public RecordStatus? RecordStatus { get; set; }
+        public ICollection<PalletLog>? PalletLog { get; set; }
     }
     public class PalletLog
     {
@@ -32,6 +33,7 @@
         public User? Creator { get; set; }
         public DateTime? CreatedOn { get; set; }
         public RecordStatus? RecordStatus { get; set; }
+        public ICollection<PalletPositionLog>? PalletPositionLog { get; set; }
     }
     public class PalletPositionLog
     {
@@ -50,6 +52,8 @@
         public User? Creator { get; set; }
         public DateTime? CreatedOn { get; set; }
         public RecordStatus? RecordStatus { get; set; }
+        public ICollection<PalletPosition>? PalletPosition { get; set; }
+        public ICollection<ColdStorageLog>? ColdStorageLog { get; set; }
     }
     public class ColdStorageLog
     {
