@@ -53,6 +53,36 @@ namespace CSMS_API.Controllers
             var response = await _companyService.GetCompanyWithRepresentativeByIDAsync(ID);
             return response;
         }
+        [HttpGet("companies/paginated")]
+        public async Task<ActionResult<Paginate<CompanyOnlyResponse>>> PaginatedCompanies(
+            int pageNumber = 1,
+            int pageSize = 10,
+            string searchTerm = null)
+        {
+            var response = await _companyService.PaginatedCompanies(pageNumber, pageSize, searchTerm);
+            return response;
+        }
+        [HttpGet("companies/paginated/with-representative")]
+        public async Task<ActionResult<Paginate<CompanyWithRepresentativeResponse>>> PaginatedCompaniesWithRepresentative(
+            int pageNumber = 1,
+            int pageSize = 10,
+            string searchTerm = null)
+        {
+            var response = await _companyService.PaginatedCompaniesWithRepresentative(pageNumber, pageSize, searchTerm);
+            return response;
+        }
+        [HttpGet("companies/list")]
+        public async Task<ActionResult<List<CompanyOnlyResponse>>> ListedCompanies(string? searchTerm)
+        {
+            var response = await _companyService.ListedCompanies(searchTerm);
+            return response;
+        }
+        [HttpGet("companies/list/with-representative")]
+        public async Task<ActionResult<List<CompanyWithRepresentativeResponse>>> ListedCompaniesWithRepresentative(string? searchTerm)
+        {
+            var response = await _companyService.ListedCompaniesWithRepresentative(searchTerm);
+            return response;
+        }
         [HttpGet("company/excel-template")]
         public async Task<ActionResult> GetTemplateAsync()
         {

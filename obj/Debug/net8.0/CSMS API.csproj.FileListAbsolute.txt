@@ -389,7 +389,6 @@ c:\Users\James\Desktop\Repositories\C#\CSMS-API-Final\obj\Debug\net8.0\refint\CS
 c:\Users\James\Desktop\Repositories\C#\CSMS-API-Final\obj\Debug\net8.0\CSMS API.pdb
 C:\Users\James\Desktop\Repositories\C#\CSMS-API-Final\obj\Debug\net8.0\CSMS API.genruntimeconfig.cache
 C:\Users\James\Desktop\Repositories\C#\CSMS-API-Final\obj\Debug\net8.0\ref\CSMS API.dll
-C:\Users\jatabilog\source\repos\CSMS-API-Final\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 C:\Users\jatabilog\source\repos\CSMS-API-Final\bin\Debug\net8.0\DynamicExpresso.Core.dll
 C:\Users\jatabilog\source\repos\CSMS-API-Final\bin\Debug\net8.0\Magicodes.IE.Core.dll
 C:\Users\jatabilog\source\repos\CSMS-API-Final\bin\Debug\net8.0\Magicodes.IE.EPPlus.dll
@@ -406,3 +405,4 @@ C:\Users\jatabilog\source\repos\CSMS-API-Final\bin\Debug\net8.0\runtimes\osx\nat
 C:\Users\jatabilog\source\repos\CSMS-API-Final\bin\Debug\net8.0\runtimes\win-arm64\native\libSkiaSharp.dll
 C:\Users\jatabilog\source\repos\CSMS-API-Final\bin\Debug\net8.0\runtimes\win-x64\native\libSkiaSharp.dll
 C:\Users\jatabilog\source\repos\CSMS-API-Final\bin\Debug\net8.0\runtimes\win-x86\native\libSkiaSharp.dll
+C:\Users\jatabilog\source\repos\CSMS-API-Final\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

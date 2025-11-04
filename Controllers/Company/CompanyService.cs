@@ -12,6 +12,16 @@ namespace CSMS_API.Controllers
         Task<CompanyOnlyResponse> DeleteCompanyByIDAsync(int ID);
         Task<CompanyOnlyResponse> GetCompanyByIDAsync(int ID);
         Task<CompanyWithRepresentativeResponse> GetCompanyWithRepresentativeByIDAsync(int ID);
+        Task<Paginate<CompanyOnlyResponse>> PaginatedCompanies(
+            int pageNumber,
+            int pageSize,
+            string searchTerm);
+        Task<Paginate<CompanyWithRepresentativeResponse>> PaginatedCompaniesWithRepresentative(
+            int pageNumber,
+            int pageSize,
+            string searchTerm);
+        Task<List<CompanyOnlyResponse>> ListedCompanies(string searchTerm);
+        Task<List<CompanyWithRepresentativeResponse>> ListedCompaniesWithRepresentative(string searchTerm);
     }
     public class CompanyService : CompanyInterface
     {
@@ -71,6 +81,32 @@ namespace CSMS_API.Controllers
         {
             var company = await _companyQuery.GetCompanyByIDAsync(ID);
             return _mapper.Map<CompanyWithRepresentativeResponse>(company);
+        }
+        public async Task<Paginate<CompanyOnlyResponse>> PaginatedCompanies(
+            int pageNumber,
+            int pageSize,
+            string searchTerm)
+        {
+            var query = _companyQuery.PaginatedCompanies(searchTerm);
+            return await PaginationHelper.PaginateAndMapAsync<Company, CompanyOnlyResponse>(query, pageNumber, pageSize, _mapper);
+        }
+        public async Task<Paginate<CompanyWithRepresentativeResponse>> PaginatedCompaniesWithRepresentative(
+            int pageNumber,
+            int pageSize,
+            string searchTerm)
+        {
+            var query = _companyQuery.PaginatedCompaniesWithRepresentative(searchTerm);
+            return await PaginationHelper.PaginateAndMapAsync<Company, CompanyWithRepresentativeResponse>(query, pageNumber, pageSize, _mapper);
+        }
+        public async Task<List<CompanyOnlyResponse>> ListedCompanies(string? searchTerm)
+        {
+            var companies = await _companyQuery.ListedCompanies(searchTerm);
+            return _mapper.Map<List<CompanyOnlyResponse>>(companies);
+        }
+        public async Task<List<CompanyWithRepresentativeResponse>> ListedCompaniesWithRepresentative(string? searchTerm)
+        {
+            var companies = await _companyQuery.ListedCompaniesWithRepresentative(searchTerm);
+            return _mapper.Map<List<CompanyWithRepresentativeResponse>>(companies);
         }
     }
 }
