@@ -11,6 +11,11 @@ namespace CSMS_API.Controllers
         Task<PalletOnlyResponse> UpdatePalletByIDAsync(int ID, UpdatePalletRequest request, ClaimsPrincipal user);
         Task<PalletOnlyResponse> DeletePalletByIDAsync(int ID);
         Task<PalletOnlyResponse> GetPalletByIDAsync(int ID);
+        Task<Paginate<PalletOnlyResponse>> PaginatedPallets(
+            int pageNumber,
+            int pageSize,
+            string searchTerm);
+        Task<List<PalletOnlyResponse>> ListedPallets(string? searchTerm);
     }
     public class PalletService : PalletInterface
     {
@@ -65,6 +70,19 @@ namespace CSMS_API.Controllers
         {
             var pallet = await _palletQuery.GetPalletByIDAsync(ID);
             return _mapper.Map<PalletOnlyResponse>(pallet);
+        }
+        public async Task<Paginate<PalletOnlyResponse>> PaginatedPallets(
+            int pageNumber,
+            int pageSize,
+            string searchTerm)
+        {
+            var query = _palletQuery.PaginatedPallets(searchTerm);
+            return await PaginationHelper.PaginateAndMapAsync<Pallet, PalletOnlyResponse>(query, pageNumber, pageSize, _mapper);
+        }
+        public async Task<List<PalletOnlyResponse>> ListedPallets(string? searchTerm)
+        {
+            var pallets = await _palletQuery.ListedPallets(searchTerm);
+            return _mapper.Map<List<PalletOnlyResponse>>(pallets);
         }
     }
 }

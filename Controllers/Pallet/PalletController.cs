@@ -36,5 +36,20 @@ namespace CSMS_API.Controllers
             var response = await _palletService.GetPalletByIDAsync(ID);
             return response;
         }
+        [HttpGet("pallets/paginated")]
+        public async Task<ActionResult<Paginate<PalletOnlyResponse>>> PaginatedPallets(
+            int pageNumber = 1,
+            int pageSize = 10,
+            string searchTerm = null)
+        {
+            var response = await _palletService.PaginatedPallets(pageNumber, pageSize, searchTerm);
+            return response;
+        }
+        [HttpGet("pallets/list")]
+        public async Task<ActionResult<List<PalletOnlyResponse>>> ListedPallets(string? searchTerm)
+        {
+            var response = await _palletService.ListedPallets(searchTerm);
+            return response;
+        }
     }
 }
