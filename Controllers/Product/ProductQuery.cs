@@ -37,5 +37,46 @@ namespace CSMS_API.Controllers
                 .SingleOrDefaultAsync(p => p.ID == ID);
             }
         }
+        public IQueryable<Product> PaginatedProducts(string? searchTerm)
+        {
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                var query = _context.Product
+                    .AsNoTracking()
+                    .Where(p => p.ProductCode.Contains(searchTerm) ||
+                    p.ProductName.Contains(searchTerm))
+                    .OrderByDescending(p => p.ID)
+                    .AsQueryable();
+
+                return query;
+            }
+            else
+            {
+                var query = _context.Product
+                   .AsNoTracking()
+                   .OrderByDescending(p => p.ID)
+                   .AsQueryable();
+
+                return query;
+            }
+        }
+        public async Task<List<Product>> ListedProducts(string? searchTerm)
+        {
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                return await _context.Product
+                    .AsNoTracking()
+                    .Where(p => p.ProductCode.Contains(searchTerm) ||
+                    p.ProductName.Contains(searchTerm))
+                    .OrderByDescending(p => p.ID)
+                    .ToListAsync();
+            } else
+            {
+                return await _context.Product
+                   .AsNoTracking()
+                   .OrderByDescending(p => p.ID)
+                   .ToListAsync();
+            }
+        }
     }
 }

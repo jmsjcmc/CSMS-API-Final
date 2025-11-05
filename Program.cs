@@ -1,6 +1,7 @@
 using CSMS_API;
 using CSMS_API.Utils;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 

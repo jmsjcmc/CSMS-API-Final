@@ -11,6 +11,11 @@ namespace CSMS_API.Controllers
         Task<ProductOnlyResponse> UpdateProductByIDAsync(int ID, UpdateProductRequest request, ClaimsPrincipal user);
         Task<ProductOnlyResponse> DeleteProductByIDAsync(int ID);
         Task<ProductWithCategoryAndCompanyResponse> GetProductByIDAsync(int ID);
+        Task<Paginate<ProductOnlyResponse>> PaginatedProducts(
+            int pageNumber,
+            int pageSize,
+            string searchTerm);
+        Task<List<ProductOnlyResponse>> ListedProducts(string? searchTerm);
     }
     public class ProductService : ProductInterface
     {
@@ -68,6 +73,19 @@ namespace CSMS_API.Controllers
         {
             var product = await _productQuery.GetProductByIDAsync(ID);
             return _mapper.Map<ProductWithCategoryAndCompanyResponse>(product);
+        }
+        public async Task<Paginate<ProductOnlyResponse>> PaginatedProducts(
+            int pageNumber,
+            int pageSize,
+            string searchTerm)
+        {
+            var query = _productQuery.PaginatedProducts(searchTerm);
+            return await PaginationHelper.PaginateAndMapAsync<Product, ProductOnlyResponse>(query, pageNumber, pageSize, _mapper);
+        }
+        public async Task<List<ProductOnlyResponse>> ListedProducts(string? searchTerm)
+        {
+            var products = await _productQuery.ListedProducts(searchTerm);
+            return _mapper.Map<List<ProductOnlyResponse>>(products);
         }
     }
 }

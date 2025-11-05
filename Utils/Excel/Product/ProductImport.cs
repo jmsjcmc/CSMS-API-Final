@@ -1,4 +1,5 @@
-﻿using Magicodes.ExporterAndImporter.Core;
+﻿using CSMS_API.Models;
+using Magicodes.ExporterAndImporter.Core;
 using Magicodes.ExporterAndImporter.Excel;
 
 namespace CSMS_API.Utils
@@ -30,5 +31,15 @@ namespace CSMS_API.Utils
         public int? Quantity { get; set; }
         [ImporterHeader(Name = "Weight")]
         public double? Weight { get; set; }
+    }
+    public class CategoryImportRequest
+    {
+        [ImporterHeader(Name = "Category Name")]
+        public string? Name { get; set; }
+    }
+    public class CategoryExportResponse
+    {
+        public string? Name { get; set; }
+        public RecordStatus? RecordStatus { get; set; }
     }
 }

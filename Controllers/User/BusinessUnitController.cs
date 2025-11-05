@@ -1,5 +1,7 @@
 using CSMS_API.Models;
 using CSMS_API.Models.Entities;
+using CSMS_API.Utils;
+using Magicodes.ExporterAndImporter.Excel;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CSMS_API.Controllers
@@ -9,15 +11,24 @@ namespace CSMS_API.Controllers
     public class BusinessUnitController : ControllerBase
     {
         private readonly BusinessUnitService _businessUnitService;
-        public BusinessUnitController(BusinessUnitService businessUnitService)
+        private readonly BusinessUnitExcelService _businessUnitExcelService;
+        public BusinessUnitController(BusinessUnitService businessUnitService, BusinessUnitExcelService businessUnitExcelService)
         {
             _businessUnitService = businessUnitService;
+            _businessUnitExcelService = businessUnitExcelService;
         }
         [HttpPost("business-unit/create")]
         public async Task<ActionResult<BusinessUnitResponse>> CreateBusinessUnitAsync(CreateBusinessUnitRequest request)
         {
             var response = await _businessUnitService.CreateBusinessUnitAsync(request, User);
             return response;
+        }
+        [HttpPost("business-units/excel-import")]
+        public async Task<ActionResult> ImportBusinessUnitsAsync(IFormFile file)
+        {
+            using var stream = file.OpenReadStream();
+            await _businessUnitExcelService.ImportBusinessUnitsAsync(stream, User);
+            return Ok("Success");
         }
         [HttpPatch("business-unit/update/{ID}")]
         public async Task<ActionResult<BusinessUnitResponse>> UpdateBusinessUnitByIDAsync(int ID, UpdateBusinessUnitRequest request)
@@ -51,6 +62,19 @@ namespace CSMS_API.Controllers
         {
             var response = await _businessUnitService.ListedBusinessUnitsAsync(searchTerm);
             return response;
+        }
+        [HttpGet("business-units/excel-template")]
+        public async Task<ActionResult> GetTemplateAsync()
+        {
+            var importer = new ExcelImporter();
+            var file = await importer.GenerateTemplateBytes<BusinessUnitImportRequest>();
+            return File(file, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "BusinessUnits.xlsx");
+        }
+        [HttpGet("business-units/excel-export")]
+        public async Task<ActionResult> ExportBusinessUnitsAsync()
+        {
+            var file = await _businessUnitExcelService.ExportBusinessUnitsAsync();
+            return File(file, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "BusinessUnits.xlsx");
         }
     }
 }

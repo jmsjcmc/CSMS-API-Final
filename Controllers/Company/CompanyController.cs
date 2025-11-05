@@ -88,7 +88,7 @@ namespace CSMS_API.Controllers
         {
             var importer = new ExcelImporter();
             var file = await importer.GenerateTemplateBytes<CompanyImportRequest>();
-            return File(file, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "CompanyTemplate.xlsx");
+            return File(file, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Companies.xlsx");
         }
         [HttpGet("companies/excel-export")]
         public async Task<ActionResult> ExportCompaniesAsync()

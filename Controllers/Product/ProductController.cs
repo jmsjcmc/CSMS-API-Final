@@ -38,6 +38,21 @@ namespace CSMS_API.Controllers
             var response = await _productService.GetProductByIDAsync(ID);
             return response;
         }
+        [HttpGet("products/paginated")]
+        public async Task<ActionResult<Paginate<ProductOnlyResponse>>> PaginatedProducts(
+            int pageNumber = 1,
+            int pageSize = 10,
+            string searchTerm = null)
+        {
+            var response = await _productService.PaginatedProducts(pageNumber, pageSize, searchTerm);
+            return response;
+        }
+        [HttpGet("products/list")]
+        public async Task<ActionResult<List<ProductOnlyResponse>>> ListedProducts(string? searchTerm)
+        {
+            var response = await _productService.ListedProducts(searchTerm);
+            return response;
+        }
         [HttpGet("product/excel-template")]
         public async Task<ActionResult> GetTemplateAsync()
         {
