@@ -42,5 +42,20 @@ namespace CSMS_API.Controllers
             var response = await _palletPositionService.GetPalletPositionByIDAsync(ID);
             return response;
         }
+        [HttpGet("pallet-positions/paginated")]
+        public async Task<ActionResult<Paginate<PalletPositionOnlyResponse>>> PaginatedPalletPositions(
+            int pageNumber = 1,
+            int pageSize = 10,
+            string searchTerm = null)
+        {
+            var response = await _palletPositionService.PaginatedPalletPositions(pageNumber, pageSize, searchTerm);
+            return response;
+        }
+        [HttpGet("pallet-positions/list")]
+        public async Task<ActionResult<List<PalletPositionOnlyResponse>>> ListedPalletPositions(string? searchTerm)
+        {
+            var response = await _palletPositionService.ListedPalletPositions(searchTerm);
+            return response;
+        }
     }
 }

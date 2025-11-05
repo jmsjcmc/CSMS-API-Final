@@ -12,6 +12,11 @@ namespace CSMS_API.Controllers
         Task<PalletPositionOnlyResponse> UpdatePalletPositionByIDAsync(int ID, UpdatePalletPositionRequest request, ClaimsPrincipal user);
         Task<PalletPositionOnlyResponse> DeletePalletPositionByIDAsync(int ID);
         Task<PalletPositionWithColdStorageResponse> GetPalletPositionByIDAsync(int ID);
+        Task<Paginate<PalletPositionOnlyResponse>> PaginatedPalletPositions(
+            int pageNumber,
+            int pageSize,
+            string searchTerm);
+        Task<List<PalletPositionOnlyResponse>> ListedPalletPositions(string? searchTerm);
     }
     public class PalletPositionService : PalletPositionInterface
     {
@@ -89,6 +94,19 @@ namespace CSMS_API.Controllers
         {
             var palletPosition = await _palletPositionQuery.GetPalletPositionByIDAsync(ID);
             return _mapper.Map<PalletPositionWithColdStorageResponse>(palletPosition);
+        }
+        public async Task<Paginate<PalletPositionOnlyResponse>> PaginatedPalletPositions(
+            int pageNumber,
+            int pageSize,
+            string searchTerm)
+        {
+            var query = _palletPositionQuery.PaginatedPalletPositions(searchTerm);
+            return await PaginationHelper.PaginateAndMapAsync<PalletPosition, PalletPositionOnlyResponse>(query, pageNumber, pageSize, _mapper);
+        }
+        public async Task<List<PalletPositionOnlyResponse>> ListedPalletPositions(string? searchTerm)
+        {
+            var palletPositions = await _palletPositionQuery.ListedPalletPositions(searchTerm);
+            return _mapper.Map<List<PalletPositionOnlyResponse>>(palletPositions);
         }
     }
 }
