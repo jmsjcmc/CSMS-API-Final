@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CSMS_API.Migrations
 {
     [DbContext(typeof(DB))]
-    [Migration("20251103082521_1")]
-    partial class _1
+    [Migration("20251105003801_2")]
+    partial class _2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -134,6 +134,55 @@ namespace CSMS_API.Migrations
                     b.ToTable("CategoryLog");
                 });
 
+            modelBuilder.Entity("CSMS_API.Models.ColdStorage", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<DateTime?>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("CreatorID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Number")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("RecordStatus")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("ColdStorage");
+                });
+
+            modelBuilder.Entity("CSMS_API.Models.ColdStorageLog", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<int?>("ColdStorageID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("UpdaterID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ColdStorageID");
+
+                    b.ToTable("ColdStorageLog");
+                });
+
             modelBuilder.Entity("CSMS_API.Models.Company", b =>
                 {
                     b.Property<int>("ID")
@@ -242,6 +291,121 @@ namespace CSMS_API.Migrations
                     b.HasIndex("DepartmentID");
 
                     b.ToTable("DepartmentLog");
+                });
+
+            modelBuilder.Entity("CSMS_API.Models.Pallet", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<DateTime?>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("CreatorID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Number")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("RecordStatus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Pallet");
+                });
+
+            modelBuilder.Entity("CSMS_API.Models.PalletLog", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<int?>("PalletID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("UpdaterID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("PalletID");
+
+                    b.ToTable("PalletLog");
+                });
+
+            modelBuilder.Entity("CSMS_API.Models.PalletPosition", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<int?>("ColdStorageID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Column")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("CreatorID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Floor")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("RecordStatus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Side")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Wing")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ColdStorageID");
+
+                    b.ToTable("PalletPosition");
+                });
+
+            modelBuilder.Entity("CSMS_API.Models.PalletPositionLog", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<int?>("PalletPositionID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("UpdaterID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("PalletPositionID");
+
+                    b.ToTable("PalletPositionLog");
                 });
 
             modelBuilder.Entity("CSMS_API.Models.Position", b =>
@@ -772,6 +936,15 @@ namespace CSMS_API.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("CSMS_API.Models.ColdStorageLog", b =>
+                {
+                    b.HasOne("CSMS_API.Models.ColdStorage", "ColdStorage")
+                        .WithMany("ColdStorageLog")
+                        .HasForeignKey("ColdStorageID");
+
+                    b.Navigation("ColdStorage");
+                });
+
             modelBuilder.Entity("CSMS_API.Models.CompanyLog", b =>
                 {
                     b.HasOne("CSMS_API.Models.Company", "Company")
@@ -788,6 +961,33 @@ namespace CSMS_API.Migrations
                         .HasForeignKey("DepartmentID");
 
                     b.Navigation("Department");
+                });
+
+            modelBuilder.Entity("CSMS_API.Models.PalletLog", b =>
+                {
+                    b.HasOne("CSMS_API.Models.Pallet", "Pallet")
+                        .WithMany("PalletLog")
+                        .HasForeignKey("PalletID");
+
+                    b.Navigation("Pallet");
+                });
+
+            modelBuilder.Entity("CSMS_API.Models.PalletPosition", b =>
+                {
+                    b.HasOne("CSMS_API.Models.ColdStorage", "ColdStorage")
+                        .WithMany("PalletPosition")
+                        .HasForeignKey("ColdStorageID");
+
+                    b.Navigation("ColdStorage");
+                });
+
+            modelBuilder.Entity("CSMS_API.Models.PalletPositionLog", b =>
+                {
+                    b.HasOne("CSMS_API.Models.PalletPosition", "PalletPosition")
+                        .WithMany("PalletPositionLog")
+                        .HasForeignKey("PalletPositionID");
+
+                    b.Navigation("PalletPosition");
                 });
 
             modelBuilder.Entity("CSMS_API.Models.Position", b =>
@@ -954,6 +1154,13 @@ namespace CSMS_API.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("CSMS_API.Models.ColdStorage", b =>
+                {
+                    b.Navigation("ColdStorageLog");
+
+                    b.Navigation("PalletPosition");
+                });
+
             modelBuilder.Entity("CSMS_API.Models.Company", b =>
                 {
                     b.Navigation("CompanyLog");
@@ -968,6 +1175,16 @@ namespace CSMS_API.Migrations
                     b.Navigation("DepartmentLog");
 
                     b.Navigation("Position");
+                });
+
+            modelBuilder.Entity("CSMS_API.Models.Pallet", b =>
+                {
+                    b.Navigation("PalletLog");
+                });
+
+            modelBuilder.Entity("CSMS_API.Models.PalletPosition", b =>
+                {
+                    b.Navigation("PalletPositionLog");
                 });
 
             modelBuilder.Entity("CSMS_API.Models.Position", b =>

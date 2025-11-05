@@ -62,6 +62,17 @@ namespace CSMS_API.Utils
                 if (company == null)
                 {
                     throw new Exception($"Company {row.CompanyName} mot found");
+                    //company = new Company
+                    //{
+                    //    Name = row.CompanyName,
+                    //    CreatorID = AuthenticationHelper.GetUserIDAsync(user),
+                    //    CreatedOn = PresentDateTimeFetcher.FetchPresentDateTime(),
+                    //    RecordStatus = RecordStatus.Active
+                    //};
+
+                    //await _context.AddAsync(company);
+                    //await _context.SaveChangesAsync();
+                    //companies.Add(company);
                 }
                 var representative = new Representative
                 {

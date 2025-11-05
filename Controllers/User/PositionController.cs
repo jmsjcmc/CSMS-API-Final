@@ -42,5 +42,35 @@ namespace CSMS_API.Controllers
             var response = await _positionService.GetPositionByIDAsync(ID);
             return response;
         }
+        [HttpGet("positions/paginated")]
+        public async Task<ActionResult<Paginate<PositionOnlyResponse>>> PaginatedPositions(
+            int pageNumber = 1,
+            int pageSize = 10,
+            string searchTerm = null)
+        {
+            var response = await _positionService.PaginatedPositions(pageNumber, pageSize, searchTerm);
+            return response;
+        }
+        [HttpGet("positions/paginated/with-department")]
+        public async Task<ActionResult<Paginate<PositionWithDepartmentResponse>>> PaginatedPositionsWithDepartment(
+            int pageNumber = 1,
+            int pageSize = 10,
+            string searchTerm = null)
+        {
+            var response = await _positionService.PaginatedPositionsWithDepartment(pageNumber, pageSize, searchTerm);
+            return response;
+        }
+        [HttpGet("positions/list")]
+        public async Task<ActionResult<List<PositionOnlyResponse>>> ListedPositions(string? searchTerm)
+        {
+            var response = await _positionService.ListedPositions(searchTerm);
+            return response;
+        }
+        [HttpGet("positions/list/with-department")]
+        public async Task<ActionResult<List<PositionWithDepartmentResponse>>> ListedPositionsWithDepartment(string? searchTerm)
+        {
+            var response = await _positionService.ListedPositionsWithDepartment(searchTerm);
+            return response;
+        }
     }
 }

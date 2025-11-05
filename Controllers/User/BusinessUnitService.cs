@@ -13,6 +13,12 @@ namespace CSMS_API.Controllers
         Task<BusinessUnitResponse> UpdateBusinessUnitByIDAsync(int ID, UpdateBusinessUnitRequest request, ClaimsPrincipal user);
         Task<BusinessUnitResponse> DeleteBusinessUnitByIDAsync(int ID);
         Task<BusinessUnitResponse> GetBusinessUnitByIDAsync(int ID);
+        Task<Paginate<BusinessUnitResponse>> PaginatedBusinessUnits(
+            int pageNumber,
+            int pageSize,
+            string searchTerm);
+        Task<List<BusinessUnitResponse>> ListedBusinessUnitsAsync(string? searchTerm);
+
     }
     public class BusinessUnitService : BusinessUnitInterface
     {
@@ -78,6 +84,19 @@ namespace CSMS_API.Controllers
         {
             var businessUnit = await _businessUnitQuery.GetBusinessUnitByIDAsync(ID);
             return _mapper.Map<BusinessUnitResponse>(businessUnit);
+        }
+        public async Task<Paginate<BusinessUnitResponse>> PaginatedBusinessUnits(
+            int pageNumber,
+            int pageSize,
+            string searchTerm)
+        {
+            var query = _businessUnitQuery.PaginatedBusinessUnits(searchTerm);
+            return await PaginationHelper.PaginateAndMapAsync<BusinessUnit, BusinessUnitResponse>(query, pageNumber, pageSize, _mapper);
+        }
+        public async Task<List<BusinessUnitResponse>> ListedBusinessUnitsAsync(string? searchTerm)
+        {
+            var businessUnits = await _businessUnitQuery.ListedBusinessUnitsAsync(searchTerm);
+            return _mapper.Map<List<BusinessUnitResponse>>(businessUnits);
         }
     }
 }

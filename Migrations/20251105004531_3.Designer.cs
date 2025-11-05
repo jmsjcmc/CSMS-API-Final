@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CSMS_API.Migrations
 {
     [DbContext(typeof(DB))]
-    [Migration("20251104072751_2")]
-    partial class _2
+    [Migration("20251105004531_3")]
+    partial class _3
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
