@@ -35,5 +35,45 @@ namespace CSMS_API.Controllers
                    .SingleOrDefaultAsync(cs => cs.ID == ID);
             }
         }
+        public IQueryable<ColdStorage> PaginatedColdStorages(string? searchTerm)
+        {
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                var query = _context.ColdStorage
+                    .AsNoTracking()
+                    .Where(cs => cs.Number.Contains(searchTerm))
+                    .OrderByDescending(cs => cs.ID)
+                    .AsQueryable();
+
+                return query;
+            }
+            else
+            {
+                var query = _context.ColdStorage
+                   .AsNoTracking()
+                   .OrderByDescending(cs => cs.ID)
+                   .AsQueryable();
+
+                return query;
+            }
+        }
+        public async Task<List<ColdStorage>> ListedColdStorages(string? searchTerm)
+        {
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                return await _context.ColdStorage
+                    .AsNoTracking()
+                    .Where(cs => cs.Number.Contains(searchTerm))
+                    .OrderByDescending(cs => cs.ID)
+                    .ToListAsync();
+            }
+            else
+            {
+                return await _context.ColdStorage
+                    .AsNoTracking()
+                    .OrderByDescending(cs => cs.ID)
+                    .ToListAsync();
+            }
+        }
     }
 }

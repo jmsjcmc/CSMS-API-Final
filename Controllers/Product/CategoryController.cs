@@ -36,5 +36,20 @@ namespace CSMS_API.Controllers
             var response = await _categoryService.GetCategoryByIDAsync(ID);
             return response;
         }
+        [HttpGet("categories/paginated")]
+        public async Task<ActionResult<Paginate<CategoryResponse>>> PaginatedCategories(
+            int pageNumber = 1,
+            int pageSize = 10,
+            string searchTerm = null)
+        {
+            var response = await _categoryService.PaginatedCategories(pageNumber, pageSize, searchTerm);
+            return response;
+        }
+        [HttpGet("categories/list")]
+        public async Task<ActionResult<List<CategoryResponse>>> ListedCategories(string? searchTerm)
+        {
+            var response = await _categoryService.ListedCategories(searchTerm);
+            return response;
+        }
     }
 }

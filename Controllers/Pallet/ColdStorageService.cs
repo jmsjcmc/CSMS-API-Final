@@ -11,6 +11,11 @@ namespace CSMS_API.Controllers
         Task<ColdStorageOnlyResponse> UpdateColdStorageByIDAsync(int ID, string coldStorageNumber, ClaimsPrincipal user);
         Task<ColdStorageOnlyResponse> DeleteColdStorageByIDAsync(int ID);
         Task<ColdStorageOnlyResponse> GetColdStorageByIDAsync(int ID);
+        Task<Paginate<ColdStorageOnlyResponse>> PaginatedColdStorages(
+            int pageNumber,
+            int pageSize,
+            string searchTerm);
+        Task<List<ColdStorageOnlyResponse>> ListedColdStorages(string? searchTerm);
     }
     public class ColdStorageService : ColdStorageInterface
     {
@@ -71,6 +76,19 @@ namespace CSMS_API.Controllers
         {
             var coldStorage = await _coldStorageQuery.GetColdStorageByIDAsync(ID);
             return _mapper.Map<ColdStorageOnlyResponse>(coldStorage);
+        }
+        public async Task<Paginate<ColdStorageOnlyResponse>> PaginatedColdStorages(
+            int pageNumber,
+            int pageSize,
+            string searchTerm)
+        {
+            var query = _coldStorageQuery.PaginatedColdStorages(searchTerm);
+            return await PaginationHelper.PaginateAndMapAsync<ColdStorage, ColdStorageOnlyResponse>(query, pageNumber, pageSize, _mapper);
+        }
+        public async Task<List<ColdStorageOnlyResponse>> ListedColdStorages(string? searchTerm)
+        {
+            var coldStorages = await _coldStorageQuery.ListedColdStorages(searchTerm);
+            return _mapper.Map<List<ColdStorageOnlyResponse>>(coldStorages);
         }
     }
 }

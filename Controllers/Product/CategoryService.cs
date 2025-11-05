@@ -11,6 +11,11 @@ namespace CSMS_API.Controllers
         Task<CategoryResponse> UpdateCategoryByIDAsync(int ID, string categoryName, ClaimsPrincipal user);
         Task<CategoryResponse> DeleteCategoryByIDAsync(int ID);
         Task<CategoryResponse> GetCategoryByIDAsync(int ID);
+        Task<Paginate<CategoryResponse>> PaginatedCategories(
+            int pageNumber,
+            int pageSize,
+            string searchTerm);
+        Task<List<CategoryResponse>> ListedCategories(string? searchTerm);
     }
     public class CategoryService : CategoryInterface
     {
@@ -70,6 +75,19 @@ namespace CSMS_API.Controllers
         {
             var category = await _categoryQuery.GetCategoryByIDAsync(ID);
             return _mapper.Map<CategoryResponse>(category);
+        }
+        public async Task<Paginate<CategoryResponse>> PaginatedCategories(
+            int pageNumber,
+            int pageSize,
+            string searchTerm)
+        {
+            var query = _categoryQuery.PaginatedCategories(searchTerm);
+            return await PaginationHelper.PaginateAndMapAsync<Category, CategoryResponse>(query, pageNumber, pageSize, _mapper);
+        }
+        public async Task<List<CategoryResponse>> ListedCategories(string? searchTerm)
+        {
+            var categories = await _categoryQuery.ListedCategories(searchTerm);
+            return _mapper.Map<List<CategoryResponse>>(categories);
         }
     }
 }

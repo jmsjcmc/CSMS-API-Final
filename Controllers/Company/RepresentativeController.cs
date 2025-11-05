@@ -52,6 +52,21 @@ namespace CSMS_API.Controllers
             var response = await _representativeService.GetRepresentativeByIDAsync(ID);
             return response;
         }
+        [HttpGet("representatives/paginated")]
+        public async Task<ActionResult<Paginate<RepresentativeOnlyResponse>>> PaginatedRepresentatives(
+            int pageNumber = 1,
+            int pageSize = 10,
+            string searchTerm = null)
+        {
+            var response = await _representativeService.PaginatedRepresentatives(pageNumber, pageSize, searchTerm);
+            return response;
+        }
+        [HttpGet("representatives/list")]
+        public async Task<ActionResult<List<RepresentativeOnlyResponse>>> ListedRepresentatives(string? searchTerm)
+        {
+            var response = await _representativeService.ListedRepresentatives(searchTerm);
+            return response;
+        }
         [HttpGet("representative/excel-template")]
         public async Task<ActionResult> GetTemplateAsync()
         {

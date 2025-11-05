@@ -36,5 +36,20 @@ namespace CSMS_API.Controllers
             var response = await _coldStorageService.GetColdStorageByIDAsync(ID);
             return response;
         }
+        [HttpGet("cold-storages/paginated")]
+        public async Task<ActionResult<Paginate<ColdStorageOnlyResponse>>> PaginatedColdStorages(
+            int pageNumber = 1,
+            int pageSize = 10,
+            string searchTerm = null)
+        {
+            var response = await _coldStorageService.PaginatedColdStorages(pageNumber, pageSize, searchTerm);
+            return response;
+        }
+        [HttpGet("cold-storages/list")]
+        public async Task<ActionResult<List<ColdStorageOnlyResponse>>> ListedColdStorages(string? searchTerm)
+        {
+            var response = await _coldStorageService.ListedColdStorages(searchTerm);
+            return response;
+        }
     }
 }
