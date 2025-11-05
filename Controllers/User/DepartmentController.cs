@@ -1,4 +1,6 @@
 using CSMS_API.Models;
+using CSMS_API.Utils;
+using Magicodes.ExporterAndImporter.Excel;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CSMS_API.Controllers
@@ -8,15 +10,24 @@ namespace CSMS_API.Controllers
     public class DepartmentController : ControllerBase
     {
         private readonly DepartmentService _departmentService;
-        public DepartmentController(DepartmentService departmentService)
+        private readonly DepartmentExcelService _departmentExcelService;
+        public DepartmentController(DepartmentService departmentService, DepartmentExcelService departmentExcelService)
         {
             _departmentService = departmentService;
+            _departmentExcelService = departmentExcelService;
         }
         [HttpPost("department/create")]
         public async Task<ActionResult<DepartmentOnlyResponse>> CreateDepartmentAsync(string departmentName)
         {
             var response = await _departmentService.CreateDepartmentAsync(departmentName, User);
             return response;
+        }
+        [HttpPost("departments/excel-import")]
+        public async Task<ActionResult> ImportDepartmentsAsync(IFormFile file)
+        {
+            using var stream = file.OpenReadStream();
+            await _departmentExcelService.ImportDepartmentsAsync(stream, User);
+            return Ok("Success");
         }
         [HttpPatch("department/update/{ID}")]
         public async Task<ActionResult<DepartmentOnlyResponse>> UpdateDepartmentByIDAsync(int ID, string departmentName)
@@ -65,6 +76,19 @@ namespace CSMS_API.Controllers
         {
             var response = await _departmentService.ListedDepartmentsWithPosition(searchTerm);
             return response;
+        }
+        [HttpGet("departments/excel-template")]
+        public async Task<ActionResult> GetTemplateAsync()
+        {
+            var importer = new ExcelImporter();
+            var file = await importer.GenerateTemplateBytes<DepartmentImportRequest>();
+            return File(file, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Departments.xlsx");
+        }
+        [HttpGet("departments/excel-export")]
+        public async Task<ActionResult> ExportDepartmentsAsync()
+        {
+            var file = await _departmentExcelService.ExportDepartmentsAsync();
+            return File(file, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Department.xlsx");
         }
     }
 }

@@ -13,18 +13,30 @@ namespace CSMS_API.Utils
         public static IServiceCollection AddServices(this IServiceCollection service)
         {
             service.AddScoped<UserService>();
+
             service.AddScoped<BusinessUnitService>();
             service.AddScoped<BusinessUnitExcelService>();
+
             service.AddScoped<DepartmentService>();
+            service.AddScoped<DepartmentExcelService>();
+
             service.AddScoped<PositionService>();
+            service.AddScoped<PositionExcelService>();
+
             service.AddScoped<CompanyService>();
             service.AddScoped<CompanyExcelService>();
+
             service.AddScoped<ProductService>();
+
             service.AddScoped<CategoryService>();
             service.AddScoped<CategoryExcelService>();
+
             service.AddScoped<ReceivingService>();
+
             service.AddScoped<ReceivingDetailService>();
+
             service.AddScoped<RepresentativeService>();
+
             service.AddScoped<ColdStorageService>();
 
             return service;
