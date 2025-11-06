@@ -57,16 +57,30 @@ namespace CSMS_API.Utils
         public static IServiceCollection AddQueries(this IServiceCollection service)
         {
             service.AddScoped<UserQuery>();
+
             service.AddScoped<BusinessUnitQuery>();
+
             service.AddScoped<DepartmentQuery>();
+
             service.AddScoped<PositionQuery>();
+
             service.AddScoped<CompanyQuery>();
+
             service.AddScoped<ProductQuery>();
+
             service.AddScoped<CategoryQuery>();
+
             service.AddScoped<ReceivingQuery>();
+
             service.AddScoped<ReceivingDetailQuery>();
+
             service.AddScoped<RepresentativeQuery>();
+
             service.AddScoped<ColdStorageQuery>();
+
+            service.AddScoped<PalletQuery>();
+
+            service.AddScoped<PalletPositionQuery>();
             return service;
         }
         public static IServiceCollection AddHelpers(this IServiceCollection service)
