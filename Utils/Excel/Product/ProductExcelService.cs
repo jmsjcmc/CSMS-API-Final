@@ -16,7 +16,48 @@ namespace CSMS_API.Utils
             _excelImporter = excelImporter;
             _excelExporter = excelExporter;
         }
-
+        public async Task ImportProductsAsync(IFormFile file, ClaimsPrincipal user)
+        {
+            var result = await _excelImporter.Import<ProductImportRequest>(file.OpenReadStream());
+            var response = result.Data;
+            var companies = await _context.Company.ToListAsync();
+            var categories = await _context.Category.ToListAsync();
+            var products = new List<Product>();
+            foreach (var row in response)
+            {
+                var company = companies.SingleOrDefault(c => c.Name == row.CompanyName);
+                if (company == null)
+                {
+                    throw new Exception($"Company {row.CompanyName} not found");
+                }
+                var category = categories.SingleOrDefault(c => c.Name == row.CategoryName);
+                if (category == null)
+                {
+                    throw new Exception($"Category {row.CategoryName} not found");
+                }
+                var product = new Product
+                {
+                    CategoryID = category.ID,
+                    CompanyID = company.ID,
+                    ProductCode = row.ProductCode,
+                    ProductName = row.ProductName,
+                    Variant = row.Variant,
+                    SKU = row.SKU,
+                    ProductPackaging = row.ProductPackaging,
+                    DeliveryUnit = row.DeliveryUnit,
+                    UOM = row.UOM,
+                    Unit = row.Unit,
+                    Quantity = row.Quantity,
+                    Weight = row.Weight,
+                    CreatorID = AuthenticationHelper.GetUserIDAsync(user),
+                    CreatedOn = PresentDateTimeFetcher.FetchPresentDateTime(),
+                    RecordStatus = RecordStatus.Active
+                };
+                products.Add(product);
+            }
+            _context.Product.AddRange(products);
+            await _context.SaveChangesAsync();
+        }
     }
     public class CategoryExcelService
     {

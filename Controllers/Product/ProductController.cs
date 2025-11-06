@@ -10,15 +10,24 @@ namespace CSMS_API.Controllers
     public class ProductController : ControllerBase
     {
         private readonly ProductService _productService;
-        public ProductController(ProductService productService)
+        private readonly ProductExcelService _productExcelService;
+        public ProductController(ProductService productService, ProductExcelService productExcelService)
         {
             _productService = productService;
+            _productExcelService = productExcelService;
         }
         [HttpPost("product/create")]
         public async Task<ActionResult<ProductOnlyResponse>> CreateProductAsync(CreateProductRequest request)
         {
             var response = await _productService.CreateProductAsync(request, User);
             return response;
+        }
+        [HttpPost("products/excel-import")]
+        public async Task<ActionResult> ImportProductsAsync(IFormFile file)
+        {
+            using var stream = file.OpenReadStream();
+            await _productExcelService.ImportProductsAsync(file, User);
+            return Ok("Success");
         }
         [HttpPatch("product/{ID}/update")]
         public async Task<ActionResult<ProductOnlyResponse>> UpdateProductByIDAsync(int ID, UpdateProductRequest request)
@@ -58,7 +67,7 @@ namespace CSMS_API.Controllers
         {
             var importer = new ExcelImporter();
             var file = await importer.GenerateTemplateBytes<ProductImportRequest>();
-            return File(file, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "ProductTemplate.xlsx");
+            return File(file, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Product.xlsx");
         }
     }
 }

@@ -27,6 +27,7 @@ namespace CSMS_API.Utils
             service.AddScoped<CompanyExcelService>();
 
             service.AddScoped<ProductService>();
+            service.AddScoped<ProductExcelService>();
 
             service.AddScoped<CategoryService>();
             service.AddScoped<CategoryExcelService>();
