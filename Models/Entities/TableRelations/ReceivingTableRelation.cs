@@ -15,4 +15,13 @@ namespace CSMS_API.Models
                 .HasForeignKey(rp => rp.ProductID);
         }
     }
+    public class ReceivingProductLogRelation : IEntityTypeConfiguration<ReceivingProductLog>
+    {
+        public void Configure(EntityTypeBuilder<ReceivingProductLog> builder)
+        {
+            builder.HasOne(rpl => rpl.ReceivingProduct)
+                .WithMany(rp => rp.ReceivingProductLog)
+                .HasForeignKey(rpl => rpl.ReceivingProductID);
+        }
+    }
 }

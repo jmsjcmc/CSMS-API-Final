@@ -4,6 +4,7 @@ using CSMS_API;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CSMS_API.Migrations
 {
     [DbContext(typeof(DB))]
-    partial class DBModelSnapshot : ModelSnapshot
+    [Migration("20251106094655_8")]
+    partial class _8
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -710,9 +713,6 @@ namespace CSMS_API.Migrations
                     b.Property<int?>("ReceivingID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("RecordStatus")
-                        .HasColumnType("int");
-
                     b.Property<int?>("TotalQuantity")
                         .HasColumnType("int");
 
@@ -726,32 +726,6 @@ namespace CSMS_API.Migrations
                     b.HasIndex("ReceivingID");
 
                     b.ToTable("ReceivingProduct");
-                });
-
-            modelBuilder.Entity("CSMS_API.Models.ReceivingProductLog", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<int?>("ReceivingProductID")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("UpdaterID")
-                        .HasColumnType("int");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("ReceivingProductID");
-
-                    b.HasIndex("UpdaterID");
-
-                    b.ToTable("ReceivingProductLog");
                 });
 
             modelBuilder.Entity("CSMS_API.Models.Representative", b =>
@@ -1203,21 +1177,6 @@ namespace CSMS_API.Migrations
                     b.Navigation("Receiving");
                 });
 
-            modelBuilder.Entity("CSMS_API.Models.ReceivingProductLog", b =>
-                {
-                    b.HasOne("CSMS_API.Models.ReceivingProduct", "ReceivingProduct")
-                        .WithMany("ReceivingProductLog")
-                        .HasForeignKey("ReceivingProductID");
-
-                    b.HasOne("CSMS_API.Models.User", "Updater")
-                        .WithMany()
-                        .HasForeignKey("UpdaterID");
-
-                    b.Navigation("ReceivingProduct");
-
-                    b.Navigation("Updater");
-                });
-
             modelBuilder.Entity("CSMS_API.Models.Representative", b =>
                 {
                     b.HasOne("CSMS_API.Models.Company", "Company")
@@ -1368,11 +1327,6 @@ namespace CSMS_API.Migrations
             modelBuilder.Entity("CSMS_API.Models.ReceivingDetail", b =>
                 {
                     b.Navigation("ReceivingDetailLog");
-                });
-
-            modelBuilder.Entity("CSMS_API.Models.ReceivingProduct", b =>
-                {
-                    b.Navigation("ReceivingProductLog");
                 });
 
             modelBuilder.Entity("CSMS_API.Models.Representative", b =>

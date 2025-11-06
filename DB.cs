@@ -38,6 +38,7 @@ namespace CSMS_API
         public DbSet<ColdStorage> ColdStorage { get; set; }
         public DbSet<ColdStorageLog> ColdStorageLog { get; set; }
         public DbSet<ReceivingProduct> ReceivingProduct { get; set; }
+        public DbSet<ReceivingProductLog> ReceivingProductLog { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
