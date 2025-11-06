@@ -23,6 +23,7 @@ namespace CSMS_API.Models
         public RecordStatus? RecordStatus { get; set; }
         public ICollection<ProductLog>? ProductLog { get; set; }
         public ICollection<ReceivingDetail>? ReceivingDetail { get; set; }
+        public ICollection<ReceivingProduct>? ReceivingProduct { get; set; }
     }
     public class ProductLog
     {

@@ -36,7 +36,7 @@
         public int? DUQuantity { get; set; }
         public double? TotalWeight { get; set; }
         public string? Remark { get; set; }
-        public UserWithBusinessUnitAndPositionObjectResponse? Creator { get; set; }
+        public UserWithBusinessUnitAndPositionObjectResponse? Creator { get; set; } // USER
         public DateTime? CreatedOn { get; set; }
     }
     public class ReceivingDetailWithReceivingAndProductResponse

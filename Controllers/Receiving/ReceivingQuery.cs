@@ -22,7 +22,12 @@ namespace CSMS_API.Controllers
                     .AsNoTracking()
                     .Include(r => r.Creator)
                     .Include(r => r.Approver)
-                    .Include(r => r.ReceivingDetail)
+                    .Include(r => r.ReceivingDetail!)
+                    .ThenInclude(rd => rd.Creator)
+                    .ThenInclude(c => c.BusinessUnit)
+                    .Include(r => r.ReceivingDetail!)
+                    .ThenInclude(rd => rd.Creator)
+                    .ThenInclude(c => c.Position)
                     .SingleOrDefaultAsync(r => r.ID == ID);
             }
         }

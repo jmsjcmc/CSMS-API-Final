@@ -24,7 +24,8 @@ namespace CSMS_API.Models
         {
             CreateMap<CreateReceivingDetailRequest, ReceivingDetail>();
             CreateMap<UpdateReceivingDetailRequest, ReceivingDetail>();
-            CreateMap<ReceivingDetail, ReceivingDetailOnlyResponse>();
+            CreateMap<ReceivingDetail, ReceivingDetailOnlyResponse>()
+                .ForMember(d => d.Creator, o => o.MapFrom(s => s.Creator));
             CreateMap<ReceivingDetail, ReceivingDetailWithReceivingAndProductResponse>()
                 .ForMember(d => d.ReceivingID, o => o.MapFrom(s => s.Receiving.ID))
                 .ForMember(d => d.DocumentNo, o => o.MapFrom(s => s.Receiving.DocumentNo))

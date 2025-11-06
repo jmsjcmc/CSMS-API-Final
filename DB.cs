@@ -37,6 +37,7 @@ namespace CSMS_API
         public DbSet<PalletPositionLog> PalletPositionLog { get; set; }
         public DbSet<ColdStorage> ColdStorage { get; set; }
         public DbSet<ColdStorageLog> ColdStorageLog { get; set; }
+        public DbSet<ReceivingProduct> ReceivingProduct { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -68,11 +69,11 @@ namespace CSMS_API
             modelBuilder.Entity<Category>().Ignore(c => c.Creator);
             modelBuilder.Entity<CategoryLog>().Ignore(cl => cl.Updater);
 
-            modelBuilder.Entity<Receiving>().Ignore(r => r.Creator);
-            modelBuilder.Entity<ReceivingLog>().Ignore(rl => rl.Updater);
+            //modelBuilder.Entity<Receiving>().Ignore(r => r.Creator);
+            //modelBuilder.Entity<ReceivingLog>().Ignore(rl => rl.Updater);
 
-            modelBuilder.Entity<ReceivingDetail>().Ignore(rd => rd.Creator);
-            modelBuilder.Entity<ReceivingDetailLog>().Ignore(rdl => rdl.Updater);
+            //modelBuilder.Entity<ReceivingDetail>().Ignore(rd => rd.Creator);
+            //modelBuilder.Entity<ReceivingDetailLog>().Ignore(rdl => rdl.Updater);
 
             modelBuilder.Entity<Pallet>().Ignore(p => p.Creator);
             modelBuilder.Entity<PalletLog>().Ignore(pl => pl.Updater);

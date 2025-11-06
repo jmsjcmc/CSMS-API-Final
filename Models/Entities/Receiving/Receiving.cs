@@ -18,6 +18,7 @@
         public RecordStatus? RecordStatus { get; set; }
         public ICollection<ReceivingLog>? ReceivingLog { get; set; }
         public ICollection<ReceivingDetail>? ReceivingDetail { get; set; }
+        public ICollection<ReceivingProduct>? ReceivingProduct { get; set; }
     }
     public class ReceivingLog
     {
