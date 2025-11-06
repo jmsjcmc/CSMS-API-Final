@@ -29,13 +29,13 @@ namespace CSMS_API.Controllers
             await _companyExcelService.ImportCompaniesAsync(stream, User);
             return Ok("Success");
         }
-        [HttpPatch("company/update/{ID}")]
+        [HttpPatch("company/{ID}/update")]
         public async Task<ActionResult<CompanyOnlyResponse>> UpdateCompanyByIDAsync(int ID, CreateCompanyRequest request)
         {
             var response = await _companyService.UpdateCompanyByIDAsync(ID, request, User);
             return response;
         }
-        [HttpDelete("company/delete/{ID}")]
+        [HttpDelete("company/{ID}/delete")]
         public async Task<ActionResult<CompanyOnlyResponse>> DeleteCompanyByIDAsync(int ID)
         {
             var response = await _companyService.DeleteCompanyByIDAsync(ID);
@@ -47,7 +47,7 @@ namespace CSMS_API.Controllers
             var response = await _companyService.GetCompanyByIDAsync(ID);
             return response;
         }
-        [HttpGet("company/with-representative/{ID}")]
+        [HttpGet("company/{ID}/with-representative")]
         public async Task<ActionResult<CompanyWithRepresentativeResponse>> GetCompanyWithRepresentativeByIDAsync(int ID)
         {
             var response = await _companyService.GetCompanyWithRepresentativeByIDAsync(ID);

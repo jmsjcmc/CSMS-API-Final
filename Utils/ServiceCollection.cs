@@ -45,6 +45,10 @@ namespace CSMS_API.Utils
 
             service.AddScoped<PalletPositionService>();
             service.AddScoped<PalletPositionExcelService>();
+
+            service.AddScoped<RoleService>();
+
+            service.AddScoped<UserRoleService>();
             return service;
         }
         public static IServiceCollection AddMagicCodesServices(this IServiceCollection service)
@@ -81,6 +85,10 @@ namespace CSMS_API.Utils
             service.AddScoped<PalletQuery>();
 
             service.AddScoped<PalletPositionQuery>();
+
+            service.AddScoped<RoleQuery>();
+
+            service.AddScoped<UserRoleQuery>();
             return service;
         }
         public static IServiceCollection AddHelpers(this IServiceCollection service)

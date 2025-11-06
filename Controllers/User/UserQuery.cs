@@ -120,6 +120,7 @@ namespace CSMS_API.Controllers
                     u.Username.Contains(searchTerm))
                     .Include(u => u.BusinessUnit)
                     .Include(u => u.Position)
+                    .ThenInclude(p => p.Department)
                     .OrderByDescending(u => u.ID)
                     .ToListAsync();
             }
@@ -129,6 +130,7 @@ namespace CSMS_API.Controllers
                     .AsNoTracking()
                     .Include(u => u.BusinessUnit)
                     .Include(u => u.Position)
+                    .ThenInclude(p => p.Department)
                     .OrderByDescending(u => u.ID)
                     .ToListAsync();
             }

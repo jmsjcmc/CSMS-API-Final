@@ -24,4 +24,20 @@ namespace CSMS_API.Models
                 .ForMember(d => d.Position, o => o.MapFrom(s => s.Position));
         }
     }
+    public class RoleMapper : Profile
+    {
+        public RoleMapper()
+        {
+            CreateMap<Role, RoleOnlyResponse>();
+        }
+    }
+    public class UserRoleMapper : Profile
+    {
+        public UserRoleMapper()
+        {
+            CreateMap<UserRole, UserWithRoleResponse>()
+                .ForMember(d => d.User, o => o.MapFrom(s => s.User))
+                .ForMember(d => d.Role, o => o.MapFrom(s => s.Role));
+        }
+    }
 }

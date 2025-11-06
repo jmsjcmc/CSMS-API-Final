@@ -12,6 +12,7 @@ namespace CSMS_API.Controllers
         Task<UserWithBusinessUnitAndPositonResponse> CreateUserAsync(CreateUserRequest request, ClaimsPrincipal authUser);
         Task<UserWithBusinessUnitAndPositonResponse> UpdateUserByIDAsync(int ID, UpdateUserRequest request, ClaimsPrincipal authUser);
         Task<UserWithBusinessUnitAndPositonResponse> AddPositionToUserByIDAsync(int userID, int positionID, ClaimsPrincipal authUser);
+        Task<UserOnlyResponse> UpdateUserStatusByIDAsync(int ID, ClaimsPrincipal authUser);
         Task<UserWithBusinessUnitAndPositonResponse> DeleteUserByIDAsync(int ID);
         Task<UserWithBusinessUnitAndPositonResponse> GetUserByIDAsync(int ID);
         Task<UserWithBusinessUnitAndPositonResponse> AuthenticatedUserDetailsAsync(ClaimsPrincipal userDetail);
@@ -109,6 +110,26 @@ namespace CSMS_API.Controllers
             await _context.UserLog.AddAsync(userLog);
             await _context.SaveChangesAsync();
             return _mapper.Map<UserWithBusinessUnitAndPositonResponse>(user);
+        }
+        public async Task<UserOnlyResponse> UpdateUserStatusByIDAsync(int ID, ClaimsPrincipal authUser)
+        {
+            var user = await _userQuery.PatchUserByIDAsync(ID);
+            user.RecordStatus = user.RecordStatus == RecordStatus.Active
+                ? RecordStatus.Inactive
+                : RecordStatus.Active;
+
+            await _context.SaveChangesAsync();
+
+            var userLog = new UserLog
+            {
+                UserID = user.ID,
+                UpdaterID = AuthenticationHelper.GetUserIDAsync(authUser),
+                UpdatedOn = PresentDateTimeFetcher.FetchPresentDateTime()
+            };
+            await _context.UserLog.AddAsync(userLog);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<UserOnlyResponse>(user);
         }
         public async Task<UserWithBusinessUnitAndPositonResponse> DeleteUserByIDAsync(int ID)
         {

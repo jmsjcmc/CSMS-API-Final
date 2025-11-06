@@ -18,19 +18,19 @@ namespace CSMS_API.Controllers
             var response = await _positionService.CreatePositionAsync(positionName, User);
             return response;
         }
-        [HttpPatch("position/update/{ID}")]
+        [HttpPatch("position/{ID}/update")]
         public async Task<ActionResult<PositionOnlyResponse>> UpdatePositionByIDAsync(int ID, string positionName)
         {
             var response = await _positionService.UpdatePositionByIDAsync(ID, positionName, User);
             return response;
         }
-        [HttpPatch("position/add-department/{ID}")]
+        [HttpPatch("position/{ID}/add-department")]
         public async Task<ActionResult<PositionWithDepartmentResponse>> AddDepartmentToPositionByIDAsync(int ID, int departmentID)
         {
             var response = await _positionService.AddDepartmentToPositionByIDAsync(ID, departmentID, User);
             return response;
         }
-        [HttpDelete("position/delete/{ID}")]
+        [HttpDelete("position/{ID}/delete")]
         public async Task<ActionResult<PositionOnlyResponse>> DeletePositionByIDAsync(int ID)
         {
             var response = await _positionService.DeletePositionByIDAsync(ID);

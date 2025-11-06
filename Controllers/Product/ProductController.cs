@@ -20,13 +20,13 @@ namespace CSMS_API.Controllers
             var response = await _productService.CreateProductAsync(request, User);
             return response;
         }
-        [HttpPatch("product/update/{ID}")]
+        [HttpPatch("product/{ID}/update")]
         public async Task<ActionResult<ProductOnlyResponse>> UpdateProductByIDAsync(int ID, UpdateProductRequest request)
         {
             var response = await _productService.UpdateProductByIDAsync(ID, request, User);
             return response;
         }
-        [HttpDelete("product/delete/{ID}")]
+        [HttpDelete("product/{ID}/delete")]
         public async Task<ActionResult<ProductOnlyResponse>> DeleteProductByIDAsync(int ID)
         {
             var response = await _productService.DeleteProductByIDAsync(ID);

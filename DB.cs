@@ -14,6 +14,7 @@ namespace CSMS_API
         public DbSet<Role> Role { get; set; }
         public DbSet<RoleLog> RoleLog { get; set; }
         public DbSet<UserRole> UserRole { get; set; }
+        public DbSet<UserRoleLog> UserRoleLog { get; set; }
         public DbSet<Department> Department { get; set; }
         public DbSet<DepartmentLog> DepartmentLog { get; set; }
         public DbSet<Position> Position { get; set; }
@@ -81,6 +82,9 @@ namespace CSMS_API
 
             modelBuilder.Entity<ColdStorage>().Ignore(cs => cs.Creator);
             modelBuilder.Entity<ColdStorageLog>().Ignore(cs => cs.Updater);
+
+            modelBuilder.Entity<UserRole>().Ignore(ur => ur.Assigner);
+            modelBuilder.Entity<UserRoleLog>().Ignore(url => url.Updater);
             modelBuilder.Seed();
         }
     }

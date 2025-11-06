@@ -19,25 +19,25 @@ namespace CSMS_API.Controllers
             var response = await _receivingService.CreateReceivingAsync(request, User);
             return response;
         }
-        [HttpPatch("receiving/add-details/{ID}")]
+        [HttpPatch("receiving/{ID}/add-details")]
         public async Task<ActionResult<ReceivingWithReceivingDetailResponse>> AddReceivingDetailToReceivingByIDAsync(int ID, UpdateReceivingRequest request)
         {
             var response = await _receivingService.AddReceivingDetailToReceivingByIDAsync(ID, request, User);
             return response;
         }
-        [HttpPatch("receiving/update/{ID}")]
+        [HttpPatch("receiving/{ID}/update")]
         public async Task<ActionResult<ReceivingWithReceivingDetailResponse>> UpdateReceivingByIDAsync(int ID, UpdateReceivingRequest request)
         {
             var response = await _receivingService.UpdateReceivingByIDAsync(ID, request, User);
             return response;
         }
-        [HttpPatch("receiving/approve/{ID}")]
+        [HttpPatch("receiving/{ID}/approve")]
         public async Task<ActionResult<ReceivingWithReceivingDetailResponse>> ApproveReceivingByIDAsync(int ID)
         {
             var response = await _receivingService.ApproveReceivingByIDAsync(ID, User);
             return response;
         }
-        [HttpDelete("receiving/delete/{ID}")]
+        [HttpDelete("receiving/{ID}/delete")]
         public async Task<ActionResult<ReceivingOnlyResponse>> DeleteReceivingByIDAsync(int ID)
         {
             var response = await _receivingService.DeleteReceivingByIDAsync(ID);

@@ -28,19 +28,19 @@ namespace CSMS_API.Controllers
             await _companyExcelService.ImportRepresentativesAsync(file, User);
             return Ok("Success");
         }
-        [HttpPatch("representative/update/{ID}")]
+        [HttpPatch("representative/{ID}/update")]
         public async Task<ActionResult<RepresentativeOnlyResponse>> UpdateRepresentativeByIDAsync(int ID, UpdateRepresentativeRequest request)
         {
             var response = await _representativeService.UpdateRepresentativeByIDAsync(ID, request, User);
             return response;
         }
-        [HttpPatch("representative/add-company/{ID}")]
+        [HttpPatch("representative/{ID}/add-company")]
         public async Task<ActionResult<RepresentativeWithCompanyResponse>> AddCompanyToRepresentativeByIDAsync(int ID, int companyID)
         {
             var response = await _representativeService.AddCompanyToRepresentativeByIDAsync(ID, companyID, User);
             return response;
         }
-        [HttpDelete("representative/delete/{ID}")]
+        [HttpDelete("representative/{ID}/delete")]
         public async Task<ActionResult<RepresentativeOnlyResponse>> DeleteRepresentativeByIDAsync(int ID)
         {
             var response = await _representativeService.DeleteRepresentativeByIDAsync(ID);
@@ -72,7 +72,7 @@ namespace CSMS_API.Controllers
         {
             var importer = new ExcelImporter();
             var file = await importer.GenerateTemplateBytes<RepresentativeImportRequest>();
-            return File(file, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "RepresentativeTemplate.xlsx");
+            return File(file, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Representatives.xlsx");
         }
     }
 }

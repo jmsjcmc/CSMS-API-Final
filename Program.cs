@@ -2,7 +2,6 @@ using CSMS_API;
 using CSMS_API.Utils;
 using Microsoft.EntityFrameworkCore;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -22,6 +21,7 @@ builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 var app = builder.Build();
 
+// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

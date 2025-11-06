@@ -29,19 +29,19 @@ namespace CSMS_API.Controllers
             await _palletPositionExcelService.ImportPalletPositionsAsync(file, User);
             return Ok("Success");
         }
-        [HttpPatch("pallet-position/add-cold-storage/{ID}")]
+        [HttpPatch("pallet-position/{ID}/add-cold-storage")]
         public async Task<ActionResult<PalletPositionWithColdStorageResponse>> AddColdStorageToPalletPositionByIDAsync(int ID, int coldStorageID)
         {
             var response = await _palletPositionService.AddColdStorageToPalletPositionByIDAsync(ID, coldStorageID, User);
             return response;
         }
-        [HttpPatch("pallet-position/update/{ID}")]
+        [HttpPatch("pallet-position/{ID}/update")]
         public async Task<ActionResult<PalletPositionOnlyResponse>> UpdatePalletPositionByIDAsync(int ID, UpdatePalletPositionRequest request)
         {
             var response = await _palletPositionService.UpdatePalletPositionByIDAsync(ID, request, User);
             return response;
         }
-        [HttpDelete("pallet-position/delete/{ID}")]
+        [HttpDelete("pallet-position/{ID}/delete")]
         public async Task<ActionResult<PalletPositionOnlyResponse>> DeletePalletPositionByIDAsync(int ID)
         {
             var response = await _palletPositionService.DeletePalletPositionByIDAsync(ID);

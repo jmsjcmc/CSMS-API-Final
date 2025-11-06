@@ -18,13 +18,13 @@ namespace CSMS_API.Controllers
             var response = await _receivingDetailService.CreateReceivingDetailAsync(request, User);
             return response;
         }
-        [HttpPatch("receiving-detail/update/{ID}")]
+        [HttpPatch("receiving-detail/{ID}/update")]
         public async Task<ActionResult<ReceivingDetailWithReceivingAndProductObjectResponse>> UpdateReceivingDetailByIDAsync(int ID, UpdateReceivingDetailRequest request)
         {
             var response = await _receivingDetailService.UpdateReceivingDetailByIDAsync(ID, request, User);
             return response;
         }
-        [HttpDelete("receiving-detail/delete/{ID}")]
+        [HttpDelete("receiving-detail/{ID}/delete")]
         public async Task<ActionResult<ReceivingDetailOnlyResponse>> DeleteReceivingDetailByIDAsync(int ID)
         {
             var response = await _receivingDetailService.DeleteReceivingDetailByIDAsync(ID);

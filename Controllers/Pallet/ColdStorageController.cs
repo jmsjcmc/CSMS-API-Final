@@ -29,13 +29,13 @@ namespace CSMS_API.Controllers
             await _coldStorageExcelService.ImportColdStoragesAsync(stream, User);
             return Ok("Success");
         }
-        [HttpPatch("cold-storage/update/{ID}")]
+        [HttpPatch("cold-storage/{ID}/update")]
         public async Task<ActionResult<ColdStorageOnlyResponse>> UpdateColdStorageByIDAsync(int ID, string coldStorageNumber)
         {
             var response = await _coldStorageService.UpdateColdStorageByIDAsync(ID, coldStorageNumber, User);
             return response;
         }
-        [HttpDelete("cold-storage/delete/{ID}")]
+        [HttpDelete("cold-storage/{ID}/delete")]
         public async Task<ActionResult<ColdStorageOnlyResponse>> DeleteColdStorageByIDAsync(int ID)
         {
             var response = await _coldStorageService.DeleteColdStorageByIDAsync(ID);

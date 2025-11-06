@@ -29,13 +29,13 @@ namespace CSMS_API.Controllers
             await _paleltExcelService.ImportPalletsAsync(stream, User);
             return Ok("Success");
         }
-        [HttpPatch("pallet/update/{ID}")]
+        [HttpPatch("pallet/{ID}/update")]
         public async Task<ActionResult<PalletOnlyResponse>> UpdatePalletByIDAsync(int ID, UpdatePalletRequest requset)
         {
             var response = await _palletService.UpdatePalletByIDAsync(ID, requset, User);
             return response;
         }
-        [HttpDelete("pallet/delete/{ID}")]
+        [HttpDelete("pallet/{ID}/delete")]
         public async Task<ActionResult<PalletOnlyResponse>> DeletePalletByIDAsync(int ID)
         {
             var response = await _palletService.DeletePalletByIDAsync(ID);

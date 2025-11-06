@@ -4,6 +4,7 @@ using CSMS_API;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CSMS_API.Migrations
 {
     [DbContext(typeof(DB))]
-    partial class DBModelSnapshot : ModelSnapshot
+    [Migration("20251106011354_6")]
+    partial class _6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -793,11 +796,11 @@ namespace CSMS_API.Migrations
                     b.Property<int?>("RoleID")
                         .HasColumnType("int");
 
+                    b.Property<int?>("UpdatedID")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("UpdatedOn")
                         .HasColumnType("datetime2");
-
-                    b.Property<int?>("UpdaterID")
-                        .HasColumnType("int");
 
                     b.HasKey("ID");
 
@@ -897,9 +900,6 @@ namespace CSMS_API.Migrations
                     b.Property<DateTime?>("AssignedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("AssignerID")
-                        .HasColumnType("int");
-
                     b.Property<int?>("RecordStatus")
                         .HasColumnType("int");
 
@@ -916,30 +916,6 @@ namespace CSMS_API.Migrations
                     b.HasIndex("UserID");
 
                     b.ToTable("UserRole");
-                });
-
-            modelBuilder.Entity("CSMS_API.Models.UserRoleLog", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<DateTime?>("UpdatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("UpdaterID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("UserRoleID")
-                        .HasColumnType("int");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("UserRoleID");
-
-                    b.ToTable("UserRoleLog");
                 });
 
             modelBuilder.Entity("CSMS_API.Models.BusinessUnitLog", b =>
@@ -1162,15 +1138,6 @@ namespace CSMS_API.Migrations
                     b.Navigation("Role");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("CSMS_API.Models.UserRoleLog", b =>
-                {
-                    b.HasOne("CSMS_API.Models.UserRole", "UserRole")
-                        .WithMany()
-                        .HasForeignKey("UserRoleID");
-
-                    b.Navigation("UserRole");
                 });
 
             modelBuilder.Entity("CSMS_API.Models.BusinessUnit", b =>

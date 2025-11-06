@@ -29,13 +29,13 @@ namespace CSMS_API.Controllers
             await _categoryExcelService.ImportCategoriesAsync(stream, User);
             return Ok("Success");
         }
-        [HttpPatch("category/update/{ID}")]
+        [HttpPatch("category/{ID}/update")]
         public async Task<ActionResult<CategoryResponse>> UpdateCategoryByIDAsync(int ID, string categoryName)
         {
             var response = await _categoryService.UpdateCategoryByIDAsync(ID, categoryName, User);
             return response;
         }
-        [HttpDelete("category/delete/{ID}")]
+        [HttpDelete("category/{ID}/delete")]
         public async Task<ActionResult<CategoryResponse>> DeleteCategoryByIDAsync(int ID)
         {
             var response = await _categoryService.DeleteCategoryByIDAsync(ID);

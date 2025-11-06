@@ -29,13 +29,13 @@ namespace CSMS_API.Controllers
             await _departmentExcelService.ImportDepartmentsAsync(stream, User);
             return Ok("Success");
         }
-        [HttpPatch("department/update/{ID}")]
+        [HttpPatch("department/{ID}/update")]
         public async Task<ActionResult<DepartmentOnlyResponse>> UpdateDepartmentByIDAsync(int ID, string departmentName)
         {
             var response = await _departmentService.UpdateDepartmentByIDAsync(ID, departmentName, User);
             return response;
         }
-        [HttpDelete("department/delete/{ID}")]
+        [HttpDelete("department/{ID}/delete")]
         public async Task<ActionResult<DepartmentOnlyResponse>> DeleteDepartmentByIDAsync(int ID)
         {
             var response = await _departmentService.DeleteDepartmentByIDAsync(ID);

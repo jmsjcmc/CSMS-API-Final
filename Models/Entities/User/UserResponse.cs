@@ -44,4 +44,10 @@ namespace CSMS_API.Models
         public DateTime? CreatedOn { get; set; }
         public RecordStatus? RecordStatus { get; set; }
     }
+    public class UserWithRoleResponse
+    {
+        public int ID { get; set; }
+        public UserOnlyResponse? User { get; set; } // USER
+        public RoleOnlyResponse? Role { get; set; } // ROLE
+    }
 }

@@ -30,13 +30,13 @@ namespace CSMS_API.Controllers
             await _businessUnitExcelService.ImportBusinessUnitsAsync(stream, User);
             return Ok("Success");
         }
-        [HttpPatch("business-unit/update/{ID}")]
+        [HttpPatch("business-unit/{ID}/update")]
         public async Task<ActionResult<BusinessUnitResponse>> UpdateBusinessUnitByIDAsync(int ID, UpdateBusinessUnitRequest request)
         {
             var response = await _businessUnitService.UpdateBusinessUnitByIDAsync(ID, request, User);
             return response;
         }
-        [HttpDelete("business-unit/delete/{ID}")]
+        [HttpDelete("business-unit/{ID}/delete")]
         public async Task<ActionResult<BusinessUnitResponse>> DeleteBusinessUnitByIDAsync(int ID)
         {
             var response = await _businessUnitService.DeleteBusinessUnitByIDAsync(ID);
