@@ -77,7 +77,7 @@ namespace CSMS_API.Utils
                 };
                 positions.Add(position);
             }
-            _context.Position.AddRange(positions);
+            await _context.Position.AddRangeAsync(positions);
             await _context.SaveChangesAsync();
         }
     }

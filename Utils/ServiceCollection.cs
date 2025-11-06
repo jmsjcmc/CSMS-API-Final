@@ -38,7 +38,13 @@ namespace CSMS_API.Utils
             service.AddScoped<RepresentativeService>();
 
             service.AddScoped<ColdStorageService>();
+            service.AddScoped<ColdStorageExcelService>();
 
+            service.AddScoped<PalletService>();
+            service.AddScoped<PalletExcelService>();
+
+            service.AddScoped<PalletPositionService>();
+            service.AddScoped<PalletPositionExcelService>();
             return service;
         }
         public static IServiceCollection AddMagicCodesServices(this IServiceCollection service)

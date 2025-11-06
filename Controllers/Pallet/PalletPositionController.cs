@@ -1,4 +1,6 @@
 using CSMS_API.Models;
+using CSMS_API.Utils;
+using Magicodes.ExporterAndImporter.Excel;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CSMS_API.Controllers
@@ -8,15 +10,24 @@ namespace CSMS_API.Controllers
     public class PalletPositionController : ControllerBase
     {
         private readonly PalletPositionService _palletPositionService;
-        public PalletPositionController(PalletPositionService palletPositionService)
+        private readonly PalletPositionExcelService _palletPositionExcelService;
+        public PalletPositionController(PalletPositionService palletPositionService, PalletPositionExcelService palletPositionExcelService)
         {
             _palletPositionService = palletPositionService;
+            _palletPositionExcelService = palletPositionExcelService;
         }
         [HttpPost("pallet-position/create")]
         public async Task<ActionResult<PalletPositionOnlyResponse>> CreatePalletPositionAsync(CreatePalletPositionRequest request)
         {
             var response = await _palletPositionService.CreatePalletPositionAsync(request, User);
             return response;
+        }
+        [HttpPost("pallet-positions/excel-import")]
+        public async Task<ActionResult> ImportPalletPositionsAsync(IFormFile file)
+        {
+            using var stream = file.OpenReadStream();
+            await _palletPositionExcelService.ImportPalletPositionsAsync(file, User);
+            return Ok("Success");
         }
         [HttpPatch("pallet-position/add-cold-storage/{ID}")]
         public async Task<ActionResult<PalletPositionWithColdStorageResponse>> AddColdStorageToPalletPositionByIDAsync(int ID, int coldStorageID)
@@ -57,5 +68,17 @@ namespace CSMS_API.Controllers
             var response = await _palletPositionService.ListedPalletPositions(searchTerm);
             return response;
         }
+        [HttpGet("pallet-positions/excel-template")]
+        public async Task<ActionResult> GetTemplateAsync()
+        {
+            var importer = new ExcelImporter();
+            var file = await importer.GenerateTemplateBytes<PalletPositionImportRequest>();
+            return File(file, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "PalletPositions.xlsx");
+        }
+        //[HttpGet("pallet-positions/excel-export")]
+        //public async Task<ActionResult> ExportPalletPositionsAsync()
+        //{
+        //
+        //}
     }
 }
