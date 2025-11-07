@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using CSMS_API.Utils;
+using System.Security.Claims;
 
 namespace CSMS_API.Models
 {
@@ -48,6 +50,37 @@ namespace CSMS_API.Models
             CreateMap<ReceivingDetail, ReceivingDetailWithReceivingAndProductObjectResponse>()
                 .ForMember(d => d.Receiving, o => o.MapFrom(s => s.Receiving))
                 .ForMember(d => d.Product, o => o.MapFrom(s => s.Product));
+        }
+    }
+    public static class ManualReceivingMapper
+    {
+        public static void ManualReceivingMapping(UpdateReceivingRequest request, Receiving receiving)
+        {
+            receiving.DocumentNo = request.DocumentNo;
+            receiving.CVNumber = request.CVNumber;
+            receiving.PlateNumber = request.PlateNumber;
+            receiving.ArrivalDate = request.ArrivalDate;
+            receiving.UnloadingStart = request.UnloadingStart;
+            receiving.UnloadingEnd = request.UnloadingEnd;
+        }
+        public static void ManualReceivingDetailMapping(UpdateReceivingRequest request, Receiving receiving, ClaimsPrincipal user)
+        {
+            foreach (var receivingDetail in request.ReceivingDetail)
+            {
+                receiving.ReceivingDetail.Add(new ReceivingDetail
+                {
+                    ReceivingID = receiving.ID,
+                    ProductID = receivingDetail.ProductID,
+                    ExpirationDate = receivingDetail.ExpirationDate,
+                    ProductionDate = receivingDetail.ProductionDate,
+                    QuantityInPallet = receivingDetail.QuantityInPallet,
+                    DUQuantity = receivingDetail.DUQuantity,
+                    TotalWeight = receivingDetail.TotalWeight,
+                    Remark = receivingDetail.Remark,
+                    CreatorID = AuthenticationHelper.GetUserIDAsync(user),
+                    CreatedOn = PresentDateTimeFetcher.FetchPresentDateTime()
+                });
+            }
         }
     }
 }

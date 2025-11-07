@@ -32,7 +32,8 @@ namespace CSMS_API.Controllers
             if (await _context.Receiving.AnyAsync(r => r.DocumentNo == request.DocumentNo))
             {
                 throw new Exception($"Document No {request.DocumentNo} already exist");
-            } else
+            }
+            else
             {
                 var receiving = _mapper.Map<Receiving>(request);
                 receiving.CreatorID = AuthenticationHelper.GetUserIDAsync(user);
@@ -48,12 +49,63 @@ namespace CSMS_API.Controllers
         public async Task<ReceivingWithReceivingDetailResponse> AddReceivingDetailToReceivingByIDAsync(int ID, UpdateReceivingRequest request, ClaimsPrincipal user)
         {
             var receiving = await _receivingQuery.PatchReceivingByIDAsync(ID);
-            _mapper.Map(request, receiving);
 
-            foreach (var receivingDetail in receiving.ReceivingDetail)
+            ManualReceivingMapper.ManualReceivingMapping(request, receiving);
+            ManualReceivingMapper.ManualReceivingDetailMapping(request, receiving, user);
+
+            _context.Receiving.Update(receiving);
+            await _context.SaveChangesAsync();
+
+            var groupedByProducts = receiving.ReceivingDetail
+                .GroupBy(rd => rd.ProductID)
+                .Select(g => new
+                {
+                    productID = g.Key,
+                    totalQuantity = g.Sum(s => s.QuantityInPallet ?? 0),
+                    totalWeight = g.Sum(s => s.TotalWeight ?? 0.0)
+                })
+                .ToList();
+
+            foreach (var productGroup in groupedByProducts)
             {
-                receivingDetail.CreatorID = AuthenticationHelper.GetUserIDAsync(user);
-                receivingDetail.CreatedOn = PresentDateTimeFetcher.FetchPresentDateTime();
+                if (productGroup.productID == null) continue;
+
+                var existingReceivingProduct = await _context.ReceivingProduct
+                    .SingleOrDefaultAsync(rp => rp.ReceivingID == receiving.ID &&
+                    rp.ProductID == productGroup.productID);
+
+                if (existingReceivingProduct != null)
+                {
+                    existingReceivingProduct.TotalQuantity = productGroup.totalQuantity;
+                    existingReceivingProduct.TotalWeight = productGroup.totalWeight;
+                    existingReceivingProduct.RecordStatus = RecordStatus.Active;
+
+                    _context.ReceivingProduct.Update(existingReceivingProduct);
+
+                    var receivingProductLog = new ReceivingProductLog
+                    {
+                        ReceivingProductID = existingReceivingProduct.ID,
+                        UpdaterID = AuthenticationHelper.GetUserIDAsync(user),
+                        UpdatedOn = PresentDateTimeFetcher.FetchPresentDateTime()
+                    };
+
+                    await _context.ReceivingProductLog.AddAsync(receivingProductLog);
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    var receivingProduct = new ReceivingProduct
+                    {
+                        ReceivingID = receiving.ID,
+                        ProductID = productGroup.productID,
+                        TotalQuantity = productGroup.totalQuantity,
+                        TotalWeight = productGroup.totalWeight,
+                        RecordStatus = RecordStatus.Active
+                    };
+
+                    await _context.ReceivingProduct.AddAsync(receivingProduct);
+                }
+
             }
             await _context.SaveChangesAsync();
 
