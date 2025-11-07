@@ -39,6 +39,8 @@ namespace CSMS_API
         public DbSet<ColdStorageLog> ColdStorageLog { get; set; }
         public DbSet<ReceivingProduct> ReceivingProduct { get; set; }
         public DbSet<ReceivingProductLog> ReceivingProductLog { get; set; }
+        public DbSet<ReceivingPlacement> ReceivingPlacement { get; set; }
+        public DbSet<ReceivingPlacementLog> ReceivingPlacementLog { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -87,6 +89,9 @@ namespace CSMS_API
 
             modelBuilder.Entity<UserRole>().Ignore(ur => ur.Assigner);
             modelBuilder.Entity<UserRoleLog>().Ignore(url => url.Updater);
+
+            modelBuilder.Entity<ReceivingPlacement>().Ignore(rp => rp.Approver);
+            modelBuilder.Entity<ReceivingPlacementLog>().Ignore(rpl => rpl.Updater);
             modelBuilder.Seed();
         }
     }

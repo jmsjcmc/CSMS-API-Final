@@ -46,6 +46,7 @@
         public User? Creator { get; set; }
         public DateTime? CreatedOn { get; set; }
         public ICollection<ReceivingDetailLog>? ReceivingDetailLog { get; set; }
+        public ICollection<ReceivingPlacement>? ReceivingPlacement { get; set; }
     }
     public class ReceivingDetailLog
     {

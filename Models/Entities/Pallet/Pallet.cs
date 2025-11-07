@@ -10,6 +10,7 @@
         public DateTime? CreatedOn { get; set; }
         public RecordStatus? RecordStatus { get; set; }
         public ICollection<PalletLog>? PalletLog { get; set; }
+        public ICollection<ReceivingPlacement>? ReceivingPlacement { get; set; }
     }
     public class PalletLog
     {
@@ -34,6 +35,7 @@
         public DateTime? CreatedOn { get; set; }
         public RecordStatus? RecordStatus { get; set; }
         public ICollection<PalletPositionLog>? PalletPositionLog { get; set; }
+        public ICollection<ReceivingPlacement>? ReceivingPlacement { get; set; }
     }
     public class PalletPositionLog
     {
