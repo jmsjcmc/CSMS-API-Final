@@ -1,6 +1,5 @@
 using CSMS_API.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace CSMS_API.Controllers
 {
@@ -17,6 +16,12 @@ namespace CSMS_API.Controllers
         public async Task<ActionResult<ReceivingOnlyResponse>> CreateReceivingAsync(CreateReceivingRequest request)
         {
             var response = await _receivingService.CreateReceivingAsync(request, User);
+            return response;
+        }
+        [HttpPost("receiving/add-placement")]
+        public async Task<ActionResult<ReceivingPlacementWithReceivingProductReceivingDetailPalletAndPalletPositionObjectResponse>> AddPalletAndPalletPositionToReceivingDetailByIDAsync(CreateReceivingPlacementRequest request)
+        {
+            var response = await _receivingService.AddPalletAndPalletPositionToReceivingDetailByIDAsync(request, User);
             return response;
         }
         [HttpPatch("receiving/{ID}/add-details")]

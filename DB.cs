@@ -41,6 +41,9 @@ namespace CSMS_API
         public DbSet<ReceivingProductLog> ReceivingProductLog { get; set; }
         public DbSet<ReceivingPlacement> ReceivingPlacement { get; set; }
         public DbSet<ReceivingPlacementLog> ReceivingPlacementLog { get; set; }
+        public DbSet<Dispatching> Dispatching { get; set; }
+        public DbSet<DispatchingDetail> DispatchingDetail { get; set; }
+        public DbSet<DispatchingPlacement> DispatchingPlacement { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

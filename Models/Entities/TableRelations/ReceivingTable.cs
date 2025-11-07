@@ -38,9 +38,14 @@
         public string? TaggingNumber { get; set; }
         public string? CrateNumber { get; set; }
         public RecordStatus? RecordStatus { get; set; }
+        public int? CreatorID { get; set; }
+        public User? Creator { get; set; }
+        public DateTime? CreatedOn { get; set; }
         public int? ApproverID { get; set; }
         public User? Approver { get; set; }
         public ICollection<ReceivingPlacementLog>? ReceivingPlacementLog { get; set; }
+        public ICollection<DispatchingDetail>? DispatchingDetail { get; set; }
+        public ICollection<DispatchingPlacement>? DispatchingPlacement { get; set; }
     }
     public class ReceivingPlacementLog
     {

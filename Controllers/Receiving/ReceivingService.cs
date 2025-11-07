@@ -11,6 +11,7 @@ namespace CSMS_API.Controllers
     {
         Task<ReceivingOnlyResponse> CreateReceivingAsync(CreateReceivingRequest request, ClaimsPrincipal user);
         Task<ReceivingWithReceivingDetailResponse> AddReceivingDetailToReceivingByIDAsync(int ID, UpdateReceivingRequest request, ClaimsPrincipal user);
+        Task<ReceivingPlacementWithReceivingProductReceivingDetailPalletAndPalletPositionObjectResponse> AddPalletAndPalletPositionToReceivingDetailByIDAsync(CreateReceivingPlacementRequest request, ClaimsPrincipal user);
         Task<ReceivingWithReceivingDetailResponse> UpdateReceivingByIDAsync(int ID, UpdateReceivingRequest request, ClaimsPrincipal user);
         Task<ReceivingWithReceivingDetailResponse> ApproveReceivingByIDAsync(int ID, ClaimsPrincipal user);
         Task<ReceivingOnlyResponse> DeleteReceivingByIDAsync(int ID);
@@ -120,6 +121,18 @@ namespace CSMS_API.Controllers
             await _context.SaveChangesAsync();
 
             return _mapper.Map<ReceivingWithReceivingDetailResponse>(receiving);
+        }
+        public async Task<ReceivingPlacementWithReceivingProductReceivingDetailPalletAndPalletPositionObjectResponse> AddPalletAndPalletPositionToReceivingDetailByIDAsync(CreateReceivingPlacementRequest request, ClaimsPrincipal user)
+        {
+            var receivingPlacement = _mapper.Map<ReceivingPlacement>(request);
+            receivingPlacement.RecordStatus = RecordStatus.Active;
+            receivingPlacement.CreatorID = AuthenticationHelper.GetUserIDAsync(user);
+            receivingPlacement.CreatedOn = PresentDateTimeFetcher.FetchPresentDateTime();
+
+            await _context.ReceivingPlacement.AddAsync(receivingPlacement);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<ReceivingPlacementWithReceivingProductReceivingDetailPalletAndPalletPositionObjectResponse>(receivingPlacement);
         }
         public async Task<ReceivingWithReceivingDetailResponse> UpdateReceivingByIDAsync(int ID, UpdateReceivingRequest request, ClaimsPrincipal user)
         {
