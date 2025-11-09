@@ -16,11 +16,12 @@ builder.Services.AddMagicCodesServices();
 builder.Services.AddServices();
 builder.Services.AddQueries();
 builder.Services.AddHelpers();
+builder.Services.AddCORS();
 builder.Services.AddSwaggerDocumentation();
 builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 var app = builder.Build();
-
+app.UseCors("AllowCORS");
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

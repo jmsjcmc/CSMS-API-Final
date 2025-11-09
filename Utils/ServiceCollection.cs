@@ -170,6 +170,21 @@ namespace CSMS_API.Utils
                 });
             return service;
         }
+        public static IServiceCollection AddCORS(this IServiceCollection service)
+        {
+            service.AddCors(options =>
+            {
+                options.AddPolicy("AllowCORS", builder =>
+                {
+                    builder
+                    .WithOrigins("http://localhost:4200")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials();
+                });
+            });
+            return service;
+        }
         private static JwtSetting ValidatedJwtSetting(IConfiguration config)
         {
             var key = config["Jwt:Key"]
