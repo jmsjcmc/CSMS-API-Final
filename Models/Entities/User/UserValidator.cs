@@ -14,6 +14,8 @@ namespace CSMS_API.Models
                 .NotEmpty().WithMessage("Username required");
             RuleFor(x => x.BusinessUnitID)
                 .NotEmpty().WithMessage("Business Unit ID required");
+            RuleFor(x => x.PositionID)
+                .NotEmpty().WithMessage("Position ID required");
         }
     }
     public class UserLoginValidator : AbstractValidator<UserLoginRequest>

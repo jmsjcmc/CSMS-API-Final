@@ -83,5 +83,28 @@ namespace CSMS_API.Controllers
                    .ToListAsync();
             }
         }
+        public async Task<List<PalletPosition>> ListedAvailablePalletPositions(string? searchTerm)
+        {
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                return await _context.PalletPosition
+                    .AsNoTracking()
+                    .Where(pp => pp.Wing.Contains(searchTerm) ||
+                    pp.Floor.Contains(searchTerm) ||
+                    pp.Column.Contains(searchTerm) ||
+                    pp.Side.Contains(searchTerm) &&
+                    pp.PalletPositionStatus == PalletPositionStatus.Available)
+                    .OrderByDescending(pp => pp.ID)
+                    .ToListAsync();
+            }
+            else
+            {
+                return await _context.PalletPosition
+                   .AsNoTracking()
+                   .Where(pp => pp.PalletPositionStatus == PalletPositionStatus.Available)
+                   .OrderByDescending(pp => pp.ID)
+                   .ToListAsync();
+            }
+        }
     }
 }

@@ -76,5 +76,26 @@ namespace CSMS_API.Controllers
                     .ToListAsync();
             }
         }
+        public async Task<List<Pallet>> ListedEmptyPallets(string? searchTerm)
+        {
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                return await _context.Pallet
+                    .AsNoTracking()
+                    .Where(p => p.Type.Contains(searchTerm) ||
+                    p.Number.Contains(searchTerm) &&
+                    p.PalletOccupationStatus == PalletOccupationStatus.Empty)
+                    .OrderByDescending(p => p.ID)
+                    .ToListAsync();
+            }
+            else
+            {
+                return await _context.Pallet
+                    .AsNoTracking()
+                    .Where(p => p.PalletOccupationStatus == PalletOccupationStatus.Empty)
+                    .OrderByDescending(p => p.ID)
+                    .ToListAsync();
+            }
+        }
     }
 }

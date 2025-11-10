@@ -16,6 +16,7 @@ namespace CSMS_API.Controllers
             int pageSize,
             string searchTerm);
         Task<List<PalletOnlyResponse>> ListedPallets(string? searchTerm);
+        Task<List<PalletOnlyResponse>> ListedEmptyPallets(string? searchTerm);
     }
     public class PalletService : PalletInterface
     {
@@ -82,6 +83,11 @@ namespace CSMS_API.Controllers
         public async Task<List<PalletOnlyResponse>> ListedPallets(string? searchTerm)
         {
             var pallets = await _palletQuery.ListedPallets(searchTerm);
+            return _mapper.Map<List<PalletOnlyResponse>>(pallets);
+        }
+        public async Task<List<PalletOnlyResponse>> ListedEmptyPallets(string? searchTerm)
+        {
+            var pallets = await _palletQuery.ListedEmptyPallets(searchTerm);
             return _mapper.Map<List<PalletOnlyResponse>>(pallets);
         }
     }
