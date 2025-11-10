@@ -2,7 +2,6 @@
 {
     public class CreateDispatchingRequest
     {
-        public int ID { get; set; }
         public string? DocumentNo { get; set; }
         public DateTime? DispatchDate { get; set; }
         public string? DispatchTimeStart { get; set; }
