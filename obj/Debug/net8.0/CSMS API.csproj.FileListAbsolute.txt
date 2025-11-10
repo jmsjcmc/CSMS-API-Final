@@ -406,7 +406,6 @@ C:\Users\jatabilog\source\repos\CSMS-API-Final\bin\Debug\net8.0\runtimes\win-arm
 C:\Users\jatabilog\source\repos\CSMS-API-Final\bin\Debug\net8.0\runtimes\win-x64\native\libSkiaSharp.dll
 C:\Users\jatabilog\source\repos\CSMS-API-Final\bin\Debug\net8.0\runtimes\win-x86\native\libSkiaSharp.dll
 C:\Users\jatabilog\source\repos\CSMS-API-Final\bin\Debug\net8.0\Bogus.dll
-C:\Users\jatabilog\source\repos\CSMS-API-Final\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 c:\Users\James\Desktop\Repositories\C#\CSMS-API-Final\bin\Debug\net8.0\Bogus.dll
 c:\Users\James\Desktop\Repositories\C#\CSMS-API-Final\bin\Debug\net8.0\DynamicExpresso.Core.dll
 c:\Users\James\Desktop\Repositories\C#\CSMS-API-Final\bin\Debug\net8.0\Magicodes.IE.Core.dll

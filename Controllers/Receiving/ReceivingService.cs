@@ -132,6 +132,26 @@ namespace CSMS_API.Controllers
             await _context.ReceivingPlacement.AddAsync(receivingPlacement);
             await _context.SaveChangesAsync();
 
+            if (request.PalletID.HasValue && request.PalletOccupationStatus.HasValue)
+            {
+                var pallet = await _context.Pallet.SingleOrDefaultAsync(p => p.ID == request.PalletID.Value);
+                if (pallet != null)
+                {
+                    pallet.PalletOccupationStatus = request.PalletOccupationStatus.Value;
+                }
+            }
+
+            if (request.PalletPositionID.HasValue)
+            {
+                var palletPosition = await _context.PalletPosition.SingleOrDefaultAsync(pp => pp.ID == request.PalletPositionID.Value);
+                if (palletPosition != null)
+                {
+                    palletPosition.PalletPositionStatus = PalletPositionStatus.Occupied;
+                }
+            }
+
+            await _context.SaveChangesAsync();
+
             return _mapper.Map<ReceivingPlacementWithReceivingProductReceivingDetailPalletAndPalletPositionObjectResponse>(receivingPlacement);
         }
         public async Task<ReceivingWithReceivingDetailResponse> UpdateReceivingByIDAsync(int ID, UpdateReceivingRequest request, ClaimsPrincipal user)

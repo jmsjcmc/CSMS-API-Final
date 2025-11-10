@@ -4,6 +4,7 @@ using CSMS_API;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CSMS_API.Migrations
 {
     [DbContext(typeof(DB))]
-    partial class DBModelSnapshot : ModelSnapshot
+    [Migration("20251110005231_15")]
+    partial class _15
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -298,9 +301,6 @@ namespace CSMS_API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<int?>("ApprovalStatus")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("ApprovedOn")
                         .HasColumnType("datetime2");
 
@@ -390,19 +390,10 @@ namespace CSMS_API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<int?>("ApprovalStatus")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("ApprovedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("ApproverID")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("CreatorID")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("DeclinedOn")
@@ -415,6 +406,9 @@ namespace CSMS_API.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("PalletPositionID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PlacementStatus")
                         .HasColumnType("int");
 
                     b.Property<int?>("Quantity")
@@ -432,8 +426,6 @@ namespace CSMS_API.Migrations
                     b.HasKey("ID");
 
                     b.HasIndex("ApproverID");
-
-                    b.HasIndex("CreatorID");
 
                     b.HasIndex("DispatchingID");
 
@@ -488,9 +480,6 @@ namespace CSMS_API.Migrations
 
                     b.Property<string>("Number")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("PalletOccupationStatus")
-                        .HasColumnType("int");
 
                     b.Property<int?>("RecordStatus")
                         .HasColumnType("int");
@@ -549,9 +538,6 @@ namespace CSMS_API.Migrations
 
                     b.Property<string>("Floor")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("PalletPositionStatus")
-                        .HasColumnType("int");
 
                     b.Property<int?>("RecordStatus")
                         .HasColumnType("int");
@@ -1354,10 +1340,6 @@ namespace CSMS_API.Migrations
                         .WithMany()
                         .HasForeignKey("ApproverID");
 
-                    b.HasOne("CSMS_API.Models.User", "Creator")
-                        .WithMany()
-                        .HasForeignKey("CreatorID");
-
                     b.HasOne("CSMS_API.Models.Dispatching", "Dispatching")
                         .WithMany("DispatchingPlacement")
                         .HasForeignKey("DispatchingID");
@@ -1375,8 +1357,6 @@ namespace CSMS_API.Migrations
                         .HasForeignKey("ReceivingPlacementID");
 
                     b.Navigation("Approver");
-
-                    b.Navigation("Creator");
 
                     b.Navigation("Dispatching");
 

@@ -9,6 +9,7 @@
         public User? Creator { get; set; }
         public DateTime? CreatedOn { get; set; }
         public RecordStatus? RecordStatus { get; set; }
+        public PalletOccupationStatus? PalletOccupationStatus { get; set; }
         public ICollection<PalletLog>? PalletLog { get; set; }
         public ICollection<ReceivingPlacement>? ReceivingPlacement { get; set; }
         public ICollection<DispatchingPlacement>? DispatchingPlacement { get; set; }
@@ -35,6 +36,7 @@
         public User? Creator { get; set; }
         public DateTime? CreatedOn { get; set; }
         public RecordStatus? RecordStatus { get; set; }
+        public PalletPositionStatus? PalletPositionStatus { get; set; }
         public ICollection<PalletPositionLog>? PalletPositionLog { get; set; }
         public ICollection<ReceivingPlacement>? ReceivingPlacement { get; set; }
         public ICollection<DispatchingPlacement>? DispatchingPlacement { get; set; }

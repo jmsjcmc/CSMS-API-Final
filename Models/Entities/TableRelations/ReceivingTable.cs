@@ -44,7 +44,6 @@
         public int? ApproverID { get; set; }
         public User? Approver { get; set; }
         public ICollection<ReceivingPlacementLog>? ReceivingPlacementLog { get; set; }
-        public ICollection<DispatchingDetail>? DispatchingDetail { get; set; }
         public ICollection<DispatchingPlacement>? DispatchingPlacement { get; set; }
     }
     public class ReceivingPlacementLog

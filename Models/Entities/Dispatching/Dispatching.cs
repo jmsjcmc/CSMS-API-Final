@@ -20,7 +20,8 @@
         public DateTime? ApprovedOn { get; set; }
         public DateTime? DeclinedOn { get; set; }
         public RecordStatus? RecordStatus { get; set; }
-        public ICollection<DispatchingDetail>? DispatchingDetail { get; set; }
+        public ApprovalStatus? ApprovalStatus { get; set; }
+        public ICollection<DispatchingPlacement>? DispatchingPlacement { get; set; }
         public ICollection<DispatchingLog>? DispatchingLog { get; set; }
     }
     public class DispatchingLog
@@ -30,26 +31,6 @@
         public Dispatching? Dispatching { get; set; }
         public int? UpdaterID { get; set; }
         public DateTime? Updater { get; set; }
-        public DateTime? UpdatedOn { get; set; }
-    }
-    public class DispatchingDetail
-    {
-        public int ID { get; set; }
-        public int? ReceivingPlacementID { get; set; }
-        public ReceivingPlacement? ReceivingPlacement { get; set; }
-        public int? DispatchingID { get; set; }
-        public Dispatching? Dispatching { get; set; }
-        public RecordStatus? RecordStatus { get; set; }
-        public ICollection<DispatchingPlacement>? DispatchingPlacement { get; set; }
-        public ICollection<DispatchingDetailLog>? DispatchingDetailLog { get; set; }
-    }
-    public class DispatchingDetailLog
-    {
-        public int ID { get; set; }
-        public int? DispatchingDetailID { get; set; }
-        public DispatchingDetail? DispatchingDetail { get; set; }
-        public int? UpdaterID { get; set; }
-        public User? Updater { get; set; }
         public DateTime? UpdatedOn { get; set; }
     }
 }

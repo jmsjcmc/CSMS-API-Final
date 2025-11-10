@@ -7,9 +7,9 @@ namespace CSMS_API.Models
     {
         public void Configure(EntityTypeBuilder<DispatchingPlacement> builder)
         {
-            builder.HasOne(dp => dp.DispatchingDetail)
+            builder.HasOne(dp => dp.Dispatching)
                 .WithMany(dd => dd.DispatchingPlacement)
-                .HasForeignKey(dp => dp.DispatchingDetailID);
+                .HasForeignKey(dp => dp.DispatchingID);
             builder.HasOne(dp => dp.Pallet)
                 .WithMany(p => p.DispatchingPlacement)
                 .HasForeignKey(dp => dp.PalletID);
@@ -19,6 +19,25 @@ namespace CSMS_API.Models
             builder.HasOne(dp => dp.ReceivingPlacement)
                 .WithMany(rp => rp.DispatchingPlacement)
                 .HasForeignKey(dp => dp.ReceivingPlacementID);
+
+            builder.HasOne(dp => dp.Approver)
+                .WithMany()
+                .HasForeignKey(dp => dp.ApproverID);
+            builder.HasOne(dp => dp.Creator)
+                .WithMany()
+                .HasForeignKey(dp => dp.CreatorID);
+        }
+    }
+    public class DispatchingPlacementLogRelation : IEntityTypeConfiguration<DispatchingPlacementLog>
+    {
+        public void Configure(EntityTypeBuilder<DispatchingPlacementLog> builder)
+        {
+            builder.HasOne(dpl => dpl.DispatchingPlacement)
+                .WithMany(dp => dp.DispatchingPlacementLog)
+                .HasForeignKey(dpl => dpl.DispatchingPlacementID);
+            builder.HasOne(dpl => dpl.Updater)
+                .WithMany()
+                .HasForeignKey(dpl => dpl.UpdaterID);
         }
     }
 }

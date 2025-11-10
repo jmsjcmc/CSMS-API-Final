@@ -14,7 +14,7 @@ namespace CSMS_API.Controllers
         {
             return await _context.Dispatching
             .AsNoTracking()
-            .Include(d => d.DispatchingDetail)
+            .Include(d => d.DispatchingPlacement)
             .SingleOrDefaultAsync(d => d.ID == ID);
         }
         public async Task<Dispatching?> PatchDispatchingByIDAsync(int ID)
@@ -29,7 +29,7 @@ namespace CSMS_API.Controllers
                 var query = _context.Dispatching
                 .AsNoTracking()
                 .Where(d => d.DocumentNo.Contains(searchTerm))
-                .Include(d => d.DispatchingDetail)
+                .Include(d => d.DispatchingPlacement)
                 .OrderByDescending(d => d.ID)
                 .AsQueryable();
 
@@ -38,7 +38,7 @@ namespace CSMS_API.Controllers
             {
                  var query = _context.Dispatching
                 .AsNoTracking()
-                .Include(d => d.DispatchingDetail)
+                .Include(d => d.DispatchingPlacement)
                 .OrderByDescending(d => d.ID)
                 .AsQueryable();
 
@@ -52,14 +52,14 @@ namespace CSMS_API.Controllers
                 return await _context.Dispatching
                 .AsNoTracking()
                 .Where(d => d.DocumentNo.Contains(searchTerm))
-                .Include(d => d.DispatchingDetail)
+                .Include(d => d.DispatchingPlacement)
                 .OrderByDescending(d => d.ID)
                 .ToListAsync();
             } else
             {
                 return await _context.Dispatching
                 .AsNoTracking()
-                .Include(d => d.DispatchingDetail)
+                .Include(d => d.DispatchingPlacement)
                 .OrderByDescending(d => d.ID)
                 .ToListAsync();
             }

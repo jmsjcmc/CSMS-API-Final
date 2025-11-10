@@ -4,6 +4,7 @@ using CSMS_API;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CSMS_API.Migrations
 {
     [DbContext(typeof(DB))]
-    partial class DBModelSnapshot : ModelSnapshot
+    [Migration("20251110004132_14")]
+    partial class _14
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -298,9 +301,6 @@ namespace CSMS_API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<int?>("ApprovalStatus")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("ApprovedOn")
                         .HasColumnType("datetime2");
 
@@ -355,6 +355,58 @@ namespace CSMS_API.Migrations
                     b.ToTable("Dispatching");
                 });
 
+            modelBuilder.Entity("CSMS_API.Models.DispatchingDetail", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<int?>("DispatchingID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ReceivingPlacementID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("RecordStatus")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("DispatchingID");
+
+                    b.HasIndex("ReceivingPlacementID");
+
+                    b.ToTable("DispatchingDetail");
+                });
+
+            modelBuilder.Entity("CSMS_API.Models.DispatchingDetailLog", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<int?>("DispatchingDetailID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("UpdaterID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("DispatchingDetailID");
+
+                    b.HasIndex("UpdaterID");
+
+                    b.ToTable("DispatchingDetailLog");
+                });
+
             modelBuilder.Entity("CSMS_API.Models.DispatchingLog", b =>
                 {
                     b.Property<int>("ID")
@@ -390,31 +442,25 @@ namespace CSMS_API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<int?>("ApprovalStatus")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("ApprovedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("ApproverID")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("CreatorID")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("DeclinedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("DispatchingID")
+                    b.Property<int?>("DispatchingDetailID")
                         .HasColumnType("int");
 
                     b.Property<int?>("PalletID")
                         .HasColumnType("int");
 
                     b.Property<int?>("PalletPositionID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PlacementStatus")
                         .HasColumnType("int");
 
                     b.Property<int?>("Quantity")
@@ -433,9 +479,7 @@ namespace CSMS_API.Migrations
 
                     b.HasIndex("ApproverID");
 
-                    b.HasIndex("CreatorID");
-
-                    b.HasIndex("DispatchingID");
+                    b.HasIndex("DispatchingDetailID");
 
                     b.HasIndex("PalletID");
 
@@ -488,9 +532,6 @@ namespace CSMS_API.Migrations
 
                     b.Property<string>("Number")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("PalletOccupationStatus")
-                        .HasColumnType("int");
 
                     b.Property<int?>("RecordStatus")
                         .HasColumnType("int");
@@ -549,9 +590,6 @@ namespace CSMS_API.Migrations
 
                     b.Property<string>("Floor")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("PalletPositionStatus")
-                        .HasColumnType("int");
 
                     b.Property<int?>("RecordStatus")
                         .HasColumnType("int");
@@ -1339,6 +1377,36 @@ namespace CSMS_API.Migrations
                     b.Navigation("Creator");
                 });
 
+            modelBuilder.Entity("CSMS_API.Models.DispatchingDetail", b =>
+                {
+                    b.HasOne("CSMS_API.Models.Dispatching", "Dispatching")
+                        .WithMany("DispatchingDetail")
+                        .HasForeignKey("DispatchingID");
+
+                    b.HasOne("CSMS_API.Models.ReceivingPlacement", "ReceivingPlacement")
+                        .WithMany("DispatchingDetail")
+                        .HasForeignKey("ReceivingPlacementID");
+
+                    b.Navigation("Dispatching");
+
+                    b.Navigation("ReceivingPlacement");
+                });
+
+            modelBuilder.Entity("CSMS_API.Models.DispatchingDetailLog", b =>
+                {
+                    b.HasOne("CSMS_API.Models.DispatchingDetail", "DispatchingDetail")
+                        .WithMany("DispatchingDetailLog")
+                        .HasForeignKey("DispatchingDetailID");
+
+                    b.HasOne("CSMS_API.Models.User", "Updater")
+                        .WithMany()
+                        .HasForeignKey("UpdaterID");
+
+                    b.Navigation("DispatchingDetail");
+
+                    b.Navigation("Updater");
+                });
+
             modelBuilder.Entity("CSMS_API.Models.DispatchingLog", b =>
                 {
                     b.HasOne("CSMS_API.Models.Dispatching", "Dispatching")
@@ -1354,13 +1422,9 @@ namespace CSMS_API.Migrations
                         .WithMany()
                         .HasForeignKey("ApproverID");
 
-                    b.HasOne("CSMS_API.Models.User", "Creator")
-                        .WithMany()
-                        .HasForeignKey("CreatorID");
-
-                    b.HasOne("CSMS_API.Models.Dispatching", "Dispatching")
+                    b.HasOne("CSMS_API.Models.DispatchingDetail", "DispatchingDetail")
                         .WithMany("DispatchingPlacement")
-                        .HasForeignKey("DispatchingID");
+                        .HasForeignKey("DispatchingDetailID");
 
                     b.HasOne("CSMS_API.Models.Pallet", "Pallet")
                         .WithMany("DispatchingPlacement")
@@ -1376,9 +1440,7 @@ namespace CSMS_API.Migrations
 
                     b.Navigation("Approver");
 
-                    b.Navigation("Creator");
-
-                    b.Navigation("Dispatching");
+                    b.Navigation("DispatchingDetail");
 
                     b.Navigation("Pallet");
 
@@ -1723,7 +1785,14 @@ namespace CSMS_API.Migrations
 
             modelBuilder.Entity("CSMS_API.Models.Dispatching", b =>
                 {
+                    b.Navigation("DispatchingDetail");
+
                     b.Navigation("DispatchingLog");
+                });
+
+            modelBuilder.Entity("CSMS_API.Models.DispatchingDetail", b =>
+                {
+                    b.Navigation("DispatchingDetailLog");
 
                     b.Navigation("DispatchingPlacement");
                 });
@@ -1785,6 +1854,8 @@ namespace CSMS_API.Migrations
 
             modelBuilder.Entity("CSMS_API.Models.ReceivingPlacement", b =>
                 {
+                    b.Navigation("DispatchingDetail");
+
                     b.Navigation("DispatchingPlacement");
 
                     b.Navigation("ReceivingPlacementLog");

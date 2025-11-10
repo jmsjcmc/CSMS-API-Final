@@ -19,6 +19,7 @@
         public int? ReceivingProductID { get; set; }
         public int? ReceivingDetailID { get; set; }
         public int? PalletID { get; set; }
+        public PalletOccupationStatus? PalletOccupationStatus { get; set; }
         public int? PalletPositionID { get; set; }
         public int? Quantity { get; set; }
         public double? Weight { get; set; }

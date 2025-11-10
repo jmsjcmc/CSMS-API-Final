@@ -7,6 +7,23 @@ namespace CSMS_API.Models
         Active = 1,
         Inactive = 0
     }
+    public enum ApprovalStatus
+    {
+        Pending = 1,
+        Approved = 2,
+        Declined = 0,
+    }
+    public enum PalletOccupationStatus
+    {
+        Full = 2,
+        Partial = 1,
+        Empty = 0
+    }
+    public enum PalletPositionStatus
+    {
+        Occupied = 1,
+        Available = 0
+    }
     public class Paginate<T>
     {
         public IEnumerable<T>? Items { get; set; }

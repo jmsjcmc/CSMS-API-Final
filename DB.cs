@@ -42,8 +42,9 @@ namespace CSMS_API
         public DbSet<ReceivingPlacement> ReceivingPlacement { get; set; }
         public DbSet<ReceivingPlacementLog> ReceivingPlacementLog { get; set; }
         public DbSet<Dispatching> Dispatching { get; set; }
-        public DbSet<DispatchingDetail> DispatchingDetail { get; set; }
+        public DbSet<DispatchingLog> DispatchingLog { get; set; }
         public DbSet<DispatchingPlacement> DispatchingPlacement { get; set; }
+        public DbSet<DispatchingPlacementLog> DispatchingPlacementLog { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -95,6 +96,9 @@ namespace CSMS_API
 
             modelBuilder.Entity<ReceivingPlacement>().Ignore(rp => rp.Approver);
             modelBuilder.Entity<ReceivingPlacementLog>().Ignore(rpl => rpl.Updater);
+
+            //modelBuilder.Entity<DispatchingPlacement>().Ignore(dp => dp.Approver);
+            //modelBuilder.Entity<DispatchingPlacementLog>().Ignore(dpl => dpl.Updater);  
             modelBuilder.Seed();
         }
     }

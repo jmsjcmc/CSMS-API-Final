@@ -19,22 +19,4 @@ namespace CSMS_API.Models
             .HasForeignKey(dl => dl.DispatchingID);
         }
     }
-    public class DispatchingDetailRelation : IEntityTypeConfiguration<DispatchingDetail>
-    {
-        public void Configure(EntityTypeBuilder<DispatchingDetail> builder)
-        {
-            builder.HasOne(dd => dd.ReceivingPlacement)
-            .WithMany(rp => rp.DispatchingDetail)
-            .HasForeignKey(dd => dd.ReceivingPlacementID);
-        }
-    }
-    public class DispatchingDetailLogRelation : IEntityTypeConfiguration<DispatchingDetailLog>
-    {
-        public void Configure(EntityTypeBuilder<DispatchingDetailLog> builder)
-        {
-            builder.HasOne(ddl => ddl.DispatchingDetail)
-            .WithMany(dd => dd.DispatchingDetailLog)
-            .HasForeignKey(ddl => ddl.DispatchingDetailID);
-        }
-    }
 }

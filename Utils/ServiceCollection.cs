@@ -50,6 +50,8 @@ namespace CSMS_API.Utils
             service.AddScoped<RoleService>();
 
             service.AddScoped<UserRoleService>();
+
+            service.AddScoped<DispatchingPlacementService>();
             return service;
         }
         public static IServiceCollection AddMagicCodesServices(this IServiceCollection service)
@@ -90,6 +92,8 @@ namespace CSMS_API.Utils
             service.AddScoped<RoleQuery>();
 
             service.AddScoped<UserRoleQuery>();
+
+            service.AddScoped<DispatchingPlacementQuery>();
             return service;
         }
         public static IServiceCollection AddHelpers(this IServiceCollection service)

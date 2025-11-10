@@ -5,14 +5,23 @@
         public int ID { get; set; }
         public int? ReceivingPlacementID { get; set; }
         public ReceivingPlacement? ReceivingPlacement { get; set; }
-        public int? DispatchingDetailID { get; set; }
-        public DispatchingDetail? DispatchingDetail { get; set; }
+        public int? DispatchingID { get; set; }
+        public Dispatching? Dispatching { get; set; }
         public int? PalletID { get; set; }
         public Pallet? Pallet { get; set; }
         public int? PalletPositionID { get; set; }
         public PalletPosition? PalletPosition { get; set; }
         public int? Quantity { get; set; }
         public double? Weight { get; set; }
+        public int? CreatorID { get; set; }
+        public User? Creator { get; set; }
+        public DateTime? CreatedOn { get; set; }
+        public int? ApproverID { get; set; }
+        public User? Approver { get; set; }
+        public DateTime? ApprovedOn { get; set; }
+        public DateTime? DeclinedOn { get; set; }
+        public RecordStatus? RecordStatus { get; set; }
+        public ApprovalStatus? ApprovalStatus { get; set; }
         public ICollection<DispatchingPlacementLog>? DispatchingPlacementLog { get; set; }
     }
     public class DispatchingPlacementLog

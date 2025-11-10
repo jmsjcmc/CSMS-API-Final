@@ -7,6 +7,7 @@
         public string? Number { get; set; }
         public DateTime? CreatedOn { get; set; }
         public RecordStatus? RecordStatus { get; set; }
+        public PalletOccupationStatus? PalletOccupationStatus { get; set; }
     }
     public class PalletPositionOnlyResponse
     {
@@ -17,6 +18,7 @@
         public string? Side { get; set; }
         public DateTime? CreatedOn { get; set; }
         public RecordStatus? RecordStatus { get; set; }
+        public PalletPositionStatus? PalletPositionStatus { get; set; }
     }
     public class PalletPositionWithColdStorageResponse
     {
@@ -29,6 +31,7 @@
         public string? Side { get; set; }
         public DateTime? CreatedOn { get; set; }
         public RecordStatus? RecordStatus { get; set; }
+        public PalletPositionStatus? PalletPositionStatus { get; set; }
     }
     public class PalletPositionWithColdStorageObjectResponse
     {
@@ -39,6 +42,7 @@
         public string? Side { get; set; }
         public DateTime? CreatedOn { get; set; }
         public RecordStatus? RecordStatus { get; set; }
+        public PalletPositionStatus? PalletPositionStatus { get; set; }
         public ColdStorageOnlyResponse? ColdStorage { get; set; } // COLD STORAGE
     }
     public class ColdStorageOnlyResponse
