@@ -30,6 +30,12 @@ namespace CSMS_API.Controllers
             var response = await _dispatchingService.ApproveDispatchingByIDAsync(ID, User);
             return response;
         }
+        [HttpPatch("dispatching/{ID}/decline-dispatching")]
+        public async Task<ActionResult<DispatchingWithDispatchingPlacementResponse>> DeclineDispatchingByIDAsync(int ID, string note)
+        {
+            var response = await _dispatchingService.DeclineDispatchingByIDAsync(ID, note, User);
+            return response;
+        }
         [HttpDelete("dispatching/{ID}/delete")]
         public async Task<ActionResult<DispatchingWithDispatchingPlacementResponse>> DeleteDispatchingByIDAsync(int ID)
         {

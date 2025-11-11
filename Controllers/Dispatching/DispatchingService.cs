@@ -10,6 +10,7 @@ namespace CSMS_API.Controllers
         Task<DispatchingWithDispatchingPlacementResponse> CreateDispatchingAsync(CreateDispatchingRequest request, ClaimsPrincipal user);
         Task<DispatchingWithDispatchingPlacementResponse> UpdateDispatchingByIDAsync(int ID, UpdateDispatchingRequest request, ClaimsPrincipal user);
         Task<DispatchingWithDispatchingPlacementResponse> ApproveDispatchingByIDAsync(int ID, ClaimsPrincipal user);
+        Task<DispatchingWithDispatchingPlacementResponse> DeclineDispatchingByIDAsync(int ID, string note, ClaimsPrincipal user);
         Task<DispatchingWithDispatchingPlacementResponse> DeleteDispatchingByIDAsync(int ID);
         Task<DispatchingWithDispatchingPlacementResponse> GetDispatchingByIDAsync(int ID);
     }
@@ -67,6 +68,28 @@ namespace CSMS_API.Controllers
         {
             var dispatching = await _dispatchingQuery.PatchDispatchingByIDAsync(ID);
             dispatching.ApprovalStatus = ApprovalStatus.Approved;
+
+            await _context.SaveChangesAsync();
+
+            var dispatchingLog = new DispatchingLog
+            {
+                DispatchingID = dispatching.ID,
+                UpdaterID = AuthenticationHelper.GetUserIDAsync(user),
+                UpdatedOn = PresentDateTimeFetcher.FetchPresentDateTime()
+            };
+
+            await _context.DispatchingLog.AddAsync(dispatchingLog);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<DispatchingWithDispatchingPlacementResponse>(dispatching);
+        }
+        public async Task<DispatchingWithDispatchingPlacementResponse> DeclineDispatchingByIDAsync(int ID, string note, ClaimsPrincipal user)
+        {
+            var dispatching = await _dispatchingQuery.PatchDispatchingByIDAsync(ID);
+            dispatching.ApprovalStatus = ApprovalStatus.Declined;
+            dispatching.ApproverID = AuthenticationHelper.GetUserIDAsync(user);
+            dispatching.DeclinedOn = PresentDateTimeFetcher.FetchPresentDateTime();
+            dispatching.Note = note;
 
             await _context.SaveChangesAsync();
 
