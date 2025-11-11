@@ -43,6 +43,8 @@ namespace CSMS_API.Controllers
         public async Task<object> UserLoginAsync(UserLoginRequest request)
         {
             var user = await _context.User
+                .Include(u => u.UserRole!)
+                .ThenInclude(ur => ur.Role)
                 .SingleOrDefaultAsync(u => u.Username == request.Username);
 
             var accessToken = _authHelper.GenerateAccessToken(user);

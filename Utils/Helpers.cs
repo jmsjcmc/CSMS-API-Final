@@ -86,12 +86,19 @@ namespace CSMS_API.Utils
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.UTF8.GetBytes(_config["Jwt:Key"]!);
+            var roles = user.UserRole
+                .Select(ur => ur.Role.Name)
+                .ToList();
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.ID.ToString()),
                 new Claim(ClaimTypes.Name, user.Username),
-                //new Claim(ClaimTypes.Role, user.UserRole.)
+
             };
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
