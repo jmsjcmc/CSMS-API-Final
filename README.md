@@ -11,7 +11,7 @@ The **CSMS API** is a backend system designed to manage cold storage warehouse o
 | --------------------------- | ----------------------------------------------------------- |
 | **.NET 8**                  | Backend framework for APIs                                  |
 | **Entity Framework Core**   | ORM for database access                                     |
-| **SQL Server** | Primary relational database (choose whichever you're using) |
+| **SQL Server**              | Primary relational database                                 |
 | **JWT Authentication**      | Secure login and access control                             |
 | **AutoMapper**              | Object mapping between entities and DTOs                    |
 | **Swagger (OpenAPI)**       | API documentation and testing UI                            |
