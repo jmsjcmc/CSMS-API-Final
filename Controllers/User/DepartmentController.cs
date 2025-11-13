@@ -17,7 +17,7 @@ namespace CSMS_API.Controllers
             _departmentExcelService = departmentExcelService;
         }
         [HttpPost("department/create")]
-        public async Task<ActionResult<DepartmentOnlyResponse>> CreateDepartmentAsync(string departmentName)
+        public async Task<ActionResult<DepartmentOnlyResponse>> CreateDepartmentAsync([FromBody] string departmentName)
         {
             var response = await _departmentService.CreateDepartmentAsync(departmentName, User);
             return response;
@@ -30,7 +30,7 @@ namespace CSMS_API.Controllers
             return Ok("Success");
         }
         [HttpPatch("department/{ID}/update")]
-        public async Task<ActionResult<DepartmentOnlyResponse>> UpdateDepartmentByIDAsync(int ID, string departmentName)
+        public async Task<ActionResult<DepartmentOnlyResponse>> UpdateDepartmentByIDAsync(int ID, [FromBody] string departmentName)
         {
             var response = await _departmentService.UpdateDepartmentByIDAsync(ID, departmentName, User);
             return response;
