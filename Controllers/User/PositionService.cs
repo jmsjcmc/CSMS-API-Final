@@ -11,6 +11,7 @@ namespace CSMS_API.Controllers
         Task<PositionOnlyResponse> CreatePositionAsync(string positionName, ClaimsPrincipal user);
         Task<PositionOnlyResponse> UpdatePositionByIDAsync(int ID, string positionName, ClaimsPrincipal user);
         Task<PositionWithDepartmentResponse> AddDepartmentToPositionByIDAsync(int positionID, int departmentID, ClaimsPrincipal user);
+        Task<PositionOnlyResponse> ToggleRecordStatusByIDAsync(int ID, ClaimsPrincipal user);
         Task<PositionOnlyResponse> DeletePositionByIDAsync(int ID);
         Task<PositionWithDepartmentResponse> GetPositionByIDAsync(int ID);
         Task<Paginate<PositionOnlyResponse>> PaginatedPositions(
@@ -96,6 +97,28 @@ namespace CSMS_API.Controllers
             await _context.SaveChangesAsync();
 
             return _mapper.Map<PositionWithDepartmentResponse>(position);
+        }
+        public async Task<PositionOnlyResponse> ToggleRecordStatusByIDAsync(int ID, ClaimsPrincipal user)
+        {
+            var position = await _positionQuery.PatchPositionByIDAsync(ID);
+
+            position.RecordStatus = position.RecordStatus == RecordStatus.Active
+                ? RecordStatus.Inactive
+                : RecordStatus.Active;
+
+            await _context.SaveChangesAsync();
+
+            var positionLog = new PositionLog
+            {
+                PositionID = position.ID,
+                UpdaterID = AuthenticationHelper.GetUserIDAsync(user),
+                UpdatedOn = PresentDateTimeFetcher.FetchPresentDateTime()
+            };
+
+            await _context.PositionLog.AddAsync(positionLog);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<PositionOnlyResponse>(position);
         }
         public async Task<PositionOnlyResponse> DeletePositionByIDAsync(int ID)
         {

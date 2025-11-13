@@ -13,13 +13,13 @@ namespace CSMS_API.Controllers
             _positionService = positionService;
         }
         [HttpPost("position/create")]
-        public async Task<ActionResult<PositionOnlyResponse>> CreatePositionAsync(string positionName)
+        public async Task<ActionResult<PositionOnlyResponse>> CreatePositionAsync([FromBody] string positionName)
         {
             var response = await _positionService.CreatePositionAsync(positionName, User);
             return response;
         }
         [HttpPatch("position/{ID}/update")]
-        public async Task<ActionResult<PositionOnlyResponse>> UpdatePositionByIDAsync(int ID, string positionName)
+        public async Task<ActionResult<PositionOnlyResponse>> UpdatePositionByIDAsync(int ID, [FromBody] string positionName)
         {
             var response = await _positionService.UpdatePositionByIDAsync(ID, positionName, User);
             return response;
@@ -28,6 +28,12 @@ namespace CSMS_API.Controllers
         public async Task<ActionResult<PositionWithDepartmentResponse>> AddDepartmentToPositionByIDAsync(int ID, int departmentID)
         {
             var response = await _positionService.AddDepartmentToPositionByIDAsync(ID, departmentID, User);
+            return response;
+        }
+        [HttpPatch("position/{ID}/toggle-record-status")]
+        public async Task<ActionResult<PositionOnlyResponse>> ToggleRecordStatusByIDAsync(int ID)
+        {
+            var response = await _positionService.ToggleRecordStatusByIDAsync(ID, User);
             return response;
         }
         [HttpDelete("position/{ID}/delete")]
