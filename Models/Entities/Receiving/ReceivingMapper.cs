@@ -82,5 +82,19 @@ namespace CSMS_API.Models
                 });
             }
         }
+        public static ReceivingOnlyResponse ManualReceivingOnlyResponse(Receiving receiving)
+        {
+            return new ReceivingOnlyResponse
+            {
+                ID = receiving.ID,
+                DocumentNo = receiving.DocumentNo,
+                CVNumber = receiving.CVNumber,
+                PlateNumber = receiving.PlateNumber,
+                ArrivalDate = receiving.ArrivalDate,
+                UnloadingStart = receiving.UnloadingStart,
+                UnloadingEnd = receiving.UnloadingEnd,
+                //
+            };
+        }
     }
 }
