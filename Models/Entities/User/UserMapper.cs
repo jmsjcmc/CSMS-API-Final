@@ -10,18 +10,72 @@ namespace CSMS_API.Models
                 .ForMember(d => d.Password, o => o.Ignore());
             CreateMap<UpdateUserRequest, User>()
                 .ForMember(d => d.Password, o => o.Ignore());
-            CreateMap<User, UserOnlyResponse>();
-            CreateMap<User, UserWithBusinessUnitAndPositonResponse>()
-                .ForMember(d => d.BusinessUnitID, o => o.MapFrom(s => s.BusinessUnit.ID))
-                .ForMember(d => d.BusinessUnitName, o => o.MapFrom(s => s.BusinessUnit.Name))
-                .ForMember(d => d.BusinessUnitLocation, o => o.MapFrom(s => s.BusinessUnit.Location))
-                .ForMember(d => d.PositionID, o => o.MapFrom(s => s.Position.ID))
-                .ForMember(d => d.PositionName, o => o.MapFrom(s => s.Position.Name))
-                .ForMember(d => d.DepartmentID, o => o.MapFrom(s => s.Position.Department.ID))
-                .ForMember(d => d.DepartmentName, o => o.MapFrom(s => s.Position.Department.Name));
-            CreateMap<User, UserWithBusinessUnitAndPositionObjectResponse>()
-                .ForMember(d => d.BusinessUnit, o => o.MapFrom(s => s.BusinessUnit))
-                .ForMember(d => d.Position, o => o.MapFrom(s => s.Position));
+        }
+    }
+    public static class ManualUserMapping
+    {
+        public static UserOnlyResponse ManualUserOnlyResponse(User user)
+        {
+            return new UserOnlyResponse
+            {
+                ID = user.ID,
+                FullName = $"{user.FirstName} {user.LastName}",
+                Username = user.Username,
+                Password = user.Password,
+                CreatedOn = user.CreatedOn,
+                RecordStatus = user.RecordStatus
+            };
+        }
+        public static List<UserOnlyResponse> ManualUserOnlyResponse(List<User> users)
+        {
+            return users
+                .Select(ManualUserOnlyResponse)
+                .ToList();
+        }
+        public static UserWithBusinessUnitAndPositonResponse ManualUserWithBusinessUnitAndPositonResponse(User user)
+        {
+            return new UserWithBusinessUnitAndPositonResponse
+            {
+                ID = user.ID,
+                FullName = $"{user.FirstName} {user.LastName}",
+                Username = user.Username,
+                BusinessUnitID = user.BusinessUnitID,
+                BusinessUnitName = user.BusinessUnit.Name,
+                BusinessUnitLocation = user.BusinessUnit.Location,
+                PositionID = user.PositionID,
+                PositionName = user.Position.Name,
+                DepartmentID = user.Position.DepartmentID,
+                DepartmentName = user.Position.Department.Name
+            };
+        }
+        public static List<UserWithBusinessUnitAndPositonResponse> ManualUserWithBusinessUnitAndPositonListResponse(List<User> users)
+        {
+            return users
+                .Select(ManualUserWithBusinessUnitAndPositonResponse)
+                .ToList();
+        }
+        public static UserWithBusinessUnitAndPositionObjectResponse ManualUserWithBusinessUnitAndPositionObjectResponse(User user)
+        {
+            return new UserWithBusinessUnitAndPositionObjectResponse
+            {
+                ID = user.ID,
+                FullName = $"{user.FirstName} {user.LastName}",
+                Username = user.Username,
+                CreatedOn = user.CreatedOn,
+                RecordStatus = user.RecordStatus,
+                BusinessUnit = user.BusinessUnit != null
+                ? ManualBusinessUnitMapping.ManualBusinessUnitResponse(user.BusinessUnit)
+                : null,
+                Position = user.Position != null
+                ? ManualPositionMapping.ManualPositionOnlyResponse(user.Position)
+                : null
+            };
+        }
+        public static List<UserWithBusinessUnitAndPositionObjectResponse> ManualUserWithBusinessUnitAndPositionObjectListResponse(List<User> users)
+        {
+            return users
+                .Select(ManualUserWithBusinessUnitAndPositionObjectResponse)
+                .ToList();
         }
     }
     public class RoleMapper : Profile

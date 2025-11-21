@@ -8,13 +8,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Remove="Models\Entities\TableRelations\NewFolder\**" />
-	  <Content Remove="Models\Entities\TableRelations\NewFolder\**" />
-	  <EmbeddedResource Remove="Models\Entities\TableRelations\NewFolder\**" />
-	  <None Remove="Models\Entities\TableRelations\NewFolder\**" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <None Remove="Models\Entities\Dispatching\DispatchingMapper.cs~RFf7fdbba.TMP" />
 	</ItemGroup>
 

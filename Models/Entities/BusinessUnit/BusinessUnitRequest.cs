@@ -1,4 +1,4 @@
-namespace CSMS_API.Models.Entities
+namespace CSMS_API.Models
 {
     public class CreateBusinessUnitRequest
     {

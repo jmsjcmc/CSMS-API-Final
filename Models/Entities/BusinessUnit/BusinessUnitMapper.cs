@@ -1,6 +1,6 @@
 using AutoMapper;
 
-namespace CSMS_API.Models.Entities
+namespace CSMS_API.Models
 {
     public class BusinessUnitMapper : Profile
     {
@@ -8,7 +8,24 @@ namespace CSMS_API.Models.Entities
         {
             CreateMap<CreateBusinessUnitRequest, BusinessUnit>();
             CreateMap<UpdateBusinessUnitRequest, BusinessUnit>();
-            CreateMap<BusinessUnit, BusinessUnitResponse>();
+        }
+    }
+    public static class ManualBusinessUnitMapping
+    {
+        public static BusinessUnitResponse ManualBusinessUnitResponse(BusinessUnit businessUnit)
+        {
+            return new BusinessUnitResponse
+            {
+                ID = businessUnit.ID,
+                Name = businessUnit.Name,
+                Location = businessUnit.Location,
+            };
+        }
+        public static List<BusinessUnitResponse> ManualBusinessUnitListResponse(List<BusinessUnit> businessUnits)
+        {
+            return businessUnits
+                .Select(ManualBusinessUnitResponse)
+                .ToList();
         }
     }
 }

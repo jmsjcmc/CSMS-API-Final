@@ -12,9 +12,6 @@ namespace CSMS_API.Models
                 .ForMember(d => d.DispatchingPlacement, o => o.MapFrom(s => s.DispatchingPlacement));
             CreateMap<UpdateDispatchingRequest, Dispatching>()
                 .ForMember(d => d.DispatchingPlacement, o => o.MapFrom(s => s.DispatchingPlacement));
-            CreateMap<Dispatching, DispatchingOnlyResponse>()
-                .ForMember(d => d.CreatorFullName, o => o.MapFrom(s => $"{s.Creator.FirstName} {s.Creator.LastName}"))
-                .ForMember(d => d.ApproverFullName, o => o.MapFrom(s => $"{s.Approver.FirstName} {s.Approver.LastName}"));
             CreateMap<Dispatching, DispatchingWithDispatchingPlacementResponse>()
                 .ForMember(d => d.CreatorFullName, o => o.MapFrom(s => $"{s.Creator.FirstName} {s.Creator.LastName}"))
                 .ForMember(d => d.ApproverFullName, o => o.MapFrom(s => $"{s.Approver.FirstName} {s.Approver.LastName}"))
@@ -49,6 +46,34 @@ namespace CSMS_API.Models
                     Quantity = request.Quantity,
                     Weight = request.Weight
                 };
+            }
+            public static DispatchingOnlyResponse ManualDispatchingOnlyResponse(Dispatching dispatching)
+            {
+                return new DispatchingOnlyResponse
+                {
+                    ID = dispatching.ID,
+                    DocumentNo = dispatching.DocumentNo,
+                    DispatchDate = dispatching.DispatchDate,
+                    DispatchTimeStart = dispatching.DispatchTimeStart,
+                    DispatchTimeEnd = dispatching.DispatchTimeEnd,
+                    NMISCertificate = dispatching.NMISCertificate,
+                    DispatchPlateNo = dispatching.DispatchPlateNo,
+                    SealNo = dispatching.SealNo,
+                    OverAllWeight = dispatching.OverAllWeight,
+                    Note = dispatching.Note,
+                    CreatorFullName = $"{dispatching.Creator.FirstName} {dispatching.Creator.LastName}",
+                    CreatedOn = dispatching.CreatedOn,
+                    ApproverFullName = $"{dispatching.Approver.FirstName} {dispatching.Approver.LastName}",
+                    ApprovedOn = dispatching.ApprovedOn,
+                    DeclinedOn = dispatching.DeclinedOn,
+                    RecordStatus = dispatching.RecordStatus
+                };
+            }
+            public static List<DispatchingOnlyResponse> ManualDispatchingOnlyListResponse(List<Dispatching> dispatchings)
+            {
+                return dispatchings
+                    .Select(ManualDispatchingOnlyResponse)
+                    .ToList();
             }
         }
     }

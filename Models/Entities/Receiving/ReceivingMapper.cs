@@ -11,13 +11,6 @@ namespace CSMS_API.Models
             CreateMap<CreateReceivingRequest, Receiving>();
             CreateMap<UpdateReceivingRequest, Receiving>()
                 .ForMember(d => d.ReceivingDetail, o => o.MapFrom(s => s.ReceivingDetail));
-            CreateMap<Receiving, ReceivingOnlyResponse>()
-                .ForMember(d => d.Creator, o => o.MapFrom(s => s.Creator))
-                .ForMember(d => d.Approver, o => o.MapFrom(s => s.Approver));
-            CreateMap<Receiving, ReceivingWithReceivingDetailResponse>()
-                .ForMember(d => d.ReceivingDetail, o => o.MapFrom(s => s.ReceivingDetail))
-                .ForMember(d => d.Creator, o => o.MapFrom(s => s.Creator))
-                .ForMember(d => d.Approver, o => o.MapFrom(s => s.Approver));
         }
     }
     public class ReceivingDetailMapper : Profile
@@ -26,35 +19,11 @@ namespace CSMS_API.Models
         {
             CreateMap<CreateReceivingDetailRequest, ReceivingDetail>();
             CreateMap<UpdateReceivingDetailRequest, ReceivingDetail>();
-            CreateMap<ReceivingDetail, ReceivingDetailOnlyResponse>()
-                .ForMember(d => d.Creator, o => o.MapFrom(s => s.Creator));
-            CreateMap<ReceivingDetail, ReceivingDetailWithReceivingAndProductResponse>()
-                .ForMember(d => d.ReceivingID, o => o.MapFrom(s => s.Receiving.ID))
-                .ForMember(d => d.DocumentNo, o => o.MapFrom(s => s.Receiving.DocumentNo))
-                .ForMember(d => d.CVNumber, o => o.MapFrom(s => s.Receiving.CVNumber))
-                .ForMember(d => d.PlateNumber, o => o.MapFrom(s => s.Receiving.PlateNumber))
-                .ForMember(d => d.ArrivalDate, o => o.MapFrom(s => s.Receiving.ArrivalDate))
-                .ForMember(d => d.UnloadingStart, o => o.MapFrom(s => s.Receiving.UnloadingStart))
-                .ForMember(d => d.UnloadingEnd, o => o.MapFrom(s => s.Receiving.UnloadingEnd))
-                .ForMember(d => d.ProductID, o => o.MapFrom(s => s.Product.ID))
-                .ForMember(d => d.ProductCode, o => o.MapFrom(s => s.Product.ProductCode))
-                .ForMember(d => d.ProductName, o => o.MapFrom(s => s.Product.ProductName))
-                .ForMember(d => d.Variant, o => o.MapFrom(s => s.Product.Variant))
-                .ForMember(d => d.SKU, o => o.MapFrom(s => s.Product.SKU))
-                .ForMember(d => d.ProductPackaging, o => o.MapFrom(s => s.Product.ProductPackaging))
-                .ForMember(d => d.DeliveryUnit, o => o.MapFrom(s => s.Product.DeliveryUnit))
-                .ForMember(d => d.UOM, o => o.MapFrom(s => s.Product.UOM))
-                .ForMember(d => d.Unit, o => o.MapFrom(s => s.Product.Unit))
-                .ForMember(d => d.Quantity, o => o.MapFrom(s => s.Product.Quantity))
-                .ForMember(d => d.Weight, o => o.MapFrom(s => s.Product.Weight));
-            CreateMap<ReceivingDetail, ReceivingDetailWithReceivingAndProductObjectResponse>()
-                .ForMember(d => d.Receiving, o => o.MapFrom(s => s.Receiving))
-                .ForMember(d => d.Product, o => o.MapFrom(s => s.Product));
         }
     }
     public static class ManualReceivingMapper
     {
-        public static void ManualReceivingMapping(UpdateReceivingRequest request, Receiving receiving)
+        public static void ManualReceivingRequestMapping(UpdateReceivingRequest request, Receiving receiving)
         {
             receiving.DocumentNo = request.DocumentNo;
             receiving.CVNumber = request.CVNumber;
@@ -63,7 +32,7 @@ namespace CSMS_API.Models
             receiving.UnloadingStart = request.UnloadingStart;
             receiving.UnloadingEnd = request.UnloadingEnd;
         }
-        public static void ManualReceivingDetailMapping(UpdateReceivingRequest request, Receiving receiving, ClaimsPrincipal user)
+        public static void ManualReceivingDetaiRequestlMapping(UpdateReceivingRequest request, Receiving receiving, ClaimsPrincipal user)
         {
             foreach (var receivingDetail in request.ReceivingDetail)
             {
@@ -93,8 +62,145 @@ namespace CSMS_API.Models
                 ArrivalDate = receiving.ArrivalDate,
                 UnloadingStart = receiving.UnloadingStart,
                 UnloadingEnd = receiving.UnloadingEnd,
-                //
+                Creator = receiving.Creator != null
+                ? ManualUserMapping.ManualUserWithBusinessUnitAndPositionObjectResponse(receiving.Creator)
+                : null,
+                Approver = receiving.Approver != null
+                ? ManualUserMapping.ManualUserWithBusinessUnitAndPositionObjectResponse(receiving.Approver)
+                : null,
+                CreatedOn = receiving.CreatedOn
             };
+        }
+        public static List<ReceivingOnlyResponse> ManualReceivingOnlyListResponse(List<Receiving> receivings)
+        {
+            return receivings
+                .Select(ManualReceivingOnlyResponse)
+                .ToList();
+        }
+        public static ReceivingWithReceivingDetailResponse ManualReceivingWithReceivingDetailResponse(Receiving receiving)
+        {
+            return new ReceivingWithReceivingDetailResponse
+            {
+                ID = receiving.ID,
+                DocumentNo = receiving.DocumentNo,
+                CVNumber = receiving.CVNumber,
+                PlateNumber = receiving.PlateNumber,
+                ArrivalDate = receiving.ArrivalDate,
+                UnloadingStart = receiving.UnloadingStart,
+                UnloadingEnd = receiving.UnloadingEnd,
+                Creator = receiving.Creator != null
+                ? ManualUserMapping.ManualUserWithBusinessUnitAndPositionObjectResponse(receiving.Creator)
+                : null,
+                Approver = receiving.Approver != null
+                ? ManualUserMapping.ManualUserWithBusinessUnitAndPositionObjectResponse(receiving.Approver)
+                : null,
+                CreatedOn = receiving.CreatedOn,
+                ReceivingDetail = receiving.ReceivingDetail != null
+                ? ManualReceivingDetailMapping.ManualReceivingDetailOnlyListResponse(receiving.ReceivingDetail.ToList())
+                : null,
+            };
+        }
+        public static List<ReceivingWithReceivingDetailResponse> ManualReceivingWithReceivingDetailListResponse(List<Receiving> receivings)
+        {
+            return receivings
+                .Select(ManualReceivingWithReceivingDetailResponse)
+                .ToList();
+        }
+    }
+    public static class ManualReceivingDetailMapping
+    {
+        public static ReceivingDetailOnlyResponse ManualReceivingDetailOnlyResponse(ReceivingDetail receivingDetail)
+        {
+            return new ReceivingDetailOnlyResponse
+            {
+                ID = receivingDetail.ID,
+                ExpirationDate = receivingDetail.ExpirationDate,
+                ProductionDate = receivingDetail.ProductionDate,
+                QuantityInPallet = receivingDetail.QuantityInPallet,
+                DUQuantity = receivingDetail.DUQuantity,
+                TotalWeight = receivingDetail.TotalWeight,
+                Remark = receivingDetail.Remark,
+                Creator = receivingDetail.Creator != null
+                ? ManualUserMapping.ManualUserWithBusinessUnitAndPositionObjectResponse(receivingDetail.Creator)
+                : null,
+                CreatedOn = receivingDetail.CreatedOn
+            };
+        }
+        public static List<ReceivingDetailOnlyResponse> ManualReceivingDetailOnlyListResponse(List<ReceivingDetail> receivingDetails)
+        {
+            return receivingDetails
+                .Select(ManualReceivingDetailOnlyResponse)
+                .ToList();
+        }
+        public static ReceivingDetailWithReceivingAndProductResponse ManualReceivingDetailWithReceivingAndProductResponse(ReceivingDetail receivingDetail)
+        {
+            return new ReceivingDetailWithReceivingAndProductResponse
+            {
+                ID = receivingDetail.ID,
+                ExpirationDate = receivingDetail.ExpirationDate,
+                ProductionDate = receivingDetail.ProductionDate,
+                QuantityInPallet = receivingDetail.QuantityInPallet,
+                DUQuantity = receivingDetail.DUQuantity,
+                TotalWeight = receivingDetail.TotalWeight,
+                Remark = receivingDetail.Remark,
+                Creator = receivingDetail.Creator != null
+                ? ManualUserMapping.ManualUserWithBusinessUnitAndPositionObjectResponse(receivingDetail.Creator)
+                : null,
+                CreatedOn = receivingDetail.CreatedOn,
+                ReceivingID = receivingDetail.ReceivingID,
+                DocumentNo = receivingDetail.Receiving.DocumentNo,
+                CVNumber = receivingDetail.Receiving.CVNumber,
+                PlateNumber = receivingDetail.Receiving.PlateNumber,
+                ArrivalDate = receivingDetail.Receiving.ArrivalDate,
+                UnloadingStart = receivingDetail.Receiving.UnloadingStart,
+                UnloadingEnd = receivingDetail.Receiving.UnloadingEnd,
+                ProductID = receivingDetail.ProductID,
+                ProductCode = receivingDetail.Product.ProductCode,
+                ProductName = receivingDetail.Product.ProductName,
+                Variant = receivingDetail.Product.Variant,
+                SKU = receivingDetail.Product.SKU,
+                ProductPackaging = receivingDetail.Product.ProductPackaging,
+                DeliveryUnit = receivingDetail.Product.DeliveryUnit,
+                UOM = receivingDetail.Product.UOM,
+                Unit = receivingDetail.Product.Unit,
+                Quantity = receivingDetail.Product.Quantity,
+                Weight = receivingDetail.Product.Weight
+            };
+        }
+        public static List<ReceivingDetailWithReceivingAndProductResponse> ManualReceivingDetailWithReceivingAndProductListResponse(List<ReceivingDetail> receivingDetails)
+        {
+            return receivingDetails
+                .Select(ManualReceivingDetailWithReceivingAndProductResponse)
+                .ToList();
+        }
+        public static ReceivingDetailWithReceivingAndProductObjectResponse ManualReceivingDetailWithReceivingAndProductObjectResponse(ReceivingDetail receivingDetail)
+        {
+            return new ReceivingDetailWithReceivingAndProductObjectResponse
+            {
+                ID = receivingDetail.ID,
+                ExpirationDate = receivingDetail.ExpirationDate,
+                ProductionDate = receivingDetail.ProductionDate,
+                QuantityInPallet = receivingDetail.QuantityInPallet,
+                DUQuantity = receivingDetail.DUQuantity,
+                TotalWeight = receivingDetail.TotalWeight,
+                Remark = receivingDetail.Remark,
+                Creator = receivingDetail.Creator != null
+                ? ManualUserMapping.ManualUserWithBusinessUnitAndPositionObjectResponse(receivingDetail.Creator)
+                : null,
+                CreatedOn = receivingDetail.CreatedOn,
+                Receiving = receivingDetail.Receiving != null
+                ? ManualReceivingMapper.ManualReceivingOnlyResponse(receivingDetail.Receiving)
+                : null,
+                Product = receivingDetail.Product != null
+                ? ManualProductMapping.ManualProductOnlyResponse(receivingDetail.Product)
+                : null
+            };
+        }
+        public static List<ReceivingDetailWithReceivingAndProductObjectResponse> ManualReceivingDetailWithReceivingAndProductObjectListResponse(List<ReceivingDetail> receivingDetails)
+        {
+            return receivingDetails
+                .Select(ManualReceivingDetailWithReceivingAndProductObjectResponse)
+                .ToList();
         }
     }
 }
