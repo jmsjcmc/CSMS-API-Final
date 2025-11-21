@@ -1,5 +1,4 @@
 using CSMS_API.Models;
-using CSMS_API.Models.Entities;
 using CSMS_API.Utils;
 using Magicodes.ExporterAndImporter.Excel;
 using Microsoft.AspNetCore.Mvc;

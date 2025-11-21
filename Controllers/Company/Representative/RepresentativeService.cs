@@ -39,7 +39,7 @@ namespace CSMS_API.Controllers
             await _context.Representative.AddAsync(representative);
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<RepresentativeOnlyResponse>(representative);
+            return ManualCompanyMapping.ManualRepresentativeOnlyResponse(representative);
         }
         public async Task<RepresentativeOnlyResponse> UpdateRepresentativeByIDAsync(int ID, UpdateRepresentativeRequest request, ClaimsPrincipal user)
         {
@@ -58,7 +58,7 @@ namespace CSMS_API.Controllers
             await _context.RepresentativeLog.AddAsync(representativeLog);
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<RepresentativeOnlyResponse>(representative);
+            return ManualCompanyMapping.ManualRepresentativeOnlyResponse(representative);
         }
         public async Task<RepresentativeWithCompanyResponse> AddCompanyToRepresentativeByIDAsync(int representativeID, int companyID, ClaimsPrincipal user)
         {
@@ -76,7 +76,8 @@ namespace CSMS_API.Controllers
 
             await _context.RepresentativeLog.AddAsync(representativeLog);
             await _context.SaveChangesAsync();
-            return _mapper.Map<RepresentativeWithCompanyResponse>(representative);
+
+            return ManualCompanyMapping.ManualRepresentativeWithCompanyResponse(representative);
         }
         public async Task<RepresentativeOnlyResponse> DeleteRepresentativeByIDAsync(int ID)
         {
@@ -85,12 +86,13 @@ namespace CSMS_API.Controllers
             _context.Representative.Remove(representative);
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<RepresentativeOnlyResponse>(representative);
+            return ManualCompanyMapping.ManualRepresentativeOnlyResponse(representative);
         }
         public async Task<RepresentativeWithCompanyResponse> GetRepresentativeByIDAsync(int ID)
         {
             var representative = await _representativeQuery.GetRepresentativeByIDAsync(ID);
-            return _mapper.Map<RepresentativeWithCompanyResponse>(representative);
+
+            return ManualCompanyMapping.ManualRepresentativeWithCompanyResponse(representative);
         }
         public async Task<Paginate<RepresentativeOnlyResponse>> PaginatedRepresentatives(
             int pageNumber,
@@ -98,12 +100,13 @@ namespace CSMS_API.Controllers
             string searchTerm)
         {
             var query = _representativeQuery.PaginatedRepresentatives(searchTerm);
-            return await PaginationHelper.PaginateAndMapAsync<Representative, RepresentativeOnlyResponse>(query, pageNumber, pageSize, _mapper);
+            return await PaginationHelper.PaginatedAndManualMapping(query, pageNumber, pageSize, ManualCompanyMapping.ManualRepresentativeOnlyResponse);
         }
         public async Task<List<RepresentativeOnlyResponse>> ListedRepresentatives(string? searchTerm)
         {
             var representatives = await _representativeQuery.ListedRepresentatives(searchTerm);
-            return _mapper.Map<List<RepresentativeOnlyResponse>>(representatives);
+
+            return ManualCompanyMapping.ManualRepresentativeOnlyListResponse(representatives);
         }
     }
 }

@@ -51,8 +51,8 @@ namespace CSMS_API.Controllers
         {
             var receiving = await _receivingQuery.PatchReceivingByIDAsync(ID);
 
-            ManualReceivingMapper.ManualReceivingMapping(request, receiving);
-            ManualReceivingMapper.ManualReceivingDetailMapping(request, receiving, user);
+            ManualReceivingMapper.ManualReceivingRequestMapping(request, receiving);
+            ManualReceivingMapper.ManualReceivingDetailRequestMapping(request, receiving, user);
 
             _context.Receiving.Update(receiving);
             await _context.SaveChangesAsync();

@@ -32,7 +32,7 @@ namespace CSMS_API.Models
             receiving.UnloadingStart = request.UnloadingStart;
             receiving.UnloadingEnd = request.UnloadingEnd;
         }
-        public static void ManualReceivingDetaiRequestlMapping(UpdateReceivingRequest request, Receiving receiving, ClaimsPrincipal user)
+        public static void ManualReceivingDetailRequestMapping(UpdateReceivingRequest request, Receiving receiving, ClaimsPrincipal user)
         {
             foreach (var receivingDetail in request.ReceivingDetail)
             {

@@ -52,7 +52,7 @@ namespace CSMS_API.Controllers
                 await _context.Department.AddAsync(department);
                 await _context.SaveChangesAsync();
 
-                return _mapper.Map<DepartmentOnlyResponse>(department);
+                return ManualDepartmentMapping.ManualDepartmentOnlyResponse(department);
             }
         }
         public async Task<DepartmentOnlyResponse> UpdateDepartmentByIDAsync(int ID, string departmentName, ClaimsPrincipal user)
@@ -71,7 +71,8 @@ namespace CSMS_API.Controllers
             };
             await _context.DepartmentLog.AddAsync(departmentLog);
             await _context.SaveChangesAsync();
-            return _mapper.Map<DepartmentOnlyResponse>(department);
+
+            return ManualDepartmentMapping.ManualDepartmentOnlyResponse(department);
         }
         public async Task<DepartmentOnlyResponse> DeleteDepartmentByIDAsync(int ID)
         {
@@ -79,12 +80,14 @@ namespace CSMS_API.Controllers
 
             _context.Department.Remove(department);
             await _context.SaveChangesAsync();
-            return _mapper.Map<DepartmentOnlyResponse>(department);
+
+            return ManualDepartmentMapping.ManualDepartmentOnlyResponse(department);
         }
         public async Task<DepartmentWithPositionResponse> GetDepartmentByIDAsync(int ID)
         {
             var department = await _departmentQuery.GetDepartmentByIDAsync(ID);
-            return _mapper.Map<DepartmentWithPositionResponse>(department);
+
+            return ManualDepartmentMapping.ManualDepartmentWithPositionResponse(department);
         }
         public async Task<Paginate<DepartmentOnlyResponse>> PaginatedDepartments(
             int pageNumber,
@@ -92,7 +95,7 @@ namespace CSMS_API.Controllers
             string searchTerm)
         {
             var query = _departmentQuery.PaginatedDepartments(searchTerm);
-            return await PaginationHelper.PaginateAndMapAsync<Department, DepartmentOnlyResponse>(query, pageNumber, pageSize, _mapper);
+            return await PaginationHelper.PaginatedAndManualMapping(query, pageNumber, pageSize, ManualDepartmentMapping.ManualDepartmentOnlyResponse);
         }
         public async Task<Paginate<DepartmentWithPositionResponse>> PaginatedDepartmentsWithPosition(
             int pageNumber,
@@ -100,17 +103,19 @@ namespace CSMS_API.Controllers
             string searchTerm)
         {
             var query = _departmentQuery.PaginatedDepartmentsWithPosition(searchTerm);
-            return await PaginationHelper.PaginateAndMapAsync<Department, DepartmentWithPositionResponse>(query, pageNumber, pageSize, _mapper);
+            return await PaginationHelper.PaginatedAndManualMapping(query, pageNumber, pageSize, ManualDepartmentMapping.ManualDepartmentWithPositionResponse);
         }
         public async Task<List<DepartmentOnlyResponse>> ListedDepartments(string? searchTerm)
         {
             var departments = await _departmentQuery.ListedDepartments(searchTerm);
-            return _mapper.Map<List<DepartmentOnlyResponse>>(departments);
+
+            return ManualDepartmentMapping.ManualDepartmentOnlyListResponse(departments);
         }
         public async Task<List<DepartmentWithPositionResponse>> ListedDepartmentsWithPosition(string? searchTerm)
         {
             var departments = await _departmentQuery.ListedDepartmentsWithPosition(searchTerm);
-            return _mapper.Map<List<DepartmentWithPositionResponse>>(departments);
+
+            return ManualDepartmentMapping.ManualDepartmentWithPositionListResponse(departments);
         }
     }
     

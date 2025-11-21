@@ -1,7 +1,6 @@
 using System.Security.Claims;
 using AutoMapper;
 using CSMS_API.Models;
-using CSMS_API.Models.Entities;
 using CSMS_API.Utils;
 using Microsoft.EntityFrameworkCore;
 
@@ -47,7 +46,7 @@ namespace CSMS_API.Controllers
 
                 await _context.BusinessUnit.AddAsync(businessUnit);
                 await _context.SaveChangesAsync();
-                return _mapper.Map<BusinessUnitResponse>(businessUnit);
+                return ManualBusinessUnitMapping.ManualBusinessUnitResponse(businessUnit);
             }
         }
         public async Task<BusinessUnitResponse> UpdateBusinessUnitByIDAsync(int ID, UpdateBusinessUnitRequest request, ClaimsPrincipal user)
@@ -68,7 +67,7 @@ namespace CSMS_API.Controllers
             await _context.BusinessUnitLog.AddAsync(businessUnitLog);
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<BusinessUnitResponse>(businessUnit);
+            return ManualBusinessUnitMapping.ManualBusinessUnitResponse(businessUnit);
         }
         public async Task<BusinessUnitResponse> DeleteBusinessUnitByIDAsync(int ID)
         {
@@ -78,12 +77,12 @@ namespace CSMS_API.Controllers
 
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<BusinessUnitResponse>(businessUnit);
+            return ManualBusinessUnitMapping.ManualBusinessUnitResponse(businessUnit);
         }
         public async Task<BusinessUnitResponse> GetBusinessUnitByIDAsync(int ID)
         {
             var businessUnit = await _businessUnitQuery.GetBusinessUnitByIDAsync(ID);
-            return _mapper.Map<BusinessUnitResponse>(businessUnit);
+            return ManualBusinessUnitMapping.ManualBusinessUnitResponse(businessUnit);
         }
         public async Task<Paginate<BusinessUnitResponse>> PaginatedBusinessUnits(
             int pageNumber,
@@ -91,12 +90,12 @@ namespace CSMS_API.Controllers
             string searchTerm)
         {
             var query = _businessUnitQuery.PaginatedBusinessUnits(searchTerm);
-            return await PaginationHelper.PaginateAndMapAsync<BusinessUnit, BusinessUnitResponse>(query, pageNumber, pageSize, _mapper);
+            return await PaginationHelper.PaginatedAndManualMapping(query, pageNumber, pageSize, ManualBusinessUnitMapping.ManualBusinessUnitResponse);
         }
         public async Task<List<BusinessUnitResponse>> ListedBusinessUnitsAsync(string? searchTerm)
         {
             var businessUnits = await _businessUnitQuery.ListedBusinessUnitsAsync(searchTerm);
-            return _mapper.Map<List<BusinessUnitResponse>>(businessUnits);
+            return ManualBusinessUnitMapping.ManualBusinessUnitListResponse(businessUnits);
         }
     }
 }

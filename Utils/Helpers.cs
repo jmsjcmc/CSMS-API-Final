@@ -39,15 +39,25 @@ namespace CSMS_API.Utils
                 .ProjectTo<TDestination>(mapper.ConfigurationProvider)
                 .ToListAsync();
         }
-        public static async Task<Paginate<TDestination>> PaginateAndMapAsync<TSource, TDestination>(
+        public static async Task<Paginate<TDestination>> PaginatedAndManualMapping<TSource, TDestination>(
             IQueryable<TSource> query,
             int pageNumber,
             int pageSize,
-            IMapper mapper)
+            Func<TSource, TDestination> mapFunction)
         {
             var totalCount = await query.CountAsync();
-            var items = await PaginatedAndProjectAsync<TSource, TDestination>(query, pageNumber, pageSize, mapper);
-            return PaginatedResponse(items, totalCount, pageNumber, pageSize);
+            var items = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+            var mappedItems = items.Select(mapFunction).ToList();
+            return new Paginate<TDestination>
+            {
+                Items = mappedItems,
+                TotalCount = totalCount,
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            };
         }
         public static Paginate<T> PaginatedResponse<T>(
             List<T> items,

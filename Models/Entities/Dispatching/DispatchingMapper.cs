@@ -19,7 +19,7 @@ namespace CSMS_API.Models
         }
         public static class ManualDispatchingMapper
         {
-            public static Dispatching ManualDispatchingMapping(CreateDispatchingRequest request, ClaimsPrincipal user)
+            public static Dispatching ManualDispatchingRequestMapping(CreateDispatchingRequest request, ClaimsPrincipal user)
             {
                 return new Dispatching
                 {
@@ -35,7 +35,7 @@ namespace CSMS_API.Models
                     CreatedOn = PresentDateTimeFetcher.FetchPresentDateTime()
                 };
             }
-            public static DispatchingPlacement ManualDispatchingPlacementMapping(int dispatchingID, CreateDispatchingPlacementRequest request)
+            public static DispatchingPlacement ManualDispatchingPlacementRequestMapping(int dispatchingID, CreateDispatchingPlacementRequest request)
             {
                 return new DispatchingPlacement
                 {
@@ -73,6 +73,37 @@ namespace CSMS_API.Models
             {
                 return dispatchings
                     .Select(ManualDispatchingOnlyResponse)
+                    .ToList();
+            }
+            public static DispatchingWithDispatchingPlacementResponse ManualDispatchingWithDispatchingPlacementResponse(Dispatching dispatching)
+            {
+                return new DispatchingWithDispatchingPlacementResponse
+                {
+                    ID = dispatching.ID,
+                    DocumentNo = dispatching.DocumentNo,
+                    DispatchDate = dispatching.DispatchDate,
+                    DispatchTimeStart = dispatching.DispatchTimeStart,
+                    DispatchTimeEnd = dispatching.DispatchTimeEnd,
+                    NMISCertificate = dispatching.NMISCertificate,
+                    DispatchPlateNo = dispatching.DispatchPlateNo,
+                    SealNo = dispatching.SealNo,
+                    OverAllWeight = dispatching.OverAllWeight,
+                    Note = dispatching.Note,
+                    CreatorFullName = $"{dispatching.Creator.FirstName} {dispatching.Creator.LastName}",
+                    CreatedOn = dispatching.CreatedOn,
+                    ApproverFullName = $"{dispatching.Approver.FirstName} {dispatching.Approver.LastName}",
+                    ApprovedOn = dispatching.ApprovedOn,
+                    DeclinedOn = dispatching.DeclinedOn,
+                    RecordStatus = dispatching.RecordStatus,
+                    DispatchingPlacement = dispatching.DispatchingPlacement != null
+                    ? ManualDispatchingPlacementMapping.ManualDispatchingPlacementOnlyListResponse(dispatching.DispatchingPlacement.ToList())
+                    : null
+                };
+            }
+            public static List<DispatchingWithDispatchingPlacementResponse> ManualDispatchingWithDispatchingPlacementResponse(List<Dispatching> dispatchings)
+            {
+                return dispatchings
+                    .Select(ManualDispatchingWithDispatchingPlacementResponse)
                     .ToList();
             }
         }

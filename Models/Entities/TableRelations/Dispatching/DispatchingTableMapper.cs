@@ -45,4 +45,46 @@ namespace CSMS_API.Models
                 .ForMember(d => d.Approver, o => o.MapFrom(s => s.Approver));
         }
     }
+    public static class ManualDispatchingPlacementMapping
+    {
+        public static DispatchingPlacementOnlyResponse ManualDispatchingPlacementOnlyResponse(DispatchingPlacement dispatchingPlacement)
+        {
+            return new DispatchingPlacementOnlyResponse
+            {
+
+            };
+        }
+        public static List<DispatchingPlacementOnlyResponse> ManualDispatchingPlacementOnlyListResponse(List<DispatchingPlacement> dispatchingPlacements)
+        {
+            return dispatchingPlacements
+                .Select(ManualDispatchingPlacementOnlyResponse)
+                .ToList();
+        }
+        public static DispatchingPlacementWithReceivingPlacementDispatchingPalletAndPalletPositionResponse ManualDispatchingPlacementWithReceivingPlacementDispatchingPalletAndPalletPositionResponse(DispatchingPlacement dispatchingPlacement)
+        {
+            return new DispatchingPlacementWithReceivingPlacementDispatchingPalletAndPalletPositionResponse
+            {
+
+            };
+        }
+        public static List<DispatchingPlacementWithReceivingPlacementDispatchingPalletAndPalletPositionResponse> ManualDispatchingPlacementWithReceivingPlacementDispatchingPalletAndPalletPositionListResponse(List<DispatchingPlacement> dispatchingPlacements)
+        {
+            return dispatchingPlacements
+                .Select(ManualDispatchingPlacementWithReceivingPlacementDispatchingPalletAndPalletPositionResponse)
+                .ToList();
+        }
+        public static DispatchingPlacementWithReceivingPlacementDispatchingPalletAndPalletPositionObjectResponse ManualDispatchingPlacementWithReceivingPlacementDispatchingPalletAndPalletPositionObjectResponse(DispatchingPlacement dispatchingPlacement)
+        {
+            return new DispatchingPlacementWithReceivingPlacementDispatchingPalletAndPalletPositionObjectResponse
+            {
+
+            };
+        }
+        public static List<DispatchingPlacementWithReceivingPlacementDispatchingPalletAndPalletPositionObjectResponse> ManualDispatchingPlacementWithReceivingPlacementDispatchingPalletAndPalletPositionObjectListResponse(List<DispatchingPlacement> dispatchingPlacements)
+        {
+            return dispatchingPlacements
+                .Select(ManualDispatchingPlacementWithReceivingPlacementDispatchingPalletAndPalletPositionObjectResponse)
+                .ToList();
+        }
+    }
 }

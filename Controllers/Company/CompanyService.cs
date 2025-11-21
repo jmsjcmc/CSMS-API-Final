@@ -43,8 +43,7 @@ namespace CSMS_API.Controllers
 
             await _context.Company.AddAsync(company);
             await _context.SaveChangesAsync();
-
-            return _mapper.Map<CompanyOnlyResponse>(company);
+            return ManualCompanyMapping.ManualCompanyOnlyResponse(company);
         }
         public async Task<CompanyOnlyResponse> UpdateCompanyByIDAsync(int ID, CreateCompanyRequest request, ClaimsPrincipal user)
         {
@@ -62,7 +61,7 @@ namespace CSMS_API.Controllers
 
             await _context.CompanyLog.AddAsync(companyLog);
             await _context.SaveChangesAsync();
-            return _mapper.Map<CompanyOnlyResponse>(company);
+            return ManualCompanyMapping.ManualCompanyOnlyResponse(company);
         }
         public async Task<CompanyOnlyResponse> DeleteCompanyByIDAsync(int ID)
         {
@@ -70,17 +69,17 @@ namespace CSMS_API.Controllers
 
             _context.Company.Remove(company);
             await _context.SaveChangesAsync();
-            return _mapper.Map<CompanyOnlyResponse>(company);
+            return ManualCompanyMapping.ManualCompanyOnlyResponse(company);
         }
         public async Task<CompanyOnlyResponse> GetCompanyByIDAsync(int ID)
         {
             var company = await _companyQuery.GetCompanyByIDAsync(ID);
-            return _mapper.Map<CompanyOnlyResponse>(company);
+            return ManualCompanyMapping.ManualCompanyOnlyResponse(company);
         }   
         public async Task<CompanyWithRepresentativeResponse> GetCompanyWithRepresentativeByIDAsync(int ID)
         {
             var company = await _companyQuery.GetCompanyByIDAsync(ID);
-            return _mapper.Map<CompanyWithRepresentativeResponse>(company);
+            return ManualCompanyMapping.ManualCompanyWithRepresentativeResponse(company);
         }
         public async Task<Paginate<CompanyOnlyResponse>> PaginatedCompanies(
             int pageNumber,
@@ -88,7 +87,7 @@ namespace CSMS_API.Controllers
             string searchTerm)
         {
             var query = _companyQuery.PaginatedCompanies(searchTerm);
-            return await PaginationHelper.PaginateAndMapAsync<Company, CompanyOnlyResponse>(query, pageNumber, pageSize, _mapper);
+            return await PaginationHelper.PaginatedAndManualMapping(query, pageNumber, pageSize, ManualCompanyMapping.ManualCompanyOnlyResponse);
         }
         public async Task<Paginate<CompanyWithRepresentativeResponse>> PaginatedCompaniesWithRepresentative(
             int pageNumber,
@@ -96,17 +95,17 @@ namespace CSMS_API.Controllers
             string searchTerm)
         {
             var query = _companyQuery.PaginatedCompaniesWithRepresentative(searchTerm);
-            return await PaginationHelper.PaginateAndMapAsync<Company, CompanyWithRepresentativeResponse>(query, pageNumber, pageSize, _mapper);
+            return await PaginationHelper.PaginatedAndManualMapping(query, pageNumber, pageSize, ManualCompanyMapping.ManualCompanyWithRepresentativeResponse);
         }
         public async Task<List<CompanyOnlyResponse>> ListedCompanies(string? searchTerm)
         {
             var companies = await _companyQuery.ListedCompanies(searchTerm);
-            return _mapper.Map<List<CompanyOnlyResponse>>(companies);
+            return ManualCompanyMapping.ManualCompanyOnlyListResponse(companies);
         }
         public async Task<List<CompanyWithRepresentativeResponse>> ListedCompaniesWithRepresentative(string? searchTerm)
         {
             var companies = await _companyQuery.ListedCompaniesWithRepresentative(searchTerm);
-            return _mapper.Map<List<CompanyWithRepresentativeResponse>>(companies);
+            return ManualCompanyMapping.ManualCompanyWithRepresentativeListResponse(companies);
         }
     }
 }
