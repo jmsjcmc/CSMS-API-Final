@@ -101,7 +101,7 @@ namespace CSMS_API.Controllers
             string searchTerm)
         {
             var query = _palletPositionQuery.PaginatedPalletPositions(searchTerm);
-            return await PaginationHelper.PaginateAndMapAsync<PalletPosition, PalletPositionOnlyResponse>(query, pageNumber, pageSize, _mapper);
+            return await PaginationHelper.PaginatedAndManualMapping(query, pageNumber, pageSize, ManualPalletMapping.ManualPalletPositionOnlyResponse);
         }
         public async Task<List<PalletPositionOnlyResponse>> ListedPalletPositions(string? searchTerm)
         {

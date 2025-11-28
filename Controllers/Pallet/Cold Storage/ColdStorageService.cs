@@ -83,7 +83,7 @@ namespace CSMS_API.Controllers
             string searchTerm)
         {
             var query = _coldStorageQuery.PaginatedColdStorages(searchTerm);
-            return await PaginationHelper.PaginateAndMapAsync<ColdStorage, ColdStorageOnlyResponse>(query, pageNumber, pageSize, _mapper);
+            return await PaginationHelper.PaginatedAndManualMapping(query, pageNumber, pageSize, ManualColdStorageMapping.ManualColdStorageOnlyResponse);
         }
         public async Task<List<ColdStorageOnlyResponse>> ListedColdStorages(string? searchTerm)
         {

@@ -80,7 +80,7 @@ namespace CSMS_API.Controllers
             string searchTerm)
         {
             var query = _productQuery.PaginatedProducts(searchTerm);
-            return await PaginationHelper.PaginateAndMapAsync<Product, ProductOnlyResponse>(query, pageNumber, pageSize, _mapper);
+            return await PaginationHelper.PaginatedAndManualMapping(query, pageNumber, pageSize, ManualProductMapping.ManualProductOnlyResponse);
         }
         public async Task<List<ProductOnlyResponse>> ListedProducts(string? searchTerm)
         {

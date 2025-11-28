@@ -106,7 +106,7 @@ namespace CSMS_API.Controllers
             string searchTerm)
         {
             var query = _roleQuery.PaginatedRoles(searchTerm);
-            return await PaginationHelper.PaginateAndMapAsync<Role, RoleOnlyResponse>(query, pageNumber, pageSize, _mapper);
+            return await PaginationHelper.PaginatedAndManualMapping(query, pageNumber, pageSize, ManualRoleMapping.ManualRoleOnlyResponse);
         }
         public async Task<List<RoleOnlyResponse>> ListedRoles(string? searchTerm)
         {

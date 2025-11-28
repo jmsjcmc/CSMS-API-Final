@@ -140,7 +140,7 @@ namespace CSMS_API.Controllers
             string searchTerm)
         {
             var query = _positionQuery.PaginatedPositions(searchTerm);
-            return await PaginationHelper.PaginateAndMapAsync<Position, PositionOnlyResponse>(query, pageNumber, pageSize, _mapper);
+            return await PaginationHelper.PaginatedAndManualMapping(query, pageNumber, pageSize, ManualPositionMapping.ManualPositionOnlyResponse);
         }
         public async Task<Paginate<PositionWithDepartmentResponse>> PaginatedPositionsWithDepartment(
             int pageNumber,
@@ -148,7 +148,7 @@ namespace CSMS_API.Controllers
             string searchTerm)
         {
             var query = _positionQuery.PaginatedPositionsWithDepartment(searchTerm);
-            return await PaginationHelper.PaginateAndMapAsync<Position, PositionWithDepartmentResponse>(query, pageNumber, pageSize, _mapper);
+            return await PaginationHelper.PaginatedAndManualMapping(query, pageNumber, pageSize, ManualPositionMapping.ManualPositionWithDepartmentResponse);
         }
         public async Task<List<PositionOnlyResponse>> ListedPositions(string? searchTerm)
         {

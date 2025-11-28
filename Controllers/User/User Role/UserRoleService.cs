@@ -69,7 +69,7 @@ namespace CSMS_API.Controllers
             int ID)
         {
             var query = _userRoleQuery.PaginatedUserRoles(ID);
-            return await PaginationHelper.PaginateAndMapAsync<UserRole, UserWithRoleResponse>(query, pageNumber, pageSize, _mapper);
+            return await PaginationHelper.PaginatedAndManualMapping(query, pageNumber, pageSize, ManualUserRoleMapping.ManualUserWithRoleResponse);
         }
         public async Task<List<UserWithRoleResponse>> ListedUserRoles(int? ID)
         {

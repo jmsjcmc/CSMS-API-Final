@@ -85,6 +85,25 @@ namespace CSMS_API.Models
             CreateMap<Role, RoleOnlyResponse>();
         }
     }
+    public static class ManualRoleMapping
+    {
+        public static RoleOnlyResponse ManualRoleOnlyResponse(Role role)
+        {
+            return new RoleOnlyResponse
+            {
+                ID = role.ID,
+                Name = role.Name,
+                CreatedOn = role.CreatedOn,
+                RecordStatus = role.RecordStatus,
+            };
+        }
+        public static List<RoleOnlyResponse> ManualRoleOnlyListResponse(List<Role> roles)
+        {
+            return roles
+                .Select(ManualRoleOnlyResponse)
+                .ToList();
+        }
+    }
     public class UserRoleMapper : Profile
     {
         public UserRoleMapper()
@@ -92,6 +111,24 @@ namespace CSMS_API.Models
             CreateMap<UserRole, UserWithRoleResponse>()
                 .ForMember(d => d.User, o => o.MapFrom(s => s.User))
                 .ForMember(d => d.Role, o => o.MapFrom(s => s.Role));
+        }
+    }
+    public static class ManualUserRoleMapping
+    {
+        public static UserWithRoleResponse ManualUserWithRoleResponse(UserRole userRole)
+        {
+            return new UserWithRoleResponse
+            {
+                ID = userRole.ID,
+                User = ManualUserMapping.ManualUserOnlyResponse(userRole.User),
+                Role = ManualRoleMapping.ManualRoleOnlyResponse(userRole.Role)
+            };
+        }
+        public static List<UserWithRoleResponse> ManualUserWithRoleListResponse(List<UserRole> userRoles)
+        {
+            return userRoles
+                .Select(ManualUserWithRoleResponse)
+                .ToList();
         }
     }
 }

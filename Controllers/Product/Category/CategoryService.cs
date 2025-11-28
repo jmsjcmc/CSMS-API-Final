@@ -82,7 +82,7 @@ namespace CSMS_API.Controllers
             string searchTerm)
         {
             var query = _categoryQuery.PaginatedCategories(searchTerm);
-            return await PaginationHelper.PaginateAndMapAsync<Category, CategoryResponse>(query, pageNumber, pageSize, _mapper);
+            return await PaginationHelper.PaginatedAndManualMapping(query, pageNumber, pageSize, ManualCategoryMapping.ManualCategoryResponse);
         }
         public async Task<List<CategoryResponse>> ListedCategories(string? searchTerm)
         {
