@@ -164,7 +164,7 @@ namespace CSMS_API.Controllers
             string searchTerm)
         {
             var query = _userQuery.PaginatedUsers(searchTerm);
-            return await PaginationHelper.PaginateAndMapAsync<User, UserOnlyResponse>(query, pageNumber, pageSize, _mapper);
+            return await PaginationHelper.PaginatedAndManualMapping(query, pageNumber, pageSize, ManualUserMapping.ManualUserOnlyResponse);
         }
         public async Task<Paginate<UserWithBusinessUnitAndPositonResponse>> PaginatedUsersWithBusinessUnitAndPosition(
             int pageNumber,
@@ -172,7 +172,7 @@ namespace CSMS_API.Controllers
             string searchTerm)
         {
             var query = _userQuery.PaginatedUsersWithBusinessUnitAndPosition(searchTerm);
-            return await PaginationHelper.PaginateAndMapAsync<User, UserWithBusinessUnitAndPositonResponse>(query, pageNumber, pageSize, _mapper);
+            return await PaginationHelper.PaginatedAndManualMapping(query, pageNumber, pageSize, ManualUserMapping.ManualUserWithBusinessUnitAndPositonResponse);
         }
         public async Task<List<UserOnlyResponse>> ListedUsers(string? searchTerm)
         {
