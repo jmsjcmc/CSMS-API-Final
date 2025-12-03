@@ -1,5 +1,6 @@
 ﻿using CSMS_API.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace CSMS_API.Controllers
 {
@@ -28,7 +29,26 @@ namespace CSMS_API.Controllers
     }
     public interface UserServiceInterface
     {
-
+        Task<object> UserLoginAsync(UserLoginRequest request);
+        Task<UserWithBusinessUnitAndPositonResponse> CreateUserAsync(CreateUserRequest request, ClaimsPrincipal user);
+        Task<UserWithBusinessUnitAndPositonResponse> PatchUserByIDAsync([FromQuery] int ID, UpdateUserRequest request, ClaimsPrincipal user);
+        Task<UserWithBusinessUnitAndPositonResponse> AddPositionToUserByIDAsync([FromQuery] int ID, [FromBody] int positionID);
+        Task<UserOnlyResponse> PatchUserStatusByIDAsync([FromQuery] int ID, RecordStatus? status);
+        Task<UserWithBusinessUnitAndPositonResponse> DeleteUserByIDAsync([FromQuery] int ID);
+        Task<UserWithBusinessUnitAndPositonResponse> GetUserByIDAsync([FromQuery] int ID);
+        Task<UserWithBusinessUnitAndPositonResponse> GetAuthenticatedUserDetailsAsync();
+        Task<Paginate<UserOnlyResponse>> GetPaginatedUsersAsync(
+            [FromQuery] int pageNumber,
+            [FromQuery] int pageSize,
+            [FromQuery] string? searchTerm,
+            [FromQuery] RecordStatus? status);
+        Task<Paginate<UserWithBusinessUnitAndPositonResponse>> GetPaginatedUsersWithBusinessUnitAndPositionAsync(
+            [FromQuery] int pageNumber,
+            [FromQuery] int pageSize,
+            [FromQuery] string? searchTerm,
+            [FromQuery] RecordStatus? status);
+        Task<List<UserOnlyResponse>> GetListedUsersAsync([FromQuery] string? searchTerm);
+        Task<List<UserWithBusinessUnitAndPositonResponse>> GetListedUsersWithBusinessUnitAndPositionAsync([FromQuery] string? searchTerm);
     }
     public interface UserQueriesInterface
     {
