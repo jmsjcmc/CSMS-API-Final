@@ -3,62 +3,55 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CSMS_API.Controllers
 {
-    public class  RoleQuery
+    public class  RoleQuery : RoleQueriesInterface
     {
         private readonly DB _context;
         public RoleQuery(DB context)
         {
             _context = context;
         }
-        public async Task<Role?> GetRoleByIDAsync(int ID)
+        public async Task<Role?> PatchRoleByIDAsync(int ID)
+        {
+            return await _context.Role
+                .SingleOrDefaultAsync(R => R.ID == ID);
+        }
+        public async Task<RoleOnlyResponse?> RoleOnlyResponseByIDAsync(int ID)
         {
             return await _context.Role
                 .AsNoTracking()
-                .SingleOrDefaultAsync(r => r.ID == ID);
+                .Where(R => R.ID == ID)
+                .Select(R => new RoleOnlyResponse
+                {
+                    ID = R.ID,
+                    Name = R.Name,
+                    CreatedOn = R.CreatedOn,
+                    RecordStatus = R.RecordStatus
+                }).SingleOrDefaultAsync();
         }
-        public async  Task<Role?> PatchRoleByIDAsync(int ID)
+        public IQueryable<RoleOnlyResponse> RoleOnlyResponseAsync(string? searchTerm, RecordStatus? status)
         {
-            return await _context.Role
-               .SingleOrDefaultAsync(r => r.ID == ID);
-        }
-        public IQueryable<Role?> PaginatedRoles(string? searchTerm)
-        {
+            var query = _context.Role
+                .AsNoTracking()
+                .AsQueryable();
+
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
-                var query = _context.Role
-                    .AsNoTracking()
-                    .Where(r => r.Name.Contains(searchTerm))
-                    .OrderByDescending(r => r.ID)
-                    .AsQueryable();
+                query = query.Where(R => R.Name.Contains(searchTerm));
+            }
+            if (status.HasValue)
+            {
+                query = query.Where(R => R.RecordStatus == status);
+            }
 
-                return query;
-            }
-            else
-            {
-                var query = _context.Role
-                    .AsNoTracking()
-                    .OrderByDescending(r => r.ID)
-                    .AsQueryable();
-
-                return query;
-            }
-        } 
-        public async Task<List<Role>> ListedRoles(string? searchTerm)
-        {
-            if (!string.IsNullOrWhiteSpace(searchTerm))
-            {
-                return await _context.Role
-                    .AsNoTracking()
-                    .Where(r => r.Name.Contains(searchTerm))
-                    .OrderByDescending(r => r.ID)
-                    .ToListAsync();
-            } else
-            {
-                return await _context.Role
-                    .AsNoTracking()
-                    .OrderByDescending(r => r.ID)
-                    .ToListAsync();
-            }
+            return query
+                .OrderByDescending(R => R.ID)
+                .Select(R => new RoleOnlyResponse
+                {
+                    ID = R.ID,
+                    Name = R.Name,
+                    CreatedOn = R.CreatedOn,
+                    RecordStatus = R.RecordStatus
+                });
         }
     }
 }

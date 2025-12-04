@@ -35,7 +35,7 @@ namespace CSMS_API.Controllers
     public interface RoleQueriesInterface
     {
         Task<Role?> PatchRoleByIDAsync(int ID);
-        Task<RoleOnlyResponse> RoleOnlyResponseByIDAsync(int ID);
+        Task<RoleOnlyResponse?> RoleOnlyResponseByIDAsync(int ID);
         IQueryable<RoleOnlyResponse> RoleOnlyResponseAsync(string? searchTerm, RecordStatus? status);
     }
 }
