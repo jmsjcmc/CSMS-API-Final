@@ -53,8 +53,8 @@ namespace CSMS_API.Controllers
     public interface UserQueriesInterface
     {
         Task<User?> PatchUserByIDAsync(int ID);
-        Task<UserWithBusinessUnitAndPositonResponse> UserWithBusinessUnitAndPositonResponseByIDAsync(int ID);
-        Task<UserOnlyResponse> UserOnlyResponseByIDAsync(int ID);
+        Task<UserWithBusinessUnitAndPositonResponse?> UserWithBusinessUnitAndPositonResponseByIDAsync(int ID);
+        Task<UserOnlyResponse?> UserOnlyResponseByIDAsync(int ID);
         IQueryable<UserWithBusinessUnitAndPositonResponse> UserWithBusinessUnitAndPositonResponseAsync(string? searchTerm, RecordStatus? status);
         IQueryable<UserOnlyResponse> UserOnlyResponseAsync(string? searchTerm, RecordStatus? status);
     }

@@ -27,7 +27,7 @@ namespace CSMS_API.Controllers
         Task<List<UserOnlyResponse>> ListedUsers(string? searchTerm);
         Task<List<UserWithBusinessUnitAndPositonResponse>> ListedUsersWithBusinessUnitAndPosition(string? searchTerm);
     }
-    public class UserService : UserInterface
+    public class UserService : UserServiceInterface
     {
         private readonly DB _context;
         private readonly IMapper _mapper;
@@ -76,7 +76,7 @@ namespace CSMS_API.Controllers
                 return _mapper.Map<UserWithBusinessUnitAndPositonResponse>(user);
             }
         }
-        public async Task<UserWithBusinessUnitAndPositonResponse> UpdateUserByIDAsync(int ID, UpdateUserRequest request, ClaimsPrincipal authUser)
+        public async Task<UserWithBusinessUnitAndPositonResponse> PatchUserByIDAsync(int ID, UpdateUserRequest request, ClaimsPrincipal authUser)
         {
             var user = await _userQuery.PatchUserByIDAsync(ID);
 
@@ -113,7 +113,7 @@ namespace CSMS_API.Controllers
             await _context.SaveChangesAsync();
             return _mapper.Map<UserWithBusinessUnitAndPositonResponse>(user);
         }
-        public async Task<UserOnlyResponse> UpdateUserStatusByIDAsync(int ID, ClaimsPrincipal authUser)
+        public async Task<UserOnlyResponse> PatchUserStatusByIDAsync(int ID, ClaimsPrincipal authUser)
         {
             var user = await _userQuery.PatchUserByIDAsync(ID);
             user.RecordStatus = user.RecordStatus == RecordStatus.Active
@@ -144,8 +144,7 @@ namespace CSMS_API.Controllers
         }
         public async Task<UserWithBusinessUnitAndPositonResponse> GetUserByIDAsync(int ID)
         {
-            var user = await _userQuery.GetUserByIDAsync(ID);
-            return _mapper.Map<UserWithBusinessUnitAndPositonResponse>(user);
+            return await _userQuery.UserWithBusinessUnitAndPositonResponseByIDAsync(ID);
         }
         public async Task<UserWithBusinessUnitAndPositonResponse> AuthenticatedUserDetailsAsync(ClaimsPrincipal userDetail)
         {
@@ -155,8 +154,7 @@ namespace CSMS_API.Controllers
             if (!int.TryParse(userIDClaim.Value, out var userID))
                 throw new UnauthorizedAccessException("Invalid user ID claim");
 
-            var user = await _userQuery.GetUserByIDAsync(userID);
-            return _mapper.Map<UserWithBusinessUnitAndPositonResponse>(user);
+            return await _userQuery.UserWithBusinessUnitAndPositonResponseByIDAsync(userID);
         }
         public async Task<Paginate<UserOnlyResponse>> PaginatedUsers(
             int pageNumber,

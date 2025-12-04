@@ -3,137 +3,111 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CSMS_API.Controllers
 {
-    public class UserQuery
+    public class UserQuery : UserQueriesInterface
     {
         private readonly DB _context;
         public UserQuery(DB context)
         {
             _context = context;
         }
-        public async Task<User?> GetUserByIDAsync(int ID)
-        {
-            if (!await _context.User.AnyAsync(u => u.ID == ID))
-            {
-                throw new Exception($"User ID {ID} not found");
-            }
-            else
-            {
-                return await _context.User
-                    .AsNoTracking()
-                    .Include(u => u.BusinessUnit)
-                    .Include(u => u.Position)
-                    .ThenInclude(p => p.Department)
-                    .SingleOrDefaultAsync(u => u.ID == ID);
-            }
-        }
         public async Task<User?> PatchUserByIDAsync(int ID)
         {
-            if (!await _context.User.AnyAsync(u => u.ID == ID))
-            {
-                throw new Exception($"User ID {ID} not found");
-            }
-            else
-            {
-                return await _context.User
-                    .SingleOrDefaultAsync(u => u.ID == ID);
-            }
+            return await _context.User
+                .SingleOrDefaultAsync(U => U.ID == ID);
         }
-        public IQueryable<User?> PaginatedUsers(string searchTerm)
+        public async Task<UserWithBusinessUnitAndPositonResponse?> UserWithBusinessUnitAndPositonResponseByIDAsync(int ID)
         {
+            return await _context.User
+                .AsNoTracking()
+                .Where(U => U.ID == ID)
+                .Select(U => new UserWithBusinessUnitAndPositonResponse
+                {
+                    ID = U.ID,
+                    FullName = $"{U.FirstName} {U.LastName}",
+                    Username = U.Username,
+                    BusinessUnitID = U.BusinessUnitID,
+                    BusinessUnitName = U.BusinessUnit.Name,
+                    BusinessUnitLocation = U.BusinessUnit.Location,
+                    PositionID = U.PositionID,
+                    PositionName = U.Position.Name,
+                    DepartmentID = U.Position.DepartmentID,
+                    DepartmentName = U.Position.Department.Name
+                }).SingleOrDefaultAsync();
+        }
+        public async Task<UserOnlyResponse?> UserOnlyResponseByIDAsync(int ID)
+        {
+            return await _context.User
+                .AsNoTracking()
+                .Where(U => U.ID == ID)
+                .Select(U => new UserOnlyResponse
+                {
+                    ID = U.ID,
+                    FullName = $"{U.FirstName} {U.LastName}",
+                    Username = U.Username,
+                    CreatedOn = U.CreatedOn,
+                    RecordStatus = U.RecordStatus
+                }).SingleOrDefaultAsync();
+        }
+        public IQueryable<UserWithBusinessUnitAndPositonResponse> UserWithBusinessUnitAndPositonResponseAsync(string? searchTerm, RecordStatus? status)
+        {
+            var query = _context.User
+                .AsNoTracking()
+                .AsQueryable();
+
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
-                var query = _context.User
-                    .AsNoTracking()
-                    .Where(u => u.FirstName.Contains(searchTerm) ||
-                    u.LastName.Contains(searchTerm) ||
-                    u.Username.Contains(searchTerm))
-                    .OrderByDescending(u => u.ID)
-                    .AsQueryable();
-
-                return query;
-            } else
-            {
-                var query = _context.User
-                    .AsNoTracking()
-                    .OrderByDescending(u => u.ID)
-                    .AsQueryable();
-
-                return query;
+                query = query.Where(U => U.FirstName.Contains(searchTerm) ||
+                U.LastName.Contains(searchTerm) ||
+                U.Username.Contains(searchTerm));
             }
+            if (status.HasValue)
+            {
+                query = query.Where(U => U.RecordStatus == status);
+            }
+
+            return query
+                .OrderByDescending(U => U.ID)
+                .Select(U => new UserWithBusinessUnitAndPositonResponse
+                {
+                    ID = U.ID,
+                    FullName = $"{U.FirstName} {U.LastName}",
+                    Username = U.Username,
+                    BusinessUnitID = U.BusinessUnitID,
+                    BusinessUnitName = U.BusinessUnit.Name,
+                    BusinessUnitLocation = U.BusinessUnit.Location,
+                    PositionID = U.PositionID,
+                    PositionName = U.Position.Name,
+                    DepartmentID = U.Position.DepartmentID,
+                    DepartmentName = U.Position.Department.Name
+                });
         }
-        public IQueryable<User> PaginatedUsersWithBusinessUnitAndPosition(string searchTerm)
+        public IQueryable<UserOnlyResponse> UserOnlyResponseAsync(string? searchTerm, RecordStatus? status)
         {
+            var query = _context.User
+                .AsNoTracking()
+                .AsQueryable();
+
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
-                var query = _context.User
-                    .AsNoTracking()
-                    .Where(u => u.FirstName.Contains(searchTerm) ||
-                    u.LastName.Contains(searchTerm) ||
-                    u.Username.Contains(searchTerm))
-                    .Include(u => u.BusinessUnit)
-                    .Include(u => u.Position)
-                    .OrderByDescending(u => u.ID)
-                    .AsQueryable();
+                query = query.Where(U => U.FirstName.Contains(searchTerm) ||
+                U.LastName.Contains(searchTerm) ||
+                U.Username.Contains(searchTerm));
+            }
+            if (status.HasValue)
+            {
+                query = query.Where(U => U.RecordStatus == status);
+            }
 
-                return query;
-            }
-            else
-            {
-                var query = _context.User
-                    .AsNoTracking()
-                    .Include(u => u.BusinessUnit)
-                    .Include(u => u.Position)
-                    .OrderByDescending(u => u.ID)
-                    .AsQueryable();
-
-                return query;
-            }
-        }
-        public async Task<List<User>> ListedUsers(string? searchTerm)
-        {
-            if (!string.IsNullOrWhiteSpace(searchTerm))
-            {
-                return await _context.User
-                    .AsNoTracking()
-                    .Where(u => u.FirstName.Contains(searchTerm) ||
-                    u.LastName.Contains(searchTerm) ||
-                    u.Username.Contains(searchTerm))
-                    .OrderByDescending(u => u.ID)
-                    .ToListAsync();
-            }
-            else
-            {
-                return await _context.User
-                    .AsNoTracking()
-                    .OrderByDescending(u => u.ID)
-                    .ToListAsync();
-            }
-        }
-        public async Task<List<User>> ListedUsersWithBusinessUnitAndPosition(string? searchTerm)
-        {
-            if (!string.IsNullOrWhiteSpace(searchTerm))
-            {
-                return await _context.User
-                    .AsNoTracking()
-                    .Where(u => u.FirstName.Contains(searchTerm) ||
-                    u.LastName.Contains(searchTerm) ||
-                    u.Username.Contains(searchTerm))
-                    .Include(u => u.BusinessUnit)
-                    .Include(u => u.Position)
-                    .ThenInclude(p => p.Department)
-                    .OrderByDescending(u => u.ID)
-                    .ToListAsync();
-            }
-            else
-            {
-                return await _context.User
-                    .AsNoTracking()
-                    .Include(u => u.BusinessUnit)
-                    .Include(u => u.Position)
-                    .ThenInclude(p => p.Department)
-                    .OrderByDescending(u => u.ID)
-                    .ToListAsync();
-            }
+            return query
+                .OrderByDescending(U => U.ID)
+                .Select(U => new UserOnlyResponse
+                {
+                    ID = U.ID,
+                    FullName = $"{U.FirstName} {U.LastName}",
+                    Username = U.Username,
+                    CreatedOn = U.CreatedOn,
+                    RecordStatus = U.RecordStatus
+                });
         }
     }
 }
