@@ -7,14 +7,14 @@ namespace CSMS_API.Controllers
     public interface UserRoleControllerInterface
     {
         Task<ActionResult<UserWithRoleResponse>> AddRoleToUserAsync([FromQuery] int userID, [FromQuery] int roleID);
-        Task<ActionResult<UserWithRoleResponse>> PatchUserRoleStatusByIDAsync([FromQuery] int ID, RecordStatus status, ClaimsPrincipal user);
+        Task<ActionResult<UserWithRoleResponse>> PatchUserRoleStatusByIDAsync([FromQuery] int ID, RecordStatus status);
         Task<ActionResult<Paginate<UserWithRoleResponse>>> GetPaginatedUserRolesAsync(
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 10,
             [FromQuery] int? ID = null,
             [FromQuery] RecordStatus? status = null);
         Task<ActionResult<List<UserWithRoleResponse>>> GetListedUserRolesAsync(
-            [FromQuery] int? ID);
+            [FromQuery] int? ID, [FromQuery] RecordStatus? status);
     }
     public interface UserRoleServiceInterface
     {
@@ -26,10 +26,12 @@ namespace CSMS_API.Controllers
             [FromQuery] int? ID,
             [FromQuery] RecordStatus? status);
         Task<List<UserWithRoleResponse>> GetListedUserRolesAsync(
-            [FromQuery] int? ID);
+            [FromQuery] int? ID, [FromQuery] RecordStatus? status);
     }
     public interface UserRoleQueriesInterface
     {
-        IQueryable<UserWithRoleResponse> UserWithRoleResponseAsync(RecordStatus? status);
+        Task<UserRole?> PatchUserRoleByIDAsync(int ID);
+        Task<UserWithRoleResponse?> UserWithRoleResponseByIDAsync(int ID);
+        IQueryable<UserWithRoleResponse> UserWithRoleResponseAsync(int? ID, RecordStatus? status);
     }
 }
