@@ -8,7 +8,7 @@ namespace CSMS_API.Controllers
     {
         Task<ActionResult<RoleOnlyResponse>> CreateRoleAsync([FromBody] string roleName);
         Task<ActionResult<RoleOnlyResponse>> PatchRoleByIDAsync([FromQuery] int ID, [FromBody] string roleName);
-        Task<ActionResult<RoleOnlyResponse>> PatchRoleStatusByIDAsync([FromQuery] int ID, RecordStatus? status);
+        Task<ActionResult<RoleOnlyResponse>> PatchRoleStatusByIDAsync([FromQuery] int ID, RecordStatus status);
         Task<ActionResult<RoleOnlyResponse>> DeleteRoleByIDAsync([FromQuery] int ID);
         Task<ActionResult<RoleOnlyResponse>> GetRoleByIDAsync([FromQuery] int ID);
         Task<ActionResult<Paginate<RoleOnlyResponse>>> GetPaginatedRolesAsync(
@@ -16,7 +16,7 @@ namespace CSMS_API.Controllers
             [FromQuery] int pageSize = 10,
             [FromQuery] string? searchTerm = null,
             [FromQuery] RecordStatus? status = null);
-        Task<ActionResult<List<RoleOnlyResponse>>> GetListedRolesAsync([FromQuery] int ID, RecordStatus? status);
+        Task<ActionResult<List<RoleOnlyResponse>>> GetListedRolesAsync([FromQuery] string? searchTerm, RecordStatus? status);
     }
     public interface RoleServiceInterface
     {
