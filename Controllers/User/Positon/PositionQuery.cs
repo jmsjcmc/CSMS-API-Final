@@ -1,124 +1,95 @@
 using CSMS_API.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 
 namespace CSMS_API.Controllers
 {
-    public class PositionQuery
+    public class PositionQuery : PositionQueriesInterface
     {
         private readonly DB _context;
         public PositionQuery(DB context)
         {
             _context = context;
         }
-        public async Task<Position?> GetPositionByIDAsync(int ID)
-        {
-            if (!await _context.Position.AnyAsync(p => p.ID == ID))
-            {
-                throw new Exception($"Position ID {ID} not found");
-            }
-            else
-            {
-                return await _context.Position
-                .AsNoTracking()
-                .Include(p => p.Department)
-                .SingleOrDefaultAsync(p => p.ID == ID);
-            }
-        }
         public async Task<Position?> PatchPositionByIDAsync(int ID)
         {
-            if (!await _context.Position.AnyAsync(p => p.ID == ID))
-            {
-                throw new Exception($"Position ID {ID} not found");
-            }
-            else
-            {
-                return await _context.Position
-                .SingleOrDefaultAsync(p => p.ID == ID);
-            }
+            return await _context.Position
+                .SingleOrDefaultAsync(P => P.ID == ID);
         }
-        public IQueryable<Position> PaginatedPositions(string? searchTerm)
+        public async Task<PositionOnlyResponse?> PositionOnlyResponseByIDAsync(int ID)
         {
+            return await _context.Position
+                .AsNoTracking()
+                .Where(P => P.ID == ID)
+                .Select(P => new PositionOnlyResponse
+                {
+                    ID = P.ID,
+                    Name = P.Name,
+                    RecordStatus = P.RecordStatus
+                }).SingleOrDefaultAsync();
+        }
+        public async Task<PositionWithDepartmentResponse?> PositionWithDepartmentResponseByIDAsync(int ID)
+        {
+            return await _context.Position
+                .AsNoTracking()
+                .Where(P => P.ID == ID)
+                .Select(P => new PositionWithDepartmentResponse
+                {
+                    ID = P.ID,
+                    Name = P.Name,
+                    RecordStatus = P.RecordStatus,
+                    DepartmentID = P.DepartmentID,
+                    DepartmentName = P.Department.Name
+                }).SingleOrDefaultAsync();
+        }
+        public IQueryable<PositionOnlyResponse> PositionOnlyResponseAsync(string? searchTerm, RecordStatus? status)
+        {
+            var query = _context.Position
+                .AsNoTracking()
+                .AsQueryable();
+
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
-                var query = _context.Position
-                    .AsNoTracking()
-                    .Where(pp => pp.Name.Contains(searchTerm))
-                    .OrderByDescending(pp => pp.ID)
-                    .AsQueryable();
-
-                return query;
-            } else
-            {
-                var query = _context.Position
-                   .AsNoTracking()
-                   .OrderByDescending(pp => pp.ID)
-                   .AsQueryable();
-
-                return query;
+                query = query.Where(P => P.Name.Contains(searchTerm));
             }
+            if (status.HasValue)
+            {
+                query = query.Where(P => P.RecordStatus == status);
+            }
+
+            return query
+                .OrderByDescending(P => P.ID)
+                .Select(P => new PositionOnlyResponse
+                {
+                    ID = P.ID,
+                    Name = P.Name,
+                    RecordStatus = P.RecordStatus
+                });
         }
-        public IQueryable<Position?> PaginatedPositionsWithDepartment(string? searchTerm)
+        public IQueryable<PositionWithDepartmentResponse> PositionWithDepartmentResponseAsync(string? searchTerm, RecordStatus? status)
         {
+            var query = _context.Position
+                .AsNoTracking()
+                .AsQueryable();
+
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
-                var query = _context.Position
-                    .AsNoTracking()
-                    .Where(pp => pp.Name.Contains(searchTerm))
-                    .Include(p => p.Department)
-                    .OrderByDescending(pp => pp.ID)
-                    .AsQueryable();
+                query = query.Where(P => P.Name.Contains(searchTerm));
+            }
+            if (status.HasValue)
+            {
+                query = query.Where(P => P.RecordStatus == status);
+            }
 
-                return query;
-            }
-            else
-            {
-                var query = _context.Position
-                   .AsNoTracking()
-                   .Include(p => p.Department)
-                   .OrderByDescending(pp => pp.ID)
-                   .AsQueryable();
-
-                return query;
-            }
-        }
-        public async Task<List<Position>> ListedPositions(string? searchTerm)
-        {
-            if (!string.IsNullOrWhiteSpace(searchTerm))
-            {
-                return await _context.Position
-                    .AsNoTracking()
-                    .Where(pp => pp.Name.Contains(searchTerm))
-                    .OrderByDescending(pp => pp.ID)
-                    .ToListAsync();
-            }
-            else
-            {
-                return await _context.Position
-                    .AsNoTracking()
-                    .OrderByDescending(pp => pp.ID)
-                    .ToListAsync();
-            }
-        }
-        public async Task<List<Position>> ListedPositionsWithDepartment(string? searchTerm)
-        {
-            if (!string.IsNullOrWhiteSpace(searchTerm))
-            {
-                return await _context.Position
-                    .AsNoTracking()
-                    .Where(pp => pp.Name.Contains(searchTerm))
-                    .Include(pp => pp.Department)
-                    .OrderByDescending(pp => pp.ID)
-                    .ToListAsync();
-            }
-            else
-            {
-                return await _context.Position
-                    .AsNoTracking()
-                    .Include(pp => pp.Department)
-                    .OrderByDescending(pp => pp.ID)
-                    .ToListAsync();
-            }
+            return query
+                .OrderByDescending(P => P.ID)
+                .Select(P => new PositionWithDepartmentResponse
+                {
+                    ID = P.ID,
+                    Name = P.Name,
+                    RecordStatus = P.RecordStatus,
+                    DepartmentID = P.DepartmentID,
+                    DepartmentName = P.Department.Name
+                });
         }
     }
 }

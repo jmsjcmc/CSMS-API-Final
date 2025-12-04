@@ -49,8 +49,8 @@ namespace CSMS_API.Controllers
     public interface PositionQueriesInterface
     {
         Task<Position?> PatchPositionByIDAsync(int ID);
-        Task<PositionOnlyResponse> PositionOnlyResponseByIDAsync(int ID);
-        Task<PositionWithDepartmentResponse> PositionWithDepartmentResponseByIDAsync(int ID);
+        Task<PositionOnlyResponse?> PositionOnlyResponseByIDAsync(int ID);
+        Task<PositionWithDepartmentResponse?> PositionWithDepartmentResponseByIDAsync(int ID);
         IQueryable<PositionOnlyResponse> PositionOnlyResponseAsync(string? searchTerm, RecordStatus? status);
         IQueryable<PositionWithDepartmentResponse> PositionWithDepartmentResponseAsync(string? searchTerm, RecordStatus? status);
     }
