@@ -5,7 +5,7 @@ namespace CSMS_API.Controllers
 {
     [Route("")]
     [ApiController]
-    public class RoleController : ControllerBase
+    public class RoleController : ControllerBase, RoleControllerInterface
     {
         private readonly RoleService _roleService;
         public RoleController(RoleService roleService)

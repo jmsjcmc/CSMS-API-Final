@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using CSMS_API.Models;
+﻿using CSMS_API.Models;
 using CSMS_API.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,12 +9,10 @@ namespace CSMS_API.Controllers
     public class RoleService : RoleServiceInterface
     {
         private readonly DB _context;
-        private readonly IMapper _mapper;
         private readonly RoleQuery _roleQuery;
-        public RoleService(DB context, IMapper mapper, RoleQuery roleQuery)
+        public RoleService(DB context, RoleQuery roleQuery)
         {
             _context = context;
-            _mapper = mapper;
             _roleQuery = roleQuery;
         }
         public async Task<RoleOnlyResponse> CreateRoleAsync([FromBody] string roleName, ClaimsPrincipal user)
