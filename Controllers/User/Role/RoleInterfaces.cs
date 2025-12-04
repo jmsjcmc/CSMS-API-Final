@@ -30,7 +30,7 @@ namespace CSMS_API.Controllers
             [FromQuery] int pageSize,
             [FromQuery] string? searchTerm,
             [FromQuery] RecordStatus? status);
-        Task<List<RoleOnlyResponse>> GetListedRolesAsync([FromQuery] int ID, RecordStatus? status);
+        Task<List<RoleOnlyResponse>> GetListedRolesAsync([FromQuery] string? searchTerm, RecordStatus? status);
     }
     public interface RoleQueriesInterface
     {

@@ -1,24 +1,13 @@
 ﻿using AutoMapper;
 using CSMS_API.Models;
 using CSMS_API.Utils;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace CSMS_API.Controllers
 {
-    public interface RoleInterface
-    {
-        Task<RoleOnlyResponse> CreateRoleAsync(string roleName, ClaimsPrincipal user);
-        Task<RoleOnlyResponse> UpdateRoleByIDAsync(int ID, string roleName, ClaimsPrincipal user);
-        Task<RoleOnlyResponse> UpdateRoleStatusByIDAsync(int ID, ClaimsPrincipal user);
-        Task<RoleOnlyResponse> DeleteRoleByIDAsync(int ID);
-        Task<RoleOnlyResponse> GetRoleByIDAsync(int ID);
-        Task<Paginate<RoleOnlyResponse>> PaginatedRoles(
-            int pageNumber,
-            int pageSize,
-            string searchTerm);
-        Task<List<RoleOnlyResponse>> ListedRoles(string? searchTerm);
-    }
-    public class RoleService : RoleInterface
+    public class RoleService : RoleServiceInterface
     {
         private readonly DB _context;
         private readonly IMapper _mapper;
@@ -29,7 +18,7 @@ namespace CSMS_API.Controllers
             _mapper = mapper;
             _roleQuery = roleQuery;
         }
-        public async Task<RoleOnlyResponse> CreateRoleAsync(string roleName, ClaimsPrincipal user)
+        public async Task<RoleOnlyResponse> CreateRoleAsync([FromBody] string roleName, ClaimsPrincipal user)
         {
             var role = new Role
             {
@@ -42,19 +31,20 @@ namespace CSMS_API.Controllers
             await _context.Role.AddAsync(role);
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<RoleOnlyResponse>(role);
-        }
-        public async Task<RoleOnlyResponse> UpdateRoleByIDAsync(int ID, string roleName, ClaimsPrincipal user)
-        {
-            var role = await _roleQuery.PatchRoleByIDAsync(ID);
 
-            role.Name = roleName;
+            return await _roleQuery.RoleOnlyResponseByIDAsync(role.ID);
+        }
+        public async Task<RoleOnlyResponse> PatchRoleByIDAsync([FromQuery] int ID,[FromBody] string roleName, ClaimsPrincipal user)
+        {
+            var query = await _roleQuery.PatchRoleByIDAsync(ID);
+
+            query.Name = roleName;
 
             await _context.SaveChangesAsync();
 
             var roleLog = new RoleLog
             {
-                RoleID = role.ID,
+                RoleID = query.ID,
                 UpdaterID = AuthenticationHelper.GetUserIDAsync(user),
                 UpdatedOn = PresentDateTimeFetcher.FetchPresentDateTime()
             };
@@ -62,21 +52,19 @@ namespace CSMS_API.Controllers
             await _context.RoleLog.AddAsync(roleLog);
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<RoleOnlyResponse>(role);
+            return await _roleQuery.RoleOnlyResponseByIDAsync(query.ID);
         }
-        public async Task<RoleOnlyResponse> UpdateRoleStatusByIDAsync(int ID, ClaimsPrincipal user)
+        public async Task<RoleOnlyResponse> PatchRoleStatusByIDAsync([FromQuery] int ID, RecordStatus status, ClaimsPrincipal user)
         {
-            var role = await _roleQuery.PatchRoleByIDAsync(ID);
+            var query = await _roleQuery.PatchRoleByIDAsync(ID);
 
-            role.RecordStatus = role.RecordStatus == RecordStatus.Active
-                ? RecordStatus.Inactive
-                : RecordStatus.Active;
+            query.RecordStatus = status;
 
             await _context.SaveChangesAsync();
 
             var roleLog = new RoleLog
             {
-                RoleID = role.ID,
+                RoleID = query.ID,
                 UpdaterID = AuthenticationHelper.GetUserIDAsync(user),
                 UpdatedOn = PresentDateTimeFetcher.FetchPresentDateTime()
             };
@@ -84,34 +72,33 @@ namespace CSMS_API.Controllers
             await _context.RoleLog.AddAsync(roleLog);
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<RoleOnlyResponse>(role);
+            return await _roleQuery.RoleOnlyResponseByIDAsync(query.ID);
         }
         public async Task<RoleOnlyResponse> DeleteRoleByIDAsync(int ID)
         {
-            var role = await _roleQuery.PatchRoleByIDAsync(ID);
+            var query = await _roleQuery.PatchRoleByIDAsync(ID);
 
-            _context.Role.Remove(role);
+            _context.Role.Remove(query);
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<RoleOnlyResponse>(role);
+            return await _roleQuery.RoleOnlyResponseByIDAsync(query.ID);
         }
-        public async Task<RoleOnlyResponse> GetRoleByIDAsync(int ID)
+        public async Task<RoleOnlyResponse> GetRoleByIDAsync([FromQuery] int ID)
         {
-            var role = await _roleQuery.GetRoleByIDAsync(ID);
-            return _mapper.Map<RoleOnlyResponse>(role);
+            return await _roleQuery.RoleOnlyResponseByIDAsync(ID);
         }
-        public async Task<Paginate<RoleOnlyResponse>> PaginatedRoles(
-            int pageNumber,
-            int pageSize,
-            string searchTerm)
+        public async Task<Paginate<RoleOnlyResponse>> GetPaginatedRolesAsync(
+            [FromQuery] int pageNumber,
+            [FromQuery] int pageSize,
+            [FromQuery] string? searchTerm,
+            [FromQuery] RecordStatus? status)
         {
-            var query = _roleQuery.PaginatedRoles(searchTerm);
-            return await PaginationHelper.PaginatedAndManualMapping(query, pageNumber, pageSize, ManualRoleMapping.ManualRoleOnlyResponse);
+            var query = _roleQuery.RoleOnlyResponseAsync(searchTerm, status);
+            return await PaginationHelper.PaginateAndMap(query, pageNumber, pageSize);
         }
-        public async Task<List<RoleOnlyResponse>> ListedRoles(string? searchTerm)
+        public async Task<List<RoleOnlyResponse>> GetListedRolesAsync([FromQuery] string? searchTerm, RecordStatus? status)
         {
-            var roles = await _roleQuery.ListedRoles(searchTerm);
-            return _mapper.Map<List<RoleOnlyResponse>>(roles);
+            return await _roleQuery.RoleOnlyResponseAsync(searchTerm, status).ToListAsync();
         }
     }
 }
