@@ -1,32 +1,12 @@
 ﻿using AutoMapper;
 using CSMS_API.Models;
 using CSMS_API.Utils;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace CSMS_API.Controllers
 {
-    public interface UserInterface
-    {
-        Task<object> UserLoginAsync(UserLoginRequest request);
-        Task<UserWithBusinessUnitAndPositonResponse> CreateUserAsync(CreateUserRequest request, ClaimsPrincipal authUser);
-        Task<UserWithBusinessUnitAndPositonResponse> UpdateUserByIDAsync(int ID, UpdateUserRequest request, ClaimsPrincipal authUser);
-        Task<UserWithBusinessUnitAndPositonResponse> AddPositionToUserByIDAsync(int userID, int positionID, ClaimsPrincipal authUser);
-        Task<UserOnlyResponse> UpdateUserStatusByIDAsync(int ID, ClaimsPrincipal authUser);
-        Task<UserWithBusinessUnitAndPositonResponse> DeleteUserByIDAsync(int ID);
-        Task<UserWithBusinessUnitAndPositonResponse> GetUserByIDAsync(int ID);
-        Task<UserWithBusinessUnitAndPositonResponse> AuthenticatedUserDetailsAsync(ClaimsPrincipal userDetail);
-        Task<Paginate<UserOnlyResponse>> PaginatedUsers(
-            int pageNumber,
-            int pageSize,
-            string searchTerm);
-        Task<Paginate<UserWithBusinessUnitAndPositonResponse>> PaginatedUsersWithBusinessUnitAndPosition(
-            int pageNumber,
-            int pageSize,
-            string searchTerm);
-        Task<List<UserOnlyResponse>> ListedUsers(string? searchTerm);
-        Task<List<UserWithBusinessUnitAndPositonResponse>> ListedUsersWithBusinessUnitAndPosition(string? searchTerm);
-    }
     public class UserService : UserServiceInterface
     {
         private readonly DB _context;
@@ -73,7 +53,7 @@ namespace CSMS_API.Controllers
                 await _context.User.AddAsync(user);
                 await _context.SaveChangesAsync();
 
-                return _mapper.Map<UserWithBusinessUnitAndPositonResponse>(user);
+                return await _userQuery.UserWithBusinessUnitAndPositonResponseByIDAsync(user.ID);
             }
         }
         public async Task<UserWithBusinessUnitAndPositonResponse> PatchUserByIDAsync(int ID, UpdateUserRequest request, ClaimsPrincipal authUser)
@@ -94,11 +74,11 @@ namespace CSMS_API.Controllers
             await _context.UserLog.AddAsync(userLog);
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<UserWithBusinessUnitAndPositonResponse>(user);
+            return await _userQuery.UserWithBusinessUnitAndPositonResponseByIDAsync(user.ID);
         }
-        public async Task<UserWithBusinessUnitAndPositonResponse> AddPositionToUserByIDAsync(int userID, int positionID, ClaimsPrincipal authUser)
+        public async Task<UserWithBusinessUnitAndPositonResponse> AddPositionToUserByIDAsync([FromQuery] int ID, [FromBody] int positionID, ClaimsPrincipal authUser)
         {
-            var user = await _userQuery.PatchUserByIDAsync(userID);
+            var user = await _userQuery.PatchUserByIDAsync(ID);
             user.PositionID = positionID;
 
             await _context.SaveChangesAsync();
@@ -111,27 +91,27 @@ namespace CSMS_API.Controllers
             };
             await _context.UserLog.AddAsync(userLog);
             await _context.SaveChangesAsync();
-            return _mapper.Map<UserWithBusinessUnitAndPositonResponse>(user);
+
+            return await _userQuery.UserWithBusinessUnitAndPositonResponseByIDAsync(user.ID);
         }
-        public async Task<UserOnlyResponse> PatchUserStatusByIDAsync(int ID, ClaimsPrincipal authUser)
+        public async Task<UserOnlyResponse> PatchUserStatusByIDAsync([FromQuery] int ID, RecordStatus status, ClaimsPrincipal user)
         {
-            var user = await _userQuery.PatchUserByIDAsync(ID);
-            user.RecordStatus = user.RecordStatus == RecordStatus.Active
-                ? RecordStatus.Inactive
-                : RecordStatus.Active;
+            var query = await _userQuery.PatchUserByIDAsync(ID);
+
+            query.RecordStatus = status;
 
             await _context.SaveChangesAsync();
 
             var userLog = new UserLog
             {
-                UserID = user.ID,
-                UpdaterID = AuthenticationHelper.GetUserIDAsync(authUser),
+                UserID = query.ID,
+                UpdaterID = AuthenticationHelper.GetUserIDAsync(user),
                 UpdatedOn = PresentDateTimeFetcher.FetchPresentDateTime()
             };
             await _context.UserLog.AddAsync(userLog);
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<UserOnlyResponse>(user);
+            return await _userQuery.UserOnlyResponseByIDAsync(query.ID);
         }
         public async Task<UserWithBusinessUnitAndPositonResponse> DeleteUserByIDAsync(int ID)
         {
@@ -140,47 +120,47 @@ namespace CSMS_API.Controllers
             _context.User.Remove(user);
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<UserWithBusinessUnitAndPositonResponse>(user);
+            return await _userQuery.UserWithBusinessUnitAndPositonResponseByIDAsync(user.ID);
         }
         public async Task<UserWithBusinessUnitAndPositonResponse> GetUserByIDAsync(int ID)
         {
             return await _userQuery.UserWithBusinessUnitAndPositonResponseByIDAsync(ID);
         }
-        public async Task<UserWithBusinessUnitAndPositonResponse> AuthenticatedUserDetailsAsync(ClaimsPrincipal userDetail)
+        public async Task<UserWithBusinessUnitAndPositonResponse> GetAuthenticatedUserDetailsAsync(ClaimsPrincipal userDetail)
         {
             var userIDClaim = userDetail.FindFirst(ClaimTypes.NameIdentifier)
-                ?? throw new UnauthorizedAccessException("User ID claim not found");
+                ?? throw new UnauthorizedAccessException("USER ID CLAIM NOT FOUND");
 
             if (!int.TryParse(userIDClaim.Value, out var userID))
-                throw new UnauthorizedAccessException("Invalid user ID claim");
+                throw new UnauthorizedAccessException("INVALID USER ID CLAIM");
 
             return await _userQuery.UserWithBusinessUnitAndPositonResponseByIDAsync(userID);
         }
-        public async Task<Paginate<UserOnlyResponse>> PaginatedUsers(
-            int pageNumber,
-            int pageSize,
-            string searchTerm)
+        public async Task<Paginate<UserOnlyResponse>> GetPaginatedUsersAsync(
+            [FromQuery] int pageNumber,
+            [FromQuery] int pageSize,
+            [FromQuery] string? searchTerm,
+            [FromQuery] RecordStatus? status)
         {
-            var query = _userQuery.PaginatedUsers(searchTerm);
-            return await PaginationHelper.PaginatedAndManualMapping(query, pageNumber, pageSize, ManualUserMapping.ManualUserOnlyResponse);
+            var query = _userQuery.UserOnlyResponseAsync(searchTerm, status);
+            return await PaginationHelper.PaginateAndMap(query, pageNumber, pageSize);
         }
-        public async Task<Paginate<UserWithBusinessUnitAndPositonResponse>> PaginatedUsersWithBusinessUnitAndPosition(
-            int pageNumber,
-            int pageSize,
-            string searchTerm)
+        public async Task<Paginate<UserWithBusinessUnitAndPositonResponse>> GetPaginatedUsersWithBusinessUnitAndPositionAsync(
+            [FromQuery] int pageNumber,
+            [FromQuery] int pageSize,
+            [FromQuery] string? searchTerm,
+            [FromQuery] RecordStatus? status)
         {
-            var query = _userQuery.PaginatedUsersWithBusinessUnitAndPosition(searchTerm);
-            return await PaginationHelper.PaginatedAndManualMapping(query, pageNumber, pageSize, ManualUserMapping.ManualUserWithBusinessUnitAndPositonResponse);
+            var query = _userQuery.UserWithBusinessUnitAndPositonResponseAsync(searchTerm, status);
+            return await PaginationHelper.PaginateAndMap(query, pageNumber, pageSize);
         }
-        public async Task<List<UserOnlyResponse>> ListedUsers(string? searchTerm)
+        public async Task<List<UserOnlyResponse>> GetListedUsersAsync(string? searchTerm, RecordStatus? status)
         {
-            var users = await _userQuery.ListedUsers(searchTerm);
-            return _mapper.Map<List<UserOnlyResponse>>(users);
+            return await _userQuery.UserOnlyResponseAsync(searchTerm, status).ToListAsync();
         }
-        public async Task<List<UserWithBusinessUnitAndPositonResponse>> ListedUsersWithBusinessUnitAndPosition(string? searchTerm)
+        public async Task<List<UserWithBusinessUnitAndPositonResponse>> GetListedUsersWithBusinessUnitAndPositionAsync(string? searchTerm, RecordStatus? status)
         {
-            var users = await _userQuery.ListedUsersWithBusinessUnitAndPosition(searchTerm);
-            return _mapper.Map<List<UserWithBusinessUnitAndPositonResponse>>(users);
+            return await _userQuery.UserWithBusinessUnitAndPositonResponseAsync(searchTerm, status).ToListAsync();
         }
     }
 }

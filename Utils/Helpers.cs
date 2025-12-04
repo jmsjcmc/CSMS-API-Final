@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using CSMS_API.Models;
+﻿using CSMS_API.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -27,50 +25,23 @@ namespace CSMS_API.Utils
     }
     public static class PaginationHelper
     {
-        public static async Task<List<TDestination>> PaginatedAndProjectAsync<TSource, TDestination>(
-            IQueryable<TSource> query,
+        public static async Task<Paginate<T>> PaginateAndMap<T>(
+            IQueryable<T> query,
             int pageNumber,
-            int pageSize,
-            IMapper mapper)
+            int pageSize)
         {
-            return await query
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .ProjectTo<TDestination>(mapper.ConfigurationProvider)
-                .ToListAsync();
-        }
-        public static async Task<Paginate<TDestination>> PaginatedAndManualMapping<TSource, TDestination>(
-            IQueryable<TSource> query,
-            int pageNumber,
-            int pageSize,
-            Func<TSource, TDestination> mapFunction)
-        {
-            var totalCount = await query.CountAsync();
+            var totalItems = await query.CountAsync();
             var items = await query
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
-            var mappedItems = items.Select(mapFunction).ToList();
-            return new Paginate<TDestination>
-            {
-                Items = mappedItems,
-                TotalCount = totalCount,
-                PageNumber = pageNumber,
-                PageSize = pageSize
-            };
-        }
-        public static Paginate<T> PaginatedResponse<T>(
-            List<T> items,
-            int totalCount,
-            int pageNumber,
-            int pageSize)
-        {
+
             return new Paginate<T>
             {
-                Items = items,
-                TotalCount = totalCount,
                 PageNumber = pageNumber,
-                PageSize = pageSize
+                PageSize = pageSize,
+                TotalCount = totalItems,
+                Items = items
             };
         }
     }

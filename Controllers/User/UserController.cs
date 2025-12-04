@@ -25,7 +25,7 @@ namespace CSMS_API.Controllers
             var response = await _userService.CreateUserAsync(request, User);
             return response;
         }
-        [HttpPatch("user/{ID}/update")]
+        [HttpPatch("user/{ID}/patch")]
         public async Task<ActionResult<UserWithBusinessUnitAndPositonResponse>> UpdateUserByIDAsync(int ID, UpdateUserRequest request)
         {
             var response = await _userService.UpdateUserByIDAsync(ID, request, User);
@@ -49,7 +49,7 @@ namespace CSMS_API.Controllers
             var response = await _userService.DeleteUserByIDAsync(ID);
             return response;
         }
-        [HttpGet("user/{ID}")]
+        [HttpGet("user/{ID}/get")]
         public async Task<ActionResult<UserWithBusinessUnitAndPositonResponse>> GetUserByIDAsync(int ID)
         {
             var response = await _userService.GetUserByIDAsync(ID);

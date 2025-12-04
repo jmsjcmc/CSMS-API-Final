@@ -32,11 +32,11 @@ namespace CSMS_API.Controllers
         Task<object> UserLoginAsync(UserLoginRequest request);
         Task<UserWithBusinessUnitAndPositonResponse> CreateUserAsync(CreateUserRequest request, ClaimsPrincipal user);
         Task<UserWithBusinessUnitAndPositonResponse> PatchUserByIDAsync([FromQuery] int ID, UpdateUserRequest request, ClaimsPrincipal user);
-        Task<UserWithBusinessUnitAndPositonResponse> AddPositionToUserByIDAsync([FromQuery] int ID, [FromBody] int positionID);
-        Task<UserOnlyResponse> PatchUserStatusByIDAsync([FromQuery] int ID, RecordStatus? status);
+        Task<UserWithBusinessUnitAndPositonResponse> AddPositionToUserByIDAsync([FromQuery] int ID, [FromBody] int positionID, ClaimsPrincipal user);
+        Task<UserOnlyResponse> PatchUserStatusByIDAsync([FromQuery] int ID, RecordStatus status, ClaimsPrincipal user);
         Task<UserWithBusinessUnitAndPositonResponse> DeleteUserByIDAsync([FromQuery] int ID);
         Task<UserWithBusinessUnitAndPositonResponse> GetUserByIDAsync([FromQuery] int ID);
-        Task<UserWithBusinessUnitAndPositonResponse> GetAuthenticatedUserDetailsAsync();
+        Task<UserWithBusinessUnitAndPositonResponse> GetAuthenticatedUserDetailsAsync(ClaimsPrincipal userDetail);
         Task<Paginate<UserOnlyResponse>> GetPaginatedUsersAsync(
             [FromQuery] int pageNumber,
             [FromQuery] int pageSize,
@@ -47,8 +47,8 @@ namespace CSMS_API.Controllers
             [FromQuery] int pageSize,
             [FromQuery] string? searchTerm,
             [FromQuery] RecordStatus? status);
-        Task<List<UserOnlyResponse>> GetListedUsersAsync([FromQuery] string? searchTerm);
-        Task<List<UserWithBusinessUnitAndPositonResponse>> GetListedUsersWithBusinessUnitAndPositionAsync([FromQuery] string? searchTerm);
+        Task<List<UserOnlyResponse>> GetListedUsersAsync([FromQuery] string? searchTerm, [FromQuery] RecordStatus? status);
+        Task<List<UserWithBusinessUnitAndPositonResponse>> GetListedUsersWithBusinessUnitAndPositionAsync([FromQuery] string? searchTerm, [FromQuery] RecordStatus? status);
     }
     public interface UserQueriesInterface
     {
