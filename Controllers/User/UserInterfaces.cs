@@ -10,7 +10,7 @@ namespace CSMS_API.Controllers
         Task<ActionResult<UserWithBusinessUnitAndPositonResponse>> CreateUserAsync(CreateUserRequest request);
         Task<ActionResult<UserWithBusinessUnitAndPositonResponse>> PatchUserByIDAsync([FromQuery] int ID, UpdateUserRequest request);
         Task<ActionResult<UserWithBusinessUnitAndPositonResponse>> AddPositionToUserByIDAsync([FromQuery] int ID, [FromBody] int positionID);
-        Task<ActionResult<UserOnlyResponse>> PatchUserStatusByIDAsync([FromQuery] int ID, RecordStatus? status);
+        Task<ActionResult<UserOnlyResponse>> PatchUserStatusByIDAsync([FromQuery] int ID, RecordStatus status);
         Task<ActionResult<UserWithBusinessUnitAndPositonResponse>> DeleteUserByIDAsync([FromQuery] int ID);
         Task<ActionResult<UserWithBusinessUnitAndPositonResponse>> GetUserByIDAsync([FromQuery] int iD);
         Task<ActionResult<UserWithBusinessUnitAndPositonResponse>> GetAuthenticatedUserDetailsAsync();
@@ -24,8 +24,8 @@ namespace CSMS_API.Controllers
             [FromQuery] int pageSize = 10,
             [FromQuery] string? searchTerm = null,
             [FromQuery] RecordStatus? status = null);
-        Task<ActionResult<List<UserOnlyResponse>>> GetListedUsersAsync([FromQuery] string? searchTerm);
-        Task<ActionResult<List<UserWithBusinessUnitAndPositonResponse>>> GetListedUsersWithBusinessUnitAndPositionAsync([FromQuery] string? searchTerm);
+        Task<ActionResult<List<UserOnlyResponse>>> GetListedUsersAsync([FromQuery] string? searchTerm, [FromQuery] RecordStatus? status);
+        Task<ActionResult<List<UserWithBusinessUnitAndPositonResponse>>> GetListedUsersWithBusinessUnitAndPositionAsync([FromQuery] string? searchTerm, [FromQuery] RecordStatus? status);
     }
     public interface UserServiceInterface
     {
