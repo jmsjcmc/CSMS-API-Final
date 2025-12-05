@@ -22,8 +22,8 @@ namespace CSMS_API.Controllers
             [FromQuery] int pageSize = 10,
             [FromQuery] string? searchTerm = null,
             [FromQuery] RecordStatus? status = null);
-        Task<ActionResult<List<PositionOnlyResponse>>> GetListedPositionsAsync(string? searchTerm, RecordStatus? status);
-        Task<ActionResult<List<PositionWithDepartmentResponse>>> GetListedPositionsWithDepartmentAsync(string? searchTerm, RecordStatus? status);
+        Task<ActionResult<List<PositionOnlyResponse>>> GetListedPositionsAsync([FromQuery] string? searchTerm, RecordStatus? status);
+        Task<ActionResult<List<PositionWithDepartmentResponse>>> GetListedPositionsWithDepartmentAsync([FromQuery] string? searchTerm, RecordStatus? status);
     }
     public interface PositionServiceInterface
     {
