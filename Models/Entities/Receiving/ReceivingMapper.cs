@@ -23,15 +23,6 @@ namespace CSMS_API.Models
     }
     public static class ManualReceivingMapper
     {
-        public static void ManualReceivingRequestMapping(UpdateReceivingRequest request, Receiving receiving)
-        {
-            receiving.DocumentNo = request.DocumentNo;
-            receiving.CVNumber = request.CVNumber;
-            receiving.PlateNumber = request.PlateNumber;
-            receiving.ArrivalDate = request.ArrivalDate;
-            receiving.UnloadingStart = request.UnloadingStart;
-            receiving.UnloadingEnd = request.UnloadingEnd;
-        }
         public static void ManualReceivingDetailRequestMapping(UpdateReceivingRequest request, Receiving receiving, ClaimsPrincipal user)
         {
             foreach (var receivingDetail in request.ReceivingDetail)
