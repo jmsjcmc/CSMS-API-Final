@@ -6,9 +6,9 @@ namespace CSMS_API.Controllers
 {
     public interface CompanyControllerInterface
     {
-        Task<ActionResult<CompanyOnlyResponse>> CreateCompanyAsync(CreateCompanyRequest request, ClaimsPrincipal user);
-        Task<ActionResult<CompanyOnlyResponse>> PatchCompanyByIDAsync(int ID, CreateCompanyRequest request, ClaimsPrincipal user);
-        Task<ActionResult<CompanyOnlyResponse>> PatchCompanyStatusByIDAsync(int ID, RecordStatus status, ClaimsPrincipal user);
+        Task<ActionResult<CompanyOnlyResponse>> CreateCompanyAsync(CreateCompanyRequest request);
+        Task<ActionResult<CompanyOnlyResponse>> PatchCompanyByIDAsync(int ID, CreateCompanyRequest request);
+        Task<ActionResult<CompanyOnlyResponse>> PatchCompanyStatusByIDAsync(int ID, RecordStatus status);
         Task<ActionResult<CompanyOnlyResponse>> DeleteCompanyByIDAsync(int ID);
         Task<ActionResult<CompanyOnlyResponse>> GetCompanyByIDAsync(int ID);
         Task<ActionResult<CompanyWithRepresentativeResponse>> GetCompanyWithRepresentativeByIDAsync(int ID);
@@ -36,7 +36,7 @@ namespace CSMS_API.Controllers
         Task<Paginate<CompanyOnlyResponse>> GetPaginatedCompaniesAsync(
             int pageNumber,
             int pageSize,
-            string? searchTerm, 
+            string? searchTerm,
             RecordStatus? status);
         Task<Paginate<CompanyWithRepresentativeResponse>> GetPaginatedCompaniesWithRepresentativeAsync(
             int pageNumber,

@@ -2,12 +2,13 @@ using CSMS_API.Models;
 using CSMS_API.Utils;
 using Magicodes.ExporterAndImporter.Excel;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace CSMS_API.Controllers
 {
     [Route("")]
     [ApiController]
-    public class CompanyController : ControllerBase
+    public class CompanyController : ControllerBase, CompanyControllerInterface
     {
         private readonly CompanyService _companyService;
         private readonly CompanyExcelService _companyExcelService;
@@ -30,9 +31,15 @@ namespace CSMS_API.Controllers
             return Ok("Success");
         }
         [HttpPatch("company/{ID}/update")]
-        public async Task<ActionResult<CompanyOnlyResponse>> UpdateCompanyByIDAsync(int ID, CreateCompanyRequest request)
+        public async Task<ActionResult<CompanyOnlyResponse>> PatchCompanyByIDAsync(int ID, CreateCompanyRequest request)
         {
-            var response = await _companyService.UpdateCompanyByIDAsync(ID, request, User);
+            var response = await _companyService.PatchCompanyByIDAsync(ID, request, User);
+            return response;
+        }
+        [HttpPatch("company/{ID}/toggle-status")]
+        public async Task<ActionResult<CompanyOnlyResponse>> PatchCompanyStatusByIDAsync(int ID, RecordStatus status)
+        {
+            var response = await _companyService.PatchCompanyStatusByIDAsync(ID, status, User);
             return response;
         }
         [HttpDelete("company/{ID}/delete")]
@@ -54,33 +61,35 @@ namespace CSMS_API.Controllers
             return response;
         }
         [HttpGet("companies/paginated")]
-        public async Task<ActionResult<Paginate<CompanyOnlyResponse>>> PaginatedCompanies(
+        public async Task<ActionResult<Paginate<CompanyOnlyResponse>>> GetPaginatedCompaniesAsync(
             int pageNumber = 1,
             int pageSize = 10,
-            string searchTerm = null)
+            string? searchTerm = null,
+            RecordStatus? status = null)
         {
-            var response = await _companyService.PaginatedCompanies(pageNumber, pageSize, searchTerm);
+            var response = await _companyService.GetPaginatedCompaniesAsync(pageNumber, pageSize, searchTerm, status);
             return response;
         }
         [HttpGet("companies/paginated/with-representative")]
-        public async Task<ActionResult<Paginate<CompanyWithRepresentativeResponse>>> PaginatedCompaniesWithRepresentative(
+        public async Task<ActionResult<Paginate<CompanyWithRepresentativeResponse>>> GetPaginatedCompaniesWithRepresentativeAsync(
             int pageNumber = 1,
             int pageSize = 10,
-            string searchTerm = null)
+            string? searchTerm = null,
+            RecordStatus? status = null)
         {
-            var response = await _companyService.PaginatedCompaniesWithRepresentative(pageNumber, pageSize, searchTerm);
+            var response = await _companyService.GetPaginatedCompaniesWithRepresentativeAsync(pageNumber, pageSize, searchTerm, status);
             return response;
         }
         [HttpGet("companies/list")]
-        public async Task<ActionResult<List<CompanyOnlyResponse>>> ListedCompanies(string? searchTerm)
+        public async Task<ActionResult<List<CompanyOnlyResponse>>> GetListedCompaniesAsync(string? searchTerm, RecordStatus? status)
         {
-            var response = await _companyService.ListedCompanies(searchTerm);
+            var response = await _companyService.GetListedCompaniesAsync(searchTerm, status);
             return response;
         }
         [HttpGet("companies/list/with-representative")]
-        public async Task<ActionResult<List<CompanyWithRepresentativeResponse>>> ListedCompaniesWithRepresentative(string? searchTerm)
+        public async Task<ActionResult<List<CompanyWithRepresentativeResponse>>> GetListedCompaniesWithRepresentativeAsync(string? searchTerm, RecordStatus? status)
         {
-            var response = await _companyService.ListedCompaniesWithRepresentative(searchTerm);
+            var response = await _companyService.GetListedCompaniesWithRepresentativeAsync(searchTerm, status);
             return response;
         }
         [HttpGet("company/excel-template")]
