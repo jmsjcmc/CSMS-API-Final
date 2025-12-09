@@ -3,81 +3,113 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CSMS_API.Controllers
 {
-    public class RepresentativeQuery
+    public class RepresentativeQuery : RepresentativeQueriesInterface
     {
         private readonly DB _context;
         public RepresentativeQuery(DB context)
         {
             _context = context;
         }
-        public async Task<Representative?> GetRepresentativeByIDAsync(int ID)
-        {
-            if (!await _context.Representative.AnyAsync(r => r.ID == ID))
-            {
-                throw new Exception($"Representative ID {ID} not found");
-            }
-            else
-            {
-                return await _context.Representative
-                .AsNoTracking()
-                .Include(r => r.Company)
-                .SingleOrDefaultAsync(r => r.ID == ID);
-            }
-        }
         public async Task<Representative?> PatchRepresentativeByIDAsync(int ID)
         {
-            if (!await _context.Representative.AnyAsync(r => r.ID == ID))
-            {
-                throw new Exception($"Representative ID {ID} not found");
-            }
-            else
-            {
-                return await _context.Representative
-                .SingleOrDefaultAsync(r => r.ID == ID);
-            }
+            return await _context.Representative
+                .SingleOrDefaultAsync(R => R.ID == ID);
         }
-        public IQueryable<Representative> PaginatedRepresentatives(string? searchTerm)
+        public async Task<RepresentativeOnlyResponse?> RepresentativeOnlyResponseByIDAsync(int ID)
         {
+            return await _context.Representative
+                .AsNoTracking()
+                .Where(R => R.ID == ID)
+                .Select(R => new RepresentativeOnlyResponse
+                {
+                    ID = R.ID,
+                    FullName = $"{R.FirstName} {R.LastName}",
+                    Position = R.Position,
+                    Email = R.Email,
+                    PhoneNumber = R.PhoneNumber,
+                    TelephoneNumber = R.TelephoneNumber,
+                    RecordStatus = R.RecordStatus
+                }).SingleOrDefaultAsync();
+        }
+        public async Task<RepresentativeWithCompanyResponse?> RepresentativeWithCompanyResponseByIDAsync(int ID)
+        {
+            return await _context.Representative
+                .AsNoTracking()
+                .Where(R => R.ID == ID)
+                .Select(R => new RepresentativeWithCompanyResponse
+                {
+                    ID = R.ID,
+                    FullName = $"{R.FirstName} {R.LastName}",
+                    Position = R.Position,
+                    Email = R.Email,
+                    PhoneNumber = R.PhoneNumber,
+                    TelephoneNumber = R.TelephoneNumber,
+                    RecordStatus = R.RecordStatus,
+                    CompanyName = R.Company.Name,
+                    CompanyLocation = R.Company.Location
+                }).SingleOrDefaultAsync();
+        }
+        public IQueryable<RepresentativeOnlyResponse> RepresentativeOnlyResponseAsync(string? searchTerm, RecordStatus? status)
+        {
+            var query = _context.Representative
+                .AsNoTracking()
+                .AsQueryable();
+
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
-                var query = _context.Representative
-                    .AsNoTracking()
-                    .Where(r => r.FirstName.Contains(searchTerm) ||
-                    r.LastName.Contains(searchTerm) ||
-                    r.Position.Contains(searchTerm))
-                    .OrderByDescending(r => r.ID)
-                    .AsQueryable();
-
-                return query;
+                query = query.Where(R => R.FirstName.Contains(searchTerm) ||
+                R.LastName.Contains(searchTerm) ||
+                R.Position.Contains(searchTerm));
             }
-            else
+            if (status.HasValue)
             {
-                var query = _context.Representative
-                    .AsNoTracking()
-                    .OrderByDescending(r => r.ID)
-                    .AsQueryable();
-
-                return query;
+                query = query.Where(R => R.RecordStatus == status.Value);
             }
+
+            return query
+                .OrderByDescending(R => R.ID)
+                .Select(R => new RepresentativeOnlyResponse
+                {
+                    ID = R.ID,
+                    FullName = $"{R.FirstName} {R.LastName}",
+                    Position = R.Position,
+                    Email = R.Email,
+                    PhoneNumber = R.PhoneNumber,
+                    TelephoneNumber = R.TelephoneNumber,
+                    RecordStatus = R.RecordStatus
+                });
         }
-        public async Task<List<Representative>> ListedRepresentatives(string? searchTerm)
+        public IQueryable<RepresentativeWithCompanyResponse> RepresentativeWithCompanyResponseAsync(string? searchTerm, RecordStatus? status)
         {
+            var query = _context.Representative
+                .AsNoTracking()
+                .AsQueryable();
+
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
-                return await _context.Representative
-                    .AsNoTracking()
-                    .Where(r => r.FirstName.Contains(searchTerm) ||
-                    r.LastName.Contains(searchTerm) ||
-                    r.Position.Contains(searchTerm))
-                    .OrderByDescending(r => r.ID)
-                    .ToListAsync();
-            } else
-            {
-                return await _context.Representative
-                    .AsNoTracking()
-                    .OrderByDescending(r => r.ID)
-                    .ToListAsync();
+                query = query.Where(R => R.FirstName.Contains(searchTerm) ||
+                R.LastName.Contains(searchTerm) ||
+                R.Position.Contains(searchTerm));
             }
+            if (status.HasValue)
+            {
+                query = query.Where(R => R.RecordStatus == status.Value);
+            }
+
+            return query
+                .OrderByDescending(R => R.ID)
+                .Select(R => new RepresentativeWithCompanyResponse
+                {
+                    ID = R.ID,
+                    FullName = $"{R.FirstName} {R.LastName}",
+                    Position = R.Position,
+                    Email = R.Email,
+                    PhoneNumber = R.PhoneNumber,
+                    TelephoneNumber = R.TelephoneNumber,
+                    RecordStatus = R.RecordStatus,
+                    CompanyName = R.Company.Name,
+                    CompanyLocation = R.Company.Location
+                });
         }
     }
 }
