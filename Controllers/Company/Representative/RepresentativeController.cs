@@ -7,7 +7,7 @@ namespace CSMS_API.Controllers
 {
     [Route("")]
     [ApiController]
-    public class RepresentativeController : ControllerBase
+    public class RepresentativeController : ControllerBase, RepresentativeControllerInterface
     {
         private readonly RepresentativeService _representativeService;
         private readonly CompanyExcelService _companyExcelService;
@@ -29,9 +29,15 @@ namespace CSMS_API.Controllers
             return Ok("Success");
         }
         [HttpPatch("representative/{ID}/update")]
-        public async Task<ActionResult<RepresentativeOnlyResponse>> UpdateRepresentativeByIDAsync(int ID, UpdateRepresentativeRequest request)
+        public async Task<ActionResult<RepresentativeOnlyResponse>> PatchRepresentativeByIDAsync(int ID, UpdateRepresentativeRequest request)
         {
-            var response = await _representativeService.UpdateRepresentativeByIDAsync(ID, request, User);
+            var response = await _representativeService.PatchRepresentativeByIDAsync(ID, request, User);
+            return response;
+        }
+        [HttpPatch("representative/{ID}/toggle-status")]
+        public async Task<ActionResult<RepresentativeOnlyResponse>> PatchRepresentativeStatusByIDAsync(int ID, RecordStatus status)
+        {
+            var response = await _representativeService.PatchRepresentativeStatusByIDAsync(ID, status, User);
             return response;
         }
         [HttpPatch("representative/{ID}/add-company")]
@@ -47,24 +53,47 @@ namespace CSMS_API.Controllers
             return response;
         }
         [HttpGet("representative/{ID}")]
-        public async Task<ActionResult<RepresentativeWithCompanyResponse>> GetRepresentativeByIDAsync(int ID)
+        public async Task<ActionResult<RepresentativeOnlyResponse>> GetRepresentativeByIDAsync(int ID)
         {
             var response = await _representativeService.GetRepresentativeByIDAsync(ID);
             return response;
         }
+        [HttpGet("representative/{ID}/with-company")]
+        public async Task<ActionResult<RepresentativeWithCompanyResponse>> GetRepresentativeWithCompanyByIDAsync(int ID)
+        {
+            var response = await _representativeService.GetRepresentativeWithCompanyByIDAsync(ID);
+            return response;
+        }
         [HttpGet("representatives/paginated")]
-        public async Task<ActionResult<Paginate<RepresentativeOnlyResponse>>> PaginatedRepresentatives(
+        public async Task<ActionResult<Paginate<RepresentativeOnlyResponse>>> GetPaginatedRepresentativesAsync(
             int pageNumber = 1,
             int pageSize = 10,
-            string searchTerm = null)
+            string? searchTerm = null,
+            RecordStatus? status = null)
         {
-            var response = await _representativeService.PaginatedRepresentatives(pageNumber, pageSize, searchTerm);
+            var response = await _representativeService.GetPaginatedRepresentativesAsync(pageNumber, pageSize, searchTerm, status);
+            return response;
+        }
+        [HttpGet("representatives/paginated/with-company")]
+        public async Task<ActionResult<Paginate<RepresentativeWithCompanyResponse>>> GetPaginatedRepresentativesWithCompanyAsync(
+            int pageNumber = 1,
+            int pageSize = 10,
+            string? searchTerm = null,
+            RecordStatus? status = null)
+        {
+            var response = await _representativeService.GetPaginatedRepresentativesWithCompanyAsync(pageNumber, pageSize, searchTerm, status);
             return response;
         }
         [HttpGet("representatives/list")]
-        public async Task<ActionResult<List<RepresentativeOnlyResponse>>> ListedRepresentatives(string? searchTerm)
+        public async Task<ActionResult<List<RepresentativeOnlyResponse>>> GetListedRepresentativesAsync(string? searchTerm, RecordStatus? status)
         {
-            var response = await _representativeService.ListedRepresentatives(searchTerm);
+            var response = await _representativeService.GetListedRepresentativesAsync(searchTerm, status);
+            return response;
+        }
+        [HttpGet("representatives/list/with-company")]
+        public async Task<ActionResult<List<RepresentativeWithCompanyResponse>>> GetListedRepresentativesWithCompanyAsync(string? searchTerm, RecordStatus? status)
+        {
+            var response = await _representativeService.GetListedRepresentativesWithCompanyAsync(searchTerm, status);
             return response;
         }
         [HttpGet("representative/excel-template")]
