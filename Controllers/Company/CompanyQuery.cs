@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CSMS_API.Controllers
 {
-    public class CompanyQuery : CompanyQueriesInterface
+    public class CompanyQuery : ICompanyQueries
     {
         private readonly DB _context;
         public CompanyQuery(DB context)

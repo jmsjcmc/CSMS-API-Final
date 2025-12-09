@@ -7,7 +7,7 @@ namespace CSMS_API.Controllers
 {
     [Route("")]
     [ApiController]
-    public class RepresentativeController : ControllerBase, RepresentativeControllerInterface
+    public class RepresentativeController : ControllerBase, IRepresentativeController
     {
         private readonly RepresentativeService _representativeService;
         private readonly CompanyExcelService _companyExcelService;

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CSMS_API.Controllers
 {
-    public class CompanyService : CompanyServiceInterface
+    public class CompanyService : ICompanyService
     {
         private readonly DB _context;
         private readonly IMapper _mapper;

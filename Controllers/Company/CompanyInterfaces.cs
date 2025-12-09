@@ -4,7 +4,7 @@ using System.Security.Claims;
 
 namespace CSMS_API.Controllers
 {
-    public interface CompanyControllerInterface
+    public interface ICompanyController
     {
         Task<ActionResult<CompanyOnlyResponse>> CreateCompanyAsync(CreateCompanyRequest request);
         Task<ActionResult<CompanyOnlyResponse>> PatchCompanyByIDAsync(int ID, CreateCompanyRequest request);
@@ -25,7 +25,7 @@ namespace CSMS_API.Controllers
         Task<ActionResult<List<CompanyOnlyResponse>>> GetListedCompaniesAsync(string? searchTerm, RecordStatus? status);
         Task<ActionResult<List<CompanyWithRepresentativeResponse>>> GetListedCompaniesWithRepresentativeAsync(string? searchTerm, RecordStatus? status);
     }
-    public interface CompanyServiceInterface
+    public interface ICompanyService
     {
         Task<CompanyOnlyResponse> CreateCompanyAsync(CreateCompanyRequest request, ClaimsPrincipal user);
         Task<CompanyOnlyResponse> PatchCompanyByIDAsync(int ID, CreateCompanyRequest request, ClaimsPrincipal user);
@@ -46,7 +46,7 @@ namespace CSMS_API.Controllers
         Task<List<CompanyOnlyResponse>> GetListedCompaniesAsync(string? searchTerm, RecordStatus? status);
         Task<List<CompanyWithRepresentativeResponse>> GetListedCompaniesWithRepresentativeAsync(string? searchTerm, RecordStatus? status);
     }
-    public interface CompanyQueriesInterface
+    public interface ICompanyQueries
     {
         Task<Company?> PatchCompanyByIDAsync(int ID);
         Task<CompanyOnlyResponse?> CompanyOnlyResponseByIDAsync(int ID);

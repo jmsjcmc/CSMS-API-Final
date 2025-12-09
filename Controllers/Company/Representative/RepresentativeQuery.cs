@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CSMS_API.Controllers
 {
-    public class RepresentativeQuery : RepresentativeQueriesInterface
+    public class RepresentativeQuery : IRepresentativeQueries
     {
         private readonly DB _context;
         public RepresentativeQuery(DB context)

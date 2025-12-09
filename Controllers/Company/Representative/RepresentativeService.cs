@@ -6,7 +6,7 @@ using System.Security.Claims;
 
 namespace CSMS_API.Controllers
 {
-    public class RepresentativeService : RepresentativeServiceInterface
+    public class RepresentativeService : IRepresentativeService
     {
         private readonly RepresentativeQuery _representativeQuery;
         private readonly IMapper _mapper;

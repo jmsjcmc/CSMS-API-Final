@@ -4,7 +4,7 @@ using System.Security.Claims;
 
 namespace CSMS_API.Controllers
 {
-    public interface RepresentativeControllerInterface
+    public interface IRepresentativeController
     {
         Task<ActionResult<RepresentativeOnlyResponse>> CreateRepresentativeAsync(CreateRepresentativeRequest request);
         Task<ActionResult<RepresentativeOnlyResponse>> PatchRepresentativeByIDAsync(int ID, UpdateRepresentativeRequest request);
@@ -26,7 +26,7 @@ namespace CSMS_API.Controllers
         Task<ActionResult<List<RepresentativeOnlyResponse>>> GetListedRepresentativesAsync(string? searchTerm, RecordStatus? status);
         Task<ActionResult<List<RepresentativeWithCompanyResponse>>> GetListedRepresentativesWithCompanyAsync(string? searchTerm, RecordStatus? status);
     }
-    public interface RepresentativeServiceInterface
+    public interface IRepresentativeService
     {
         Task<RepresentativeOnlyResponse> CreateRepresentativeAsync(CreateRepresentativeRequest request, ClaimsPrincipal user);
         Task<RepresentativeOnlyResponse> PatchRepresentativeByIDAsync(int ID, UpdateRepresentativeRequest request, ClaimsPrincipal user);
@@ -48,7 +48,7 @@ namespace CSMS_API.Controllers
         Task<List<RepresentativeOnlyResponse>> GetListedRepresentativesAsync(string? searchTerm, RecordStatus? status);
         Task<List<RepresentativeWithCompanyResponse>> GetListedRepresentativesWithCompanyAsync(string? searchTerm, RecordStatus? status);
     }
-    public interface RepresentativeQueriesInterface
+    public interface IRepresentativeQueries
     {
         Task<Representative?> PatchRepresentativeByIDAsync(int ID);
         Task<RepresentativeOnlyResponse?> RepresentativeOnlyResponseByIDAsync(int ID);

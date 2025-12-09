@@ -8,7 +8,7 @@ namespace CSMS_API.Controllers
 {
     [Route("")]
     [ApiController]
-    public class CompanyController : ControllerBase, CompanyControllerInterface
+    public class CompanyController : ControllerBase, ICompanyController
     {
         private readonly CompanyService _companyService;
         private readonly CompanyExcelService _companyExcelService;
