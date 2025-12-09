@@ -19,6 +19,9 @@ namespace CSMS_API.Controllers
         }
         public async Task<CompanyOnlyResponse> CreateCompanyAsync(CreateCompanyRequest request, ClaimsPrincipal user)
         {
+            if (await _context.Company.AnyAsync(C => C.Name == request.Name))
+                throw new Exception($"{request.Name} ALREADY EXIST.");
+
             var company = _mapper.Map<Company>(request);
 
             company.RecordStatus = RecordStatus.Active;
