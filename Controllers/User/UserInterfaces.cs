@@ -4,7 +4,7 @@ using System.Security.Claims;
 
 namespace CSMS_API.Controllers
 {
-    public interface UserControllerInterface
+    public interface IUserController
     {
         Task<ActionResult<object>> UserLoginAsync(UserLoginRequest request);
         Task<ActionResult<UserWithBusinessUnitAndPositonResponse>> CreateUserAsync(CreateUserRequest request);
@@ -27,7 +27,7 @@ namespace CSMS_API.Controllers
         Task<ActionResult<List<UserOnlyResponse>>> GetListedUsersAsync([FromQuery] string? searchTerm, [FromQuery] RecordStatus? status);
         Task<ActionResult<List<UserWithBusinessUnitAndPositonResponse>>> GetListedUsersWithBusinessUnitAndPositionAsync([FromQuery] string? searchTerm, [FromQuery] RecordStatus? status);
     }
-    public interface UserServiceInterface
+    public interface IUserServiceInterface
     {
         Task<object> UserLoginAsync(UserLoginRequest request);
         Task<UserWithBusinessUnitAndPositonResponse> CreateUserAsync(CreateUserRequest request, ClaimsPrincipal user);
