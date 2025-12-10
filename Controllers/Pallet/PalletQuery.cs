@@ -3,99 +3,63 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CSMS_API.Controllers
 {
-    public class PalletQuery
+    public class PalletQuery : IPalletQueries
     {
         private readonly DB _context;
         public PalletQuery(DB context)
         {
             _context = context;
         }
-        public async Task<Pallet?> GetPalletByIDAsync(int ID)
-        {
-            if (!await _context.Pallet.AnyAsync(p => p.ID == ID))
-            {
-                throw new Exception($"Pallet ID {ID} not found");
-            }
-            else
-            {
-                return await _context.Pallet
-                    .AsNoTracking()
-                    .SingleOrDefaultAsync(p => p.ID == ID);
-            }
-        }
         public async Task<Pallet?> PatchPalletByIDAsync(int ID)
         {
-            if (!await _context.Pallet.AnyAsync(p => p.ID == ID))
-            {
-                throw new Exception($"Pallet ID {ID} not found");
-            }
-            else
-            {
-                return await _context.Pallet
-                    .SingleOrDefaultAsync(p => p.ID == ID);
-            }
+            return await _context.Pallet
+                .SingleOrDefaultAsync(P => P.ID == ID);
         }
-        public IQueryable<Pallet> PaginatedPallets(string? searchTerm)
+        public async Task<PalletOnlyResponse?> PalletOnlyResponseByIDAsync(int ID)
         {
-            if (!string.IsNullOrWhiteSpace(searchTerm))
-            {
-                var query = _context.Pallet
-                    .AsNoTracking()
-                    .Where(p => p.Type.Contains(searchTerm) ||
-                    p.Number.Contains(searchTerm))
-                    .OrderByDescending(p => p.ID)
-                    .AsQueryable();
+            return await _context.Pallet
+                .AsNoTracking()
+                .Where(P => P.ID == ID)
+                .Select(P => new PalletOnlyResponse
+                {
+                    ID = P.ID,
+                    Type = P.Type,
+                    Number = P.Number,
+                    CreatedOn = P.CreatedOn,
+                    RecordStatus = P.RecordStatus,
+                    PalletOccupationStatus = P.PalletOccupationStatus
+                }).SingleOrDefaultAsync();
+        }
+        public IQueryable<PalletOnlyResponse> PalletOnlyResponseAsync(string? searchTerm, RecordStatus? recordStatus, PalletOccupationStatus? palletOccupationStatus)
+        {
+            var query = _context.Pallet
+                .AsNoTracking()
+                .AsQueryable();
 
-                return query;
-            }
-            else
+            if (!string.IsNullOrWhiteSpace(searchTerm))
             {
-                var query = _context.Pallet
-                    .AsNoTracking()
-                    .OrderByDescending(p => p.ID)
-                    .AsQueryable();
+                query = query.Where(P => P.Type.Contains(searchTerm));
+            }
+            if (recordStatus.HasValue)
+            {
+                query = query.Where(P => P.RecordStatus == recordStatus.Value);
+            }
+            if (palletOccupationStatus.HasValue)
+            {
+                query = query.Where(P => P.PalletOccupationStatus == palletOccupationStatus.Value);
+            }
 
-                return query;
-            }
-        }
-        public async Task<List<Pallet>> ListedPallets(string? searchTerm)
-        {
-            if (!string.IsNullOrWhiteSpace(searchTerm))
-            {
-                return await _context.Pallet
-                    .AsNoTracking()
-                    .Where(p => p.Type.Contains(searchTerm) ||
-                    p.Number.Contains(searchTerm))
-                    .OrderByDescending(p => p.ID)
-                    .ToListAsync();
-            } else
-            {
-                return await _context.Pallet
-                    .AsNoTracking()
-                    .OrderByDescending(p => p.ID)
-                    .ToListAsync();
-            }
-        }
-        public async Task<List<Pallet>> ListedEmptyPallets(string? searchTerm)
-        {
-            if (!string.IsNullOrWhiteSpace(searchTerm))
-            {
-                return await _context.Pallet
-                    .AsNoTracking()
-                    .Where(p => p.Type.Contains(searchTerm) ||
-                    p.Number.Contains(searchTerm) &&
-                    p.PalletOccupationStatus == PalletOccupationStatus.Empty)
-                    .OrderByDescending(p => p.ID)
-                    .ToListAsync();
-            }
-            else
-            {
-                return await _context.Pallet
-                    .AsNoTracking()
-                    .Where(p => p.PalletOccupationStatus == PalletOccupationStatus.Empty)
-                    .OrderByDescending(p => p.ID)
-                    .ToListAsync();
-            }
+            return query
+                .OrderByDescending(P => P.ID)
+                .Select(P => new PalletOnlyResponse
+                {
+                    ID = P.ID,
+                    Type = P.Type,
+                    Number = P.Number,
+                    CreatedOn = P.CreatedOn,
+                    RecordStatus = P.RecordStatus,
+                    PalletOccupationStatus = P.PalletOccupationStatus
+                });
         }
     }
 }
